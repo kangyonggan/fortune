@@ -6,6 +6,7 @@
         <property name="fortune.app.name.en" description="项目名字（英文）" defaultValue="Fortune Pay"/>
         <property name="fortune.app.author" description="项目负责人" defaultValue="康永敢"/>
         <property name="fortune.app.author.en" description="项目负责人" defaultValue="Yonggan Kang"/>
+        <property name="fortune.app.ba.no" description="备案号" defaultValue="皖ICP备16017743号-1"/>
 
         <!-- redis -->
         <property name="fortune.redis.maxTotal" description="redis最大连接数" defaultValue="1000"/>
@@ -34,7 +35,7 @@
         <!-- log4j2 -->
         <property name="fortune.log4j2.home" description="log4j2日志的文件主目录" defaultValue="/Users/kyg/logs/fortune"/>
 
-        <property name="fortune.file.root.path" description="文件根目录" defaultValue="/Users/kyg/code/hxzq/fortune/fortune-web/src/main/webapp/WEB-INF/"/>
+        <property name="fortune.file.root.path" description="文件根目录" defaultValue="/Users/kyg/code/kyg/fortune/fortune-web/src/main/webapp/WEB-INF/"/>
         <property name="fortune.slow.method.time" description="慢方法时间(秒)" defaultValue="1"/>
         <property name="fortune.slow.interface.time" description="慢接口时间(秒)" defaultValue="1"/>
         <property name="fortune.cache.open" description="是否开启缓存,Y:开启,N:不开启" defaultValue="Y"/>

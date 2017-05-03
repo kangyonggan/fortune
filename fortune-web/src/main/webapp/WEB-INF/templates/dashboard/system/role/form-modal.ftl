@@ -32,13 +32,13 @@
 <@override name="modal-footer">
     <button class="btn btn-sm" data-dismiss="modal">
         <i class="ace-icon fa fa-times"></i>
-        <@spring.message "app.button.cancel"/>
+        <@s.message "app.button.cancel"/>
     </button>
 
 <button class="btn btn-sm btn-inverse" id="submit" data-loading-text="正在保存..." data-toggle="form-submit"
         data-target="#modal-form">
     <i class="ace-icon fa fa-check"></i>
-    <@spring.message "app.button.save"/>
+    <@s.message "app.button.save"/>
 
     <script src="${ctx}/static/app/js/dashboard/system/role/form-modal.js"></script>
 </@override>

@@ -19,12 +19,11 @@
     <!-- text fonts -->
     <link rel="stylesheet" href="${ctx}/static/ace/dist/css/ace-fonts.min.css"/>
 
-<#--skin-->
+    <#--skin-->
     <link rel="stylesheet" href="${ctx}/static/ace/dist/css/ace-skins.min.css"/>
 
     <!-- ace styles -->
-    <link rel="stylesheet" href="${ctx}/static/ace/dist/css/ace.min.css" class="ace-main-stylesheet"
-          id="main-ace-style"/>
+    <link rel="stylesheet" href="${ctx}/static/ace/dist/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style"/>
 
     <!--[if lte IE 9]>
     <link rel="stylesheet" href="${ctx}/static/ace/dist/css/ace-part2.min.css" class="ace-main-stylesheet"/>

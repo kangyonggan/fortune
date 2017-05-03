@@ -12,4 +12,15 @@
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <select id="selectRolesByUsername" resultMap="BaseResultMap">
+        SELECT r.*
+        FROM role r, user_role ur
+        <where>
+            r.code = ur.role_code
+            AND ur.username = #{username}
+            AND r.is_deleted = 0
+            ORDER BY r.id DESC
+        </where>
+    </select>
 </mapper>

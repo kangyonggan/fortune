@@ -8,7 +8,7 @@
 
     <i class="ace-icon fa fa-check green"></i>
 
-    欢迎进入<strong class="green"><@spring.message "app.name"/></strong>工作台。请点击左边菜单开始工作。👈
+    欢迎进入<strong class="green"><@s.message "app.name"/></strong>工作台。请点击左边菜单开始工作。👈
 
 </div>
 

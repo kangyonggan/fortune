@@ -34,7 +34,7 @@
 <@override name="modal-footer">
 <button class="btn btn-sm" data-dismiss="modal">
     <i class="ace-icon fa fa-times"></i>
-    <@spring.message "app.button.close"/>
+    <@s.message "app.button.close"/>
 </button>
 </@override>
 

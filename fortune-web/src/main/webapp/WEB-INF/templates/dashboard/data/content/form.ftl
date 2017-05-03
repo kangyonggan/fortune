@@ -75,7 +75,7 @@
         <div class="col-xs-offset-3">
             <button id="submit" class="btn btn-inverse" data-loading-text="正在提交...">
                 <i class="ace-icon fa fa-check"></i>
-            <@spring.message "app.button.save"/>
+            <@s.message "app.button.save"/>
             </button>
         </div>
     </div>

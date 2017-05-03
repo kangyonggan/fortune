@@ -78,11 +78,8 @@
             <value>
                 /dashboard/** = authc
 
-                /register* = anon
                 /validate* = anon
                 /login* = anon
-                /reset* = anon
-                /content* = anon
             </value>
         </property>
     </bean>

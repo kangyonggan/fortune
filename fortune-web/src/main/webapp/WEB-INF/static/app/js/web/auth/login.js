@@ -11,7 +11,7 @@ $(function () {
         rules: {
             username: {
                 required: true,
-                rangelength: [5, 30]
+                rangelength: [5, 20]
             },
             password: {
                 required: true,
@@ -21,9 +21,6 @@ $(function () {
                 required: true,
                 isCaptcha: true
             }
-        },
-        messages: {
-            username: "请输入5至20位的用户名、手机号或者邮箱"
         },
         submitHandler: function () {
             $btn.button('loading');

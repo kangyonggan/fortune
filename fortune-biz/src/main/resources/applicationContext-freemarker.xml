@@ -45,6 +45,7 @@
                 <entry key="extends" value-ref="extendsDirective"/>
                 <entry key="override" value-ref="overrideDirective"/>
                 <entry key="super" value-ref="superDirective"/>
+                <entry key="shiro" value-ref="shiroTags"/>
             </map>
         </property>
     </bean>

@@ -14,7 +14,7 @@
             <a href="#index" class="navbar-brand">
                 <small>
                     <i class="fa fa-leaf"></i>
-                <@spring.message "app.name"/>
+                <@s.message "app.name"/>
                 </small>
             </a>
         </div>
@@ -25,13 +25,8 @@
                 <ul class="nav ace-nav">
                     <li class="dark">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <#if user.smallAvatar!=''>
-                                <img class="nav-user-photo" src="${ctx}/${user.smallAvatar}"
-                                     alt="${user.fullname}">
-                            <#else>
-                                <img class="nav-user-photo" src="${ctx}/static/ace/dist/avatars/profile-pic.jpg"
-                                     alt="${user.fullname}">
-                            </#if>
+                            <img class="nav-user-photo" src="${ctx}/static/ace/dist/avatars/profile-pic.jpg"
+                                 alt="${user.fullname}">
                             <span class="user-info">
 									<small>欢迎,</small>
                             <span id="navFullname">${user.fullname}</span>
@@ -41,15 +36,6 @@
                         </a>
 
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                            <li>
-                                <a href="#user/profile">
-                                    <i class="ace-icon fa fa-user"></i>
-                                    个人信息
-                                </a>
-                            </li>
-
-                            <li class="divider"></li>
-
                             <li>
                                 <a href="${ctx}/logout">
                                     <i class="ace-icon fa fa-power-off"></i>
@@ -72,9 +58,6 @@
             <ul class="nav navbar-nav hidden-xs">
                 <li>
                     <a href="#login">登录</a>
-                </li>
-                <li>
-                    <a href="#register">注册</a>
                 </li>
             </ul>
         </@shiro.guest>

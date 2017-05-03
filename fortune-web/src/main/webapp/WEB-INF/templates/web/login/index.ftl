@@ -13,10 +13,10 @@
 
             <form id="login-form" action="${ctx}/login" method="post" novalidate="novalidate">
                 <div>
-                    <label for="username">用户名<small>/手机号/邮箱</small></label>
+                    <label for="username">用户名</label>
                     <div class="input-icon input-icon-right">
                         <input value="admin" type="text" name="username" class="form-control"
-                               placeholder="请输入用户名、手机号或者邮箱"/>
+                               placeholder="密码:5至20位的字母数字组合"/>
                         <i class="ace-icon fa fa-user"></i>
                     </div>
                 </div>
@@ -60,13 +60,13 @@
 
         <div class="toolbar clearfix">
             <div>
-                <a href="#reset" class="forgot-password-link">
+                <a href="javascript:" class="forgot-password-link">
                     <i class="ace-icon fa fa-arrow-left"></i>
                     忘记密码？
                 </a>
             </div>
             <div>
-                <a href="#register" class="user-signup-link">
+                <a href="javascript:" class="user-signup-link">
                     注册
                     <i class="ace-icon fa fa-arrow-right"></i>
                 </a>

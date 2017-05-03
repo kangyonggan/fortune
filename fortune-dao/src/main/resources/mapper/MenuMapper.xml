@@ -16,4 +16,17 @@
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <select id="selectMenusByUsername" resultMap="BaseResultMap">
+        SELECT
+        DISTINCT m.*
+        FROM menu m, role_menu rm, user_role ur
+        <where>
+            m.code = rm.menu_code
+            AND rm.role_code = ur.role_code
+            AND ur.username = #{username}
+            AND m.is_deleted = 0
+            ORDER BY m.sort ASC
+        </where>
+    </select>
 </mapper>

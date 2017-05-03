@@ -21,7 +21,7 @@
     <!-- 使用JDBC事务 -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="multiDataSource"/>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <!-- 读取属性文件，否则 java 类无法直接读取属性 -->

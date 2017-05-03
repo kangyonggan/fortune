@@ -1,18 +1,27 @@
 package com.kangyonggan.app.fortune.biz.shiro;
 
+import com.kangyonggan.app.fortune.biz.service.MenuService;
+import com.kangyonggan.app.fortune.biz.service.RoleService;
+import com.kangyonggan.app.fortune.biz.service.UserService;
+import com.kangyonggan.app.fortune.common.Encodes;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
+import com.kangyonggan.app.fortune.model.vo.Menu;
+import com.kangyonggan.app.fortune.model.vo.Role;
+import com.kangyonggan.app.fortune.model.vo.ShiroUser;
+import com.kangyonggan.app.fortune.model.vo.User;
 import lombok.extern.log4j.Log4j2;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * @author kangyonggan
@@ -22,6 +31,15 @@ import javax.annotation.PostConstruct;
 @Component
 public class MyShiroRealm extends AuthorizingRealm {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private MenuService menuService;
+
     /**
      * 权限认证，为当前登录的Subject授予角色和权限
      * 经测试：本例中该方法的调用时机为需授权资源被访问时
@@ -30,7 +48,20 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        ShiroUser shiroUser = (ShiroUser) principalCollection.getPrimaryPrincipal();
+        log.info("Shiro权限认证, username={}", shiroUser.getUsername());
+        List<Role> roles = roleService.findRolesByUsername(shiroUser.getUsername());
+        List<Menu> menus = menuService.findMenusByUsername(shiroUser.getUsername());
+
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        // 基于Role的权限信息
+        for (Role role : roles) {
+            info.addRole(role.getCode());
+        }
+        // 基于Permission的权限信息
+        for (Menu menu : menus) {
+            addStringPermission(info, menu);
+        }
 
         return info;
     }
@@ -41,7 +72,29 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken authenticationToken) throws AuthenticationException {
-        return null;
+        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+
+        log.info("Shiro登录认证, username={}", token.getUsername());
+
+        String username = token.getUsername();
+        User user = userService.findUserByUsername(username);
+
+        if (null == user) {
+            throw new UnknownAccountException();
+        }
+
+        if (user.getIsDeleted() == 1) {
+            throw new DisabledAccountException();
+        }
+
+        byte[] salt = Encodes.decodeHex(user.getSalt());
+        ShiroUser shiroUser = new ShiroUser();
+        shiroUser.setId(user.getId());
+        shiroUser.setUsername(user.getUsername());
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(shiroUser,
+                user.getPassword(), ByteSource.Util.bytes(salt), getName());
+
+        return simpleAuthenticationInfo;
     }
 
     /**
@@ -55,4 +108,13 @@ public class MyShiroRealm extends AuthorizingRealm {
         setCredentialsMatcher(matcher);
     }
 
+    private void addStringPermission(SimpleAuthorizationInfo info, Menu menu) {
+        info.addStringPermission(menu.getCode());
+
+        if (menu.getLeaf() != null) {
+            for (Menu subMenu : menu.getLeaf()) {
+                addStringPermission(info, subMenu);
+            }
+        }
+    }
 }

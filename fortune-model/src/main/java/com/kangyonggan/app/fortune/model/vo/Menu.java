@@ -2,6 +2,7 @@ package com.kangyonggan.app.fortune.model.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -62,6 +63,18 @@ public class Menu implements Serializable {
      */
     @Column(name = "updated_time")
     private Date updatedTime;
+
+    /**
+     * 子菜单
+     */
+    @Transient
+    private List<Menu> leaf;
+
+    /**
+     * 父菜单ID
+     */
+    @Transient
+    private Long pid;
 
     private static final long serialVersionUID = 1L;
 }
