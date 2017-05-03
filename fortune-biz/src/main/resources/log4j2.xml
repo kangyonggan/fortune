@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="300">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%logger{36}.%t:%L] - %msg%n"/>
+        </Console>
+        <RollingRandomAccessFile name="AllFile" fileName="${fortune.log4j2.home}/all.log"
+                                 filePattern="${fortune.log4j2.home}/all-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%logger{36}.%t:%L] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+            <Filters>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="ErrorFile" fileName="${fortune.log4j2.home}/error.log"
+                                 filePattern="${fortune.log4j2.home}/error-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%logger{36}.%t:%L] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+            <Filters>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+        <SMTP name="Mail" subject="${fortune.app.name} - 报警通知" to="${fortune.mail.receiver}"
+              from="${fortune.mail.username}"
+              smtpHost="${fortune.mail.host}" smtpUsername="${fortune.mail.username}"
+              smtpPassword="${fortune.mail.password}" bufferSize="${fortune.mail.bufferSize}">
+        </SMTP>
+        <Async name="AsyncAll">
+            <AppenderRef ref="AllFile"/>
+        </Async>
+        <Async name="AsyncError">
+            <AppenderRef ref="ErrorFile"/>
+            <AppenderRef ref="Mail"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="info" additivity="true" includeLocation="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncAll"/>
+            <AppenderRef ref="AsyncError"/>
+        </Root>
+    </Loggers>
+</Configuration>

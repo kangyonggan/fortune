@@ -1,0 +1,3 @@
+$(function () {
+    updateState("content/cache");
+});
