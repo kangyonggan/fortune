@@ -1,4 +1,4 @@
-package com.kangyonggan.app.fortune.common;
+package com.kangyonggan.app.fortune.common.util;
 
 
 import java.io.BufferedReader;
@@ -81,7 +81,7 @@ public class HttpUtil {
             in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
-                result += line;
+                result += line + "\n";
             }
         } catch (Exception e) {
             throw e;

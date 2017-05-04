@@ -3,7 +3,7 @@ package com.kangyonggan.app.fortune.biz.aspect;
 
 import com.kangyonggan.app.fortune.biz.service.RedisService;
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
-import com.kangyonggan.app.fortune.common.StringUtil;
+import com.kangyonggan.app.fortune.common.util.StringUtil;
 import com.kangyonggan.app.fortune.model.annotation.CacheDelete;
 import com.kangyonggan.app.fortune.model.annotation.CacheDeleteAll;
 import com.kangyonggan.app.fortune.model.annotation.CacheGetOrSave;

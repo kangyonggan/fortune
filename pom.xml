@@ -95,6 +95,7 @@
         <yuicompressor.version>2.4.8</yuicompressor.version>
         <zxing.version>3.3.0</zxing.version>
         <poi.version>3.12</poi.version>
+        <xstream.version>1.4.9</xstream.version>
     </properties>
 
     <build>
@@ -494,6 +495,11 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>${xstream.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

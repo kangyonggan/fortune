@@ -1,4 +1,4 @@
-package com.kangyonggan.app.fortune.common;
+package com.kangyonggan.app.fortune.common.util;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;

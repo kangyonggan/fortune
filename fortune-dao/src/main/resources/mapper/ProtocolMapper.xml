@@ -8,7 +8,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="merch_co" property="merchCo" jdbcType="VARCHAR"/>
         <result column="acct_no" property="acctNo" jdbcType="VARCHAR"/>
-        <result column="protocol" property="protocol" jdbcType="VARCHAR"/>
+        <result column="protocol_no" property="protocolNo" jdbcType="VARCHAR"/>
         <result column="acct_nm" property="acctNm" jdbcType="VARCHAR"/>
         <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
         <result column="id_tp" property="idTp" jdbcType="VARCHAR"/>

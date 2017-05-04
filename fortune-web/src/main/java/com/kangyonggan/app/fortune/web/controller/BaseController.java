@@ -1,7 +1,7 @@
 package com.kangyonggan.app.fortune.web.controller;
 
 
-import com.kangyonggan.app.fortune.common.StringUtil;
+import com.kangyonggan.app.fortune.common.util.StringUtil;
 
 /**
  * @author kangyonggan

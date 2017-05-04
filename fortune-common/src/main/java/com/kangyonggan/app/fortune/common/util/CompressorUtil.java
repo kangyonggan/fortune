@@ -1,4 +1,4 @@
-package com.kangyonggan.app.fortune.common;
+package com.kangyonggan.app.fortune.common.util;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;

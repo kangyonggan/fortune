@@ -2,7 +2,7 @@ package com.kangyonggan.app.fortune.biz.aspect;
 
 
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
-import com.kangyonggan.app.fortune.common.AspectUtil;
+import com.kangyonggan.app.fortune.common.util.AspectUtil;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;

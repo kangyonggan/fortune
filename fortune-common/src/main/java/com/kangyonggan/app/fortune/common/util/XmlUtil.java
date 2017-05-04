@@ -1,4 +1,4 @@
-package com.kangyonggan.app.fortune.common;
+package com.kangyonggan.app.fortune.common.util;
 
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;

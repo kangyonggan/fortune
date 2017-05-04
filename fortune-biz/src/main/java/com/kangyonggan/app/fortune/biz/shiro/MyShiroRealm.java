@@ -3,7 +3,7 @@ package com.kangyonggan.app.fortune.biz.shiro;
 import com.kangyonggan.app.fortune.biz.service.MenuService;
 import com.kangyonggan.app.fortune.biz.service.RoleService;
 import com.kangyonggan.app.fortune.biz.service.UserService;
-import com.kangyonggan.app.fortune.common.Encodes;
+import com.kangyonggan.app.fortune.common.util.Encodes;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.vo.Menu;
 import com.kangyonggan.app.fortune.model.vo.Role;

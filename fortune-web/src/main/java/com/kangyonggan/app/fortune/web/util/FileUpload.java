@@ -1,7 +1,7 @@
 package com.kangyonggan.app.fortune.web.util;
 
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
-import com.kangyonggan.app.fortune.common.DateUtil;
+import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.io.FilenameUtils;

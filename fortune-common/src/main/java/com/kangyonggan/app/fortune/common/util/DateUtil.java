@@ -1,4 +1,4 @@
-package com.kangyonggan.app.fortune.common;
+package com.kangyonggan.app.fortune.common.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

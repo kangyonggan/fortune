@@ -7,6 +7,11 @@ package com.kangyonggan.app.fortune.model.constants;
 public interface AppConstants {
 
     /**
+     * 默认编码
+     */
+    String CHARSET = "UTF-8";
+
+    /**
      * 分页大小
      */
     int PAGE_SIZE = 10;

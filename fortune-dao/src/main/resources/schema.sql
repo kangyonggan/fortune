@@ -282,7 +282,7 @@ CREATE TABLE protocol
   COMMENT '商户号',
   acct_no      VARCHAR(20)                           NOT NULL
   COMMENT '卡号',
-  protocol     VARCHAR(64)                           NOT NULL
+  protocol_no  VARCHAR(64)                           NOT NULL
   COMMENT '协议号',
   acct_nm      VARCHAR(20)                           NOT NULL
   COMMENT '户名',
@@ -308,8 +308,8 @@ CREATE UNIQUE INDEX id_UNIQUE
   ON protocol (id);
 CREATE INDEX created_time_ix
   ON protocol (created_time);
-CREATE UNIQUE INDEX protocol_UNIQUE
-  ON protocol (protocol);
+CREATE UNIQUE INDEX protocol_no_UNIQUE
+  ON protocol (protocol_no);
 CREATE UNIQUE INDEX merch_co_acct_no_UNIQUE
   ON protocol (merch_co, acct_no);
 CREATE INDEX merch_co_ix
