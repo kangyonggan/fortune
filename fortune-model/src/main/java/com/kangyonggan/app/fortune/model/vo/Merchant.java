@@ -17,11 +17,6 @@ public class Merchant implements Serializable {
     private Long id;
 
     /**
-     * 用户名
-     */
-    private String username;
-
-    /**
      * 商户号
      */
     @Column(name = "merch_co")
@@ -72,6 +67,30 @@ public class Merchant implements Serializable {
      * 余额
      */
     private BigDecimal balance;
+
+    /**
+     * ftp主机名
+     */
+    @Column(name = "ftp_host")
+    private String ftpHost;
+
+    /**
+     * ftp用户名
+     */
+    @Column(name = "ftp_user")
+    private String ftpUser;
+
+    /**
+     * ftp密码
+     */
+    @Column(name = "ftp_pwd")
+    private String ftpPwd;
+
+    /**
+     * ftp目录
+     */
+    @Column(name = "ftp_dir")
+    private String ftpDir;
 
     /**
      * 逻辑删除:{0:未删除, 1:已删除}

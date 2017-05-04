@@ -36,55 +36,12 @@ CREATE TABLE user
   COMMENT '用户表';
 CREATE UNIQUE INDEX id_UNIQUE
   ON user (id);
-CREATE INDEX create_ix
+CREATE INDEX created_time_ix
   ON user (created_time);
 CREATE UNIQUE INDEX username_UNIQUE
   ON user (username);
 CREATE UNIQUE INDEX email_UNIQUE
   ON user (email);
-
--- ----------------------------
---  Table structure for merchant
--- ----------------------------
-DROP TABLE
-IF EXISTS merchant;
-
-CREATE TABLE merchant
-(
-  id            BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
-  COMMENT '主键, 自增',
-  username      VARCHAR(20)                           NOT NULL
-  COMMENT '用户名',
-  merch_co      VARCHAR(15)                           NOT NULL
-  COMMENT '商户号',
-  merch_nm      VARCHAR(15)                           NOT NULL
-  COMMENT '商户名称',
-  merch_acct_no VARCHAR(20)                           NOT NULL
-  COMMENT '商户银行卡号',
-  merch_acct_nm VARCHAR(20)                           NOT NULL
-  COMMENT '商户银行卡户名',
-  merch_mobile  VARCHAR(11)                           NOT NULL
-  COMMENT '商户手机号',
-  merch_id_no   VARCHAR(18)                           NOT NULL
-  COMMENT '商户证件号',
-  merch_id_tp   VARCHAR(2)                            NOT NULL
-  COMMENT '商户证件类型',
-  charset       VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
-  COMMENT '编码',
-  balance       DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
-  COMMENT '余额',
-  is_deleted    TINYINT                               NOT NULL                    DEFAULT 0
-  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
-  created_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
-  COMMENT '创建时间',
-  updated_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  COMMENT '更新时间'
-)
-  COMMENT '商户信息表';
-CREATE UNIQUE INDEX id_UNIQUE
-  ON merchant (id);
-CREATE UNIQUE INDEX username_UNIQUE
-  ON merchant (username);
 
 -- ----------------------------
 --  Table structure for role
@@ -110,7 +67,7 @@ CREATE TABLE role
   COMMENT '角色表';
 CREATE UNIQUE INDEX id_UNIQUE
   ON role (id);
-CREATE INDEX create_ix
+CREATE INDEX created_time_ix
   ON role (created_time);
 CREATE UNIQUE INDEX code_UNIQUE
   ON role (code);
@@ -147,7 +104,7 @@ CREATE TABLE menu
   COMMENT '菜单表';
 CREATE UNIQUE INDEX id_UNIQUE
   ON menu (id);
-CREATE INDEX create_ix
+CREATE INDEX created_time_ix
   ON menu (created_time);
 CREATE INDEX sort_ix
   ON menu (sort);
@@ -216,12 +173,249 @@ CREATE UNIQUE INDEX id_UNIQUE
   ON dictionary (id);
 CREATE UNIQUE INDEX code_UNIQUE
   ON dictionary (code);
-CREATE INDEX create_ix
+CREATE INDEX created_time_ix
   ON dictionary (created_time);
 CREATE INDEX type_ix
   ON dictionary (type);
 CREATE INDEX sort_ix
   ON dictionary (sort);
+
+# fpay相关表
+
+-- ----------------------------
+--  Table structure for merchant
+-- ----------------------------
+DROP TABLE
+IF EXISTS merchant;
+
+CREATE TABLE merchant
+(
+  id            BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  COMMENT '主键, 自增',
+  merch_co      VARCHAR(15)                           NOT NULL
+  COMMENT '商户号',
+  merch_nm      VARCHAR(15)                           NOT NULL
+  COMMENT '商户名称',
+  merch_acct_no VARCHAR(20)                           NOT NULL
+  COMMENT '商户银行卡号',
+  merch_acct_nm VARCHAR(20)                           NOT NULL
+  COMMENT '商户银行卡户名',
+  merch_mobile  VARCHAR(11)                           NOT NULL
+  COMMENT '商户手机号',
+  merch_id_no   VARCHAR(18)                           NOT NULL
+  COMMENT '商户证件号',
+  merch_id_tp   VARCHAR(2)                            NOT NULL
+  COMMENT '商户证件类型',
+  charset       VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
+  COMMENT '编码',
+  balance       DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
+  COMMENT '余额',
+  ftp_host      VARCHAR(20)                           NOT NULL                    DEFAULT ''
+  COMMENT 'ftp主机名',
+  ftp_user      VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  COMMENT 'ftp用户名',
+  ftp_pwd       VARCHAR(128)                          NOT NULL                    DEFAULT ''
+  COMMENT 'ftp密码',
+  ftp_dir       VARCHAR(128)                          NOT NULL                    DEFAULT ''
+  COMMENT 'ftp目录',
+  is_deleted    TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
+  created_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  updated_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间'
+)
+  COMMENT '商户信息表';
+CREATE UNIQUE INDEX id_UNIQUE
+  ON merchant (id);
+CREATE INDEX created_time_ix
+  ON merchant (created_time);
+CREATE UNIQUE INDEX merch_co_UNIQUE
+  ON merchant (merch_co);
+
+-- ----------------------------
+--  Table structure for trans
+-- ----------------------------
+DROP TABLE
+IF EXISTS trans;
+
+CREATE TABLE trans
+(
+  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  COMMENT '主键, 自增',
+  merch_co     VARCHAR(15)                           NOT NULL
+  COMMENT '商户号',
+  tran_co      VARCHAR(4)                            NOT NULL
+  COMMENT '交易码',
+  tran_nm      VARCHAR(4)                            NOT NULL
+  COMMENT '交易名称',
+  is_paused    TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '交易暂停:{0:正常, 1:暂停}',
+  resume_time  TIMESTAMP                             NULL
+  COMMENT '交易暂停的恢复时间',
+  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
+  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间'
+)
+  COMMENT '交易代码对应关系表';
+CREATE UNIQUE INDEX id_UNIQUE
+  ON trans (id);
+CREATE INDEX created_time_ix
+  ON trans (created_time);
+CREATE INDEX merch_co_ix
+  ON trans (merch_co);
+
+-- ----------------------------
+--  Table structure for protocol
+-- ----------------------------
+DROP TABLE
+IF EXISTS protocol;
+
+CREATE TABLE protocol
+(
+  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  COMMENT '主键, 自增',
+  merch_co     VARCHAR(15)                           NOT NULL
+  COMMENT '商户号',
+  acct_no      VARCHAR(20)                           NOT NULL
+  COMMENT '卡号',
+  protocol     VARCHAR(64)                           NOT NULL
+  COMMENT '协议号',
+  acct_nm      VARCHAR(20)                           NOT NULL
+  COMMENT '户名',
+  mobile       VARCHAR(11)                           NOT NULL
+  COMMENT '手机号',
+  id_tp        VARCHAR(1)                            NOT NULL                    DEFAULT '0'
+  COMMENT '证件类型, 默认身份证：0',
+  id_no        VARCHAR(40)                           NOT NULL
+  COMMENT '证件号码',
+  expired_time TIMESTAMP                             NOT NULL
+  COMMENT '协议有效期',
+  is_unsign    TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '是否解约:{0:正常, 1:已解约}',
+  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
+  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间'
+)
+  COMMENT '协议签约表';
+CREATE UNIQUE INDEX id_UNIQUE
+  ON protocol (id);
+CREATE INDEX created_time_ix
+  ON protocol (created_time);
+CREATE UNIQUE INDEX protocol_UNIQUE
+  ON protocol (protocol);
+CREATE UNIQUE INDEX merch_co_acct_no_UNIQUE
+  ON protocol (merch_co, acct_no);
+CREATE INDEX merch_co_ix
+  ON protocol (merch_co);
+CREATE INDEX acct_no_ix
+  ON protocol (acct_no);
+
+-- ----------------------------
+--  Table structure for command
+-- ----------------------------
+DROP TABLE
+IF EXISTS command;
+
+CREATE TABLE command
+(
+  id              BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  COMMENT '主键, 自增',
+  merch_co        VARCHAR(15)                           NOT NULL
+  COMMENT '商户号',
+  protocol        VARCHAR(64)                           NOT NULL
+  COMMENT '协议号',
+  merch_serial_no VARCHAR(20)                           NOT NULL
+  COMMENT '商户流水号',
+  fpay_serial_no  VARCHAR(20)                           NOT NULL
+  COMMENT '发财付流水号',
+  fpay_date       VARCHAR(8)                            NOT NULL
+  COMMENT '发财付交易日期',
+  acct_no         VARCHAR(20)                           NOT NULL
+  COMMENT '卡号',
+  acct_nm         VARCHAR(20)                           NOT NULL
+  COMMENT '户名',
+  mobile          VARCHAR(11)                           NOT NULL
+  COMMENT '手机号',
+  id_tp           VARCHAR(1)                            NOT NULL                    DEFAULT '0'
+  COMMENT '证件类型, 默认身份证：0',
+  id_no           VARCHAR(40)                           NOT NULL
+  COMMENT '证件号码',
+  currCo          VARCHAR(2)                            NOT NULL                    DEFAULT '00'
+  COMMENT '币种, 默认人民币：00',
+  amount          DECIMAL(16, 2)                        NOT NULL
+  COMMENT '交易金额',
+  sndr_acct_tp    VARCHAR(2)                            NOT NULL                    DEFAULT '00'
+  COMMENT '付款方式账户类型',
+  rcvr_acct_tp    VARCHAR(2)                            NOT NULL                    DEFAULT '00'
+  COMMENT '收款方式账户类型',
+  settle_date     VARCHAR(8)                            NOT NULL
+  COMMENT '清算日期',
+  remark          VARCHAR(30)                           NOT NULL                    DEFAULT ''
+  COMMENT '备注',
+  resv1           VARCHAR(30)                           NOT NULL                    DEFAULT ''
+  COMMENT '预留字段1',
+  resv2           VARCHAR(30)                           NOT NULL                    DEFAULT ''
+  COMMENT '预留字段2',
+  tran_st         VARCHAR(1)                            NOT NULL                    DEFAULT 'I'
+  COMMENT '交易状态',
+  is_deleted      TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
+  created_time    TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  updated_time    TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间'
+)
+  COMMENT '交易流水表';
+CREATE UNIQUE INDEX id_UNIQUE
+  ON command (id);
+CREATE INDEX created_time_ix
+  ON command (created_time);
+CREATE UNIQUE INDEX protocol_UNIQUE
+  ON command (protocol);
+CREATE UNIQUE INDEX merch_co_acct_no_UNIQUE
+  ON command (merch_co, acct_no);
+CREATE INDEX merch_co_ix
+  ON command (merch_co);
+CREATE INDEX acct_no_ix
+  ON command (acct_no);
+
+-- ----------------------------
+--  Table structure for resp
+-- ----------------------------
+DROP TABLE
+IF EXISTS resp;
+
+CREATE TABLE resp
+(
+  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  COMMENT '主键, 自增',
+  resp_co      VARCHAR(4)                            NOT NULL
+  COMMENT '响应码',
+  resp_msg     VARCHAR(40)                           NOT NULL
+  COMMENT '响应码描述',
+  trans_st     VARCHAR(1)                            NOT NULL
+  COMMENT '交易状态',
+  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
+  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间'
+)
+  COMMENT '错误码表';
+CREATE UNIQUE INDEX id_UNIQUE
+  ON resp (id);
+CREATE INDEX created_time_ix
+  ON resp (created_time);
+CREATE UNIQUE INDEX resp_co_UNIQUE
+  ON resp (resp_co);
 
 #====================初始数据====================#
 
@@ -273,3 +467,24 @@ INSERT INTO role_menu SELECT
                         'ROLE_ADMIN',
                         code
                       FROM menu;
+
+INSERT INTO dictionary
+(code, value, type, sort)
+VALUES
+  # 六种交易
+  ('K001', '签约', 'TRANS_CO', 0),
+  ('K002', '解约', 'TRANS_CO', 1),
+  ('K003', '单笔代扣', 'TRANS_CO', 2),
+  ('K004', '单笔代付', 'TRANS_CO', 3),
+  ('K005', '交易查询', 'TRANS_CO', 4),
+  ('K006', '账户余额查询', 'TRANS_CO', 5),
+
+  # 证件类型
+  ('0', '身份证', 'ID_TP', 0),
+  ('1', '港澳居民往来内地通行证', 'ID_TP', 1),
+  ('2', '港澳居民往来内地通行证', 'ID_TP', 2),
+  ('3', '外国护照', 'ID_TP', 3),
+  ('4', '其他', 'ID_TP', 4),
+
+  # 币种
+  ('00', '人民币', 'CURR_CO', 0);
