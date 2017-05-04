@@ -35,16 +35,16 @@
               smtpHost="${fortune.mail.host}" smtpUsername="${fortune.mail.username}"
               smtpPassword="${fortune.mail.password}" bufferSize="${fortune.mail.bufferSize}">
         </SMTP>
-        <Async name="AsyncAll">
+        <Async name="AsyncAll" includeLocation="true">
             <AppenderRef ref="AllFile"/>
         </Async>
-        <Async name="AsyncError">
+        <Async name="AsyncError" includeLocation="true">
             <AppenderRef ref="ErrorFile"/>
             <!--<AppenderRef ref="Mail"/>-->
         </Async>
     </Appenders>
     <Loggers>
-        <Root level="info" additivity="true" includeLocation="true">
+        <Root level="info" additivity="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="AsyncAll"/>
             <AppenderRef ref="AsyncError"/>
