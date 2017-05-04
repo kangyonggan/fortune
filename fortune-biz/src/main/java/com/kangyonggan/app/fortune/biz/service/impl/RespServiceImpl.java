@@ -28,7 +28,7 @@ public class RespServiceImpl extends BaseService<Resp> implements RespService {
         resp = super.selectOne(resp);
 
         if (resp == null) {
-            log.info("错误码不存在或已逻辑删除:{}, 将使用保底错误码", respCo);
+            log.info("错误码不存在或已逻辑删除:{}, 将使用保底错误码9999", respCo);
 
             resp = new Resp();
             resp.setRespCo("9999");

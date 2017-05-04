@@ -19,6 +19,7 @@
         <result column="ftp_user" jdbcType="VARCHAR" property="ftpUser"/>
         <result column="ftp_pwd" jdbcType="VARCHAR" property="ftpPwd"/>
         <result column="ftp_dir" jdbcType="VARCHAR" property="ftpDir"/>
+        <result column="is_debug" jdbcType="TINYINT" property="isDebug"/>
         <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>

@@ -93,6 +93,12 @@ public class Merchant implements Serializable {
     private String ftpDir;
 
     /**
+     * 是否是测试环境:{0:生产环境, 1:测试环境}
+     */
+    @Column(name = "is_debug")
+    private Byte isDebug;
+
+    /**
      * 逻辑删除:{0:未删除, 1:已删除}
      */
     @Column(name = "is_deleted")

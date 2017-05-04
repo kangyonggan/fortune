@@ -1,16 +1,14 @@
 package com.kangyonggan.app.fortune.web.controller;
 
+import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.biz.service.FpayService;
-import com.kangyonggan.app.fortune.biz.service.RespService;
-import com.kangyonggan.app.fortune.common.exception.ParseException;
+import com.kangyonggan.app.fortune.common.exception.BuildException;
 import com.kangyonggan.app.fortune.common.exception.ReceiveException;
 import com.kangyonggan.app.fortune.common.exception.SendException;
 import com.kangyonggan.app.fortune.common.util.XStreamUtil;
-import com.kangyonggan.app.fortune.common.util.XmlUtil;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
-import com.kangyonggan.app.fortune.model.vo.Resp;
+import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
-import com.kangyonggan.app.fortune.model.xml.Header;
 import com.thoughtworks.xstream.XStream;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * 发财付接口
@@ -40,7 +39,7 @@ public class FpayController {
     private FpayService fpayService;
 
     @Autowired
-    private RespService respService;
+    private FpayHelper fpayHelper;
 
     /**
      * 交易总入口
@@ -64,9 +63,8 @@ public class FpayController {
         }
 
         // 2. 解析xml
-        Fpay fpay = null;
+        Fpay fpay;
         try {
-
             XStream xStream = XStreamUtil.getXStream();
             xStream.processAnnotations(Fpay.class);
             fpay = (Fpay) xStream.fromXML(reqXml);
@@ -75,11 +73,52 @@ public class FpayController {
             return;
         }
 
-        // 3. 核心业务逻辑
+        // TODO 交易落库, command表的约束不能那么强
+
+        // 3. 入参校验
+        try {
+            Map<String, Object> validResult = fpayHelper.validParams(fpay);
+            boolean isValid = (boolean) validResult.get("isValid");
+            log.info("入参校验结果:{}", isValid);
+
+            if (!isValid) {
+                log.info("入参校验失败，错误码：{}", validResult.get("respCo"));
+                fpayHelper.buildErrorXml(fpay, (String) validResult.get("respCo"));
+                return;
+            }
+        } catch (Exception e) {
+            processException(response, "0004");
+            return;
+        }
+
+        // 4. 分发请求
         String respXml;
         try {
-            respXml = fpayService.execute(reqXml);
-        } catch (ParseException pe) {
+            String tranCo = fpay.getHeader().getTranCo();
+            log.info("交易代码：{}", tranCo);
+            if (TranCo.K001.name().equals(tranCo)) {
+                // 签约
+                respXml = fpayService.sign(fpay);
+            } else if (TranCo.K002.name().equals(tranCo)) {
+                // 解约
+                respXml = fpayService.unsign(fpay);
+            } else if (TranCo.K003.name().equals(tranCo)) {
+                // 单笔代扣
+                respXml = fpayService.pay(fpay);
+            } else if (TranCo.K004.name().equals(tranCo)) {
+                // 单笔代付
+                respXml = fpayService.redeem(fpay);
+            } else if (TranCo.K005.name().equals(tranCo)) {
+                // 交易查询
+                respXml = fpayService.query(fpay);
+            } else if (TranCo.K006.name().equals(tranCo)) {
+                // 余额查询
+                respXml = fpayService.queryBalance(fpay);
+            } else {
+                processException(response, fpay, "0009");
+                return;
+            }
+        } catch (BuildException pe) {
             processException(response, fpay, "0005");
             return;
         } catch (Exception e) {
@@ -87,7 +126,7 @@ public class FpayController {
             return;
         }
 
-        // 4. 写响应
+        // 5. 写响应
         try {
             wirteRespXml(response, respXml);
         } catch (SendException e) {
@@ -115,7 +154,7 @@ public class FpayController {
             out.write(respXml.getBytes(AppConstants.CHARSET));
             out.flush();
 
-            log.info("响应报文回写完毕：{}", respXml);
+            log.info("响应报文回写完毕：\n{}", respXml);
         } catch (IOException e) {
             throw new SendException("回写响应报文异常", e);
         } finally {
@@ -150,7 +189,7 @@ public class FpayController {
             out.flush();
 
             String reqXml = new String(out.toByteArray(), AppConstants.CHARSET);
-            log.info("商户请求报文: {}", reqXml);
+            log.info("商户请求报文: \n{}", reqXml);
 
             return reqXml;
         } catch (IOException e) {
@@ -179,36 +218,7 @@ public class FpayController {
     private void processException(HttpServletResponse response, Fpay reqFpay, String respCode) {
         OutputStream out = null;
         try {
-            // 响应码
-            Resp resp = respService.findRespByRespCo(respCode);
-
-            // TODO 这段逻辑可重复使用，后面要重构 xml处理器
-            XStream xStream = XStreamUtil.getXStream();
-            xStream.processAnnotations(Fpay.class);
-
-            // 响应头
-            Header header = new Header();
-            if (reqFpay != null) {
-                header.setMerchCo(reqFpay.getHeader().getMerchCo());
-                header.setTranCo(reqFpay.getHeader().getTranCo());
-                header.setSerialNo(reqFpay.getHeader().getSerialNo());
-            } else {
-                header.setMerchCo("");
-                header.setTranCo("");
-                header.setSerialNo("");
-            }
-            header.setRespCo(resp.getRespCo());
-            header.setRespMsg(resp.getRespMsg());
-
-            // 响应报文整体
-            Fpay respFpay = new Fpay();
-            respFpay.setHeader(header);
-
-            // 转xml
-            String respXml = xStream.toXML(respFpay);
-
-            // 格式化xml
-            respXml = XmlUtil.format(respXml);
+            String respXml = fpayHelper.buildErrorXml(reqFpay, respCode);
 
             out = response.getOutputStream();
             out.write(respXml.getBytes(AppConstants.CHARSET));

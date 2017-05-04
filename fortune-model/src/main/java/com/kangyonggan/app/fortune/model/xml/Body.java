@@ -1,6 +1,7 @@
 package com.kangyonggan.app.fortune.model.xml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
  * @since 5/4/17
  */
 @XStreamAlias("body")
+@Data
 public class Body {
 
     /**

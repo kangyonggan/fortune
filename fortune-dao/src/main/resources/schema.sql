@@ -218,6 +218,8 @@ CREATE TABLE merchant
   COMMENT 'ftp密码',
   ftp_dir       VARCHAR(128)                          NOT NULL                    DEFAULT ''
   COMMENT 'ftp目录',
+  is_debug      TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '是否是测试环境:{0:生产环境, 1:测试环境}',
   is_deleted    TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '逻辑删除:{0:未删除, 1:已删除}',
   created_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
@@ -265,8 +267,8 @@ CREATE UNIQUE INDEX id_UNIQUE
   ON trans (id);
 CREATE INDEX created_time_ix
   ON trans (created_time);
-CREATE INDEX merch_co_ix
-  ON trans (merch_co);
+CREATE UNIQUE INDEX merch_co_tran_co_UNIQUE
+  ON trans (merch_co, tran_co);
 
 -- ----------------------------
 --  Table structure for protocol

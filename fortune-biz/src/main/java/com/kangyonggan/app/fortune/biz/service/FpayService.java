@@ -1,6 +1,7 @@
 package com.kangyonggan.app.fortune.biz.service;
 
-import com.kangyonggan.app.fortune.common.exception.ParseException;
+import com.kangyonggan.app.fortune.common.exception.BuildException;
+import com.kangyonggan.app.fortune.model.xml.Fpay;
 
 /**
  * 发财付业务核心处理器
@@ -11,12 +12,63 @@ import com.kangyonggan.app.fortune.common.exception.ParseException;
 public interface FpayService {
 
     /**
-     * 解析报文、分发请求、构建报文
+     * 签约
      *
-     * @param reqXml 请求报文
+     * @param fpay 签约请求
      * @return
-     * @throws ParseException 解析异常
+     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    String execute(String reqXml) throws ParseException, Exception;
+    String sign(Fpay fpay) throws BuildException, Exception;
+
+    /**
+     * 解约
+     *
+     * @param fpay 解约请求
+     * @return
+     * @throws BuildException 构建报文异常
+     * @throws Exception      未知异常
+     */
+    String unsign(Fpay fpay) throws BuildException, Exception;
+
+    /**
+     * 单笔代扣
+     *
+     * @param fpay 代扣请求
+     * @return
+     * @throws BuildException 构建报文异常
+     * @throws Exception      未知异常
+     */
+    String pay(Fpay fpay) throws BuildException, Exception;
+
+    /**
+     * 单笔代付
+     *
+     * @param fpay 代付请求
+     * @return
+     * @throws BuildException 构建报文异常
+     * @throws Exception      未知异常
+     */
+    String redeem(Fpay fpay) throws BuildException, Exception;
+
+    /**
+     * 交易查询
+     *
+     * @param fpay 查询请求
+     * @return
+     * @throws BuildException 构建报文异常
+     * @throws Exception      未知异常
+     */
+    String query(Fpay fpay) throws BuildException, Exception;
+
+    /**
+     * 余额查询
+     *
+     * @param fpay 余额查询请求
+     * @return
+     * @throws BuildException 构建报文异常
+     * @throws Exception      未知异常
+     */
+    String queryBalance(Fpay fpay) throws BuildException, Exception;
+
 }
