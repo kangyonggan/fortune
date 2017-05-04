@@ -2,8 +2,8 @@
 <config>
     <group>
         <!--app-->
-        <property name="fortune.app.name" description="项目名字" defaultValue="发财付"/>
-        <property name="fortune.app.name.en" description="项目名字（英文）" defaultValue="Fortune Pay"/>
+        <property name="fortune.app.name" description="项目名字" defaultValue="发财付平台管理系统"/>
+        <property name="fortune.app.name.en" description="项目名字（英文）" defaultValue="Fortune Pay System"/>
         <property name="fortune.app.author" description="项目负责人" defaultValue="康永敢"/>
         <property name="fortune.app.author.en" description="项目负责人" defaultValue="Yonggan Kang"/>
         <property name="fortune.app.ba.no" description="备案号" defaultValue="皖ICP备16017743号-1"/>

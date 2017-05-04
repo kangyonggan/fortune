@@ -19,8 +19,8 @@ public class IndexController extends BaseController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String web() {
-        return "web/web";
+    public String layout() {
+        return "web/layout";
     }
 
     /**

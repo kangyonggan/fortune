@@ -40,7 +40,7 @@
         </Async>
         <Async name="AsyncError">
             <AppenderRef ref="ErrorFile"/>
-            <AppenderRef ref="Mail"/>
+            <!--<AppenderRef ref="Mail"/>-->
         </Async>
     </Appenders>
     <Loggers>

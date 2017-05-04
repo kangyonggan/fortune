@@ -4,7 +4,9 @@ import com.kangyonggan.app.fortune.biz.service.UserService;
 import com.kangyonggan.app.fortune.model.annotation.CacheGetOrSave;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
+import com.kangyonggan.app.fortune.model.vo.ShiroUser;
 import com.kangyonggan.app.fortune.model.vo.User;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,5 +25,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setUsername(username);
 
         return super.selectOne(user);
+    }
+
+    @Override
+    @LogTime
+    public ShiroUser getShiroUser() {
+        return (ShiroUser) SecurityUtils.getSubject().getPrincipal();
     }
 }
