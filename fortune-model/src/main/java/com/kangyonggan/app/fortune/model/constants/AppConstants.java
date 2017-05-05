@@ -42,5 +42,10 @@ public interface AppConstants {
      * 把验证码存放在session中的key
      */
     String KEY_CAPTCHA = "key-captcha";
+
+    /**
+     * command流水号在redis中的key
+     */
+    String COMMAND_SERIAL_NO = "command:serialNo";
 }
 

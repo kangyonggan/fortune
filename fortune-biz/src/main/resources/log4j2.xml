@@ -44,6 +44,12 @@
         </Async>
     </Appenders>
     <Loggers>
+        <Logger name="com.kangyonggan.app.fortune.mapper" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncAll"></AppenderRef>
+            <AppenderRef ref="AsyncError"></AppenderRef>
+        </Logger>
+
         <Root level="info" additivity="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="AsyncAll"/>

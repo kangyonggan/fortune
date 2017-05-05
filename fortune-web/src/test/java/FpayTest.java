@@ -1,3 +1,4 @@
+import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.common.util.HttpUtil;
 
 /**
@@ -11,7 +12,7 @@ public class FpayTest {
             "   <header>\n" +
             "      <merchCo>319879465156486</merchCo>\n" +
             "      <tranCo>K001</tranCo>\n" +
-            "      <serialNo>20170502211851000001</serialNo>\n" +
+            "      <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>\n" +
             "      <reqDate>20170502</reqDate>\n" +
             "      <reqTime>211851</reqTime>\n" +
             "      <signature>...</signature>\n" +

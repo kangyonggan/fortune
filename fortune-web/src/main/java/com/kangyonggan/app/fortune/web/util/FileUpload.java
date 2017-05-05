@@ -89,7 +89,7 @@ public class FileUpload {
     private static String extractFilePathByExtension(String extension, String suffix) {
         StringBuilder tempPath = new StringBuilder();
         tempPath.append(AppConstants.FILE_UPLOAD);
-        tempPath.append(DateUtil.getCurrentFullDateTime());
+        tempPath.append(DateUtil.getFullDateTime());
 
         if (StringUtils.isNoneBlank(suffix)) {
             tempPath.append("_").append(suffix);

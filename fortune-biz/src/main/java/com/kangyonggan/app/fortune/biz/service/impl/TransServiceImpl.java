@@ -1,6 +1,7 @@
 package com.kangyonggan.app.fortune.biz.service.impl;
 
 import com.kangyonggan.app.fortune.biz.service.TransService;
+import com.kangyonggan.app.fortune.model.annotation.CacheGetOrSave;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.vo.Trans;
@@ -15,6 +16,7 @@ public class TransServiceImpl extends BaseService<Trans> implements TransService
 
     @Override
     @LogTime
+    @CacheGetOrSave("trans:merchCo:{0}:tranCo:{1}")
     public Trans findTransByMerchCoAndTranCo(String merchCo, String tranCo) {
         Trans trans = new Trans();
         trans.setMerchCo(merchCo);

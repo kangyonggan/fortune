@@ -16,7 +16,7 @@ public class MerchantServiceImpl extends BaseService<Merchant> implements Mercha
 
     @Override
     @LogTime
-    @CacheGetOrSave("merchant:co:{0}")
+    @CacheGetOrSave("merchant:merchCo:{0}")
     public Merchant findMerchantByMerchCo(String merchCo) {
         Merchant merchant = new Merchant();
         merchant.setMerchCo(merchCo);

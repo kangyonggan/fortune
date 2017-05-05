@@ -1,32 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kangyonggan.app.fortune.mapper.CommandMapper">
     <resultMap id="BaseResultMap" type="com.kangyonggan.app.fortune.model.vo.Command">
         <!--
           WARNING - @mbggenerated
         -->
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="merch_co" property="merchCo" jdbcType="VARCHAR"/>
-        <result column="protocol" property="protocol" jdbcType="VARCHAR"/>
-        <result column="merch_serial_no" property="merchSerialNo" jdbcType="VARCHAR"/>
-        <result column="fpay_serial_no" property="fpaySerialNo" jdbcType="VARCHAR"/>
-        <result column="fpay_date" property="fpayDate" jdbcType="VARCHAR"/>
-        <result column="acct_no" property="acctNo" jdbcType="VARCHAR"/>
-        <result column="acct_nm" property="acctNm" jdbcType="VARCHAR"/>
-        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
-        <result column="id_tp" property="idTp" jdbcType="VARCHAR"/>
-        <result column="id_no" property="idNo" jdbcType="VARCHAR"/>
-        <result column="currCo" property="currco" jdbcType="VARCHAR"/>
-        <result column="amount" property="amount" jdbcType="DECIMAL"/>
-        <result column="sndr_acct_tp" property="sndrAcctTp" jdbcType="VARCHAR"/>
-        <result column="rcvr_acct_tp" property="rcvrAcctTp" jdbcType="VARCHAR"/>
-        <result column="settle_date" property="settleDate" jdbcType="VARCHAR"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="resv1" property="resv1" jdbcType="VARCHAR"/>
-        <result column="resv2" property="resv2" jdbcType="VARCHAR"/>
-        <result column="tran_st" property="tranSt" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
-        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
-        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merch_co" jdbcType="VARCHAR" property="merchCo"/>
+        <result column="protocol" jdbcType="VARCHAR" property="protocol"/>
+        <result column="merch_serial_no" jdbcType="VARCHAR" property="merchSerialNo"/>
+        <result column="fpay_serial_no" jdbcType="VARCHAR" property="fpaySerialNo"/>
+        <result column="tran_co" jdbcType="VARCHAR" property="tranCo"/>
+        <result column="req_date" jdbcType="VARCHAR" property="reqDate"/>
+        <result column="req_time" jdbcType="VARCHAR" property="reqTime"/>
+        <result column="fpay_date" jdbcType="VARCHAR" property="fpayDate"/>
+        <result column="acct_no" jdbcType="VARCHAR" property="acctNo"/>
+        <result column="acct_nm" jdbcType="VARCHAR" property="acctNm"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="id_tp" jdbcType="VARCHAR" property="idTp"/>
+        <result column="id_no" jdbcType="VARCHAR" property="idNo"/>
+        <result column="currCo" jdbcType="VARCHAR" property="currco"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="sndr_acct_tp" jdbcType="VARCHAR" property="sndrAcctTp"/>
+        <result column="rcvr_acct_tp" jdbcType="VARCHAR" property="rcvrAcctTp"/>
+        <result column="settle_date" jdbcType="VARCHAR" property="settleDate"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="resv1" jdbcType="VARCHAR" property="resv1"/>
+        <result column="resv2" jdbcType="VARCHAR" property="resv2"/>
+        <result column="tran_st" jdbcType="VARCHAR" property="tranSt"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
     </resultMap>
 </mapper>

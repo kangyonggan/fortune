@@ -171,8 +171,8 @@ CREATE TABLE dictionary
   COMMENT '字典表';
 CREATE UNIQUE INDEX id_UNIQUE
   ON dictionary (id);
-CREATE UNIQUE INDEX code_UNIQUE
-  ON dictionary (code);
+CREATE UNIQUE INDEX type_code_UNIQUE
+  ON dictionary (type, code);
 CREATE INDEX created_time_ix
   ON dictionary (created_time);
 CREATE INDEX type_ix
@@ -204,7 +204,7 @@ CREATE TABLE merchant
   COMMENT '商户手机号',
   merch_id_no   VARCHAR(18)                           NOT NULL
   COMMENT '商户证件号',
-  merch_id_tp   VARCHAR(2)                            NOT NULL
+  merch_id_tp   VARCHAR(1)                            NOT NULL                    DEFAULT '0'
   COMMENT '商户证件类型',
   charset       VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
   COMMENT '编码',
@@ -249,7 +249,7 @@ CREATE TABLE trans
   COMMENT '商户号',
   tran_co      VARCHAR(4)                            NOT NULL
   COMMENT '交易码',
-  tran_nm      VARCHAR(4)                            NOT NULL
+  tran_nm      VARCHAR(20)                           NOT NULL
   COMMENT '交易名称',
   is_paused    TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '交易暂停:{0:正常, 1:暂停}',
@@ -329,35 +329,41 @@ CREATE TABLE command
 (
   id              BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
   COMMENT '主键, 自增',
-  merch_co        VARCHAR(15)                           NOT NULL
+  merch_co        VARCHAR(15)                           NOT NULL                    DEFAULT ''
   COMMENT '商户号',
-  protocol        VARCHAR(64)                           NOT NULL
+  protocol        VARCHAR(64)                           NOT NULL                    DEFAULT ''
   COMMENT '协议号',
   merch_serial_no VARCHAR(20)                           NOT NULL
   COMMENT '商户流水号',
   fpay_serial_no  VARCHAR(20)                           NOT NULL
   COMMENT '发财付流水号',
-  fpay_date       VARCHAR(8)                            NOT NULL
+  tran_co         VARCHAR(4)                            NOT NULL                    DEFAULT ''
+  COMMENT '交易码',
+  req_date        VARCHAR(8)                            NOT NULL                    DEFAULT ''
+  COMMENT '请求方交易日期',
+  req_time        VARCHAR(6)                            NOT NULL                    DEFAULT ''
+  COMMENT '请求方交易时间',
+  fpay_date       VARCHAR(8)                            NOT NULL                    DEFAULT ''
   COMMENT '发财付交易日期',
-  acct_no         VARCHAR(20)                           NOT NULL
+  acct_no         VARCHAR(20)                           NOT NULL                    DEFAULT ''
   COMMENT '卡号',
-  acct_nm         VARCHAR(20)                           NOT NULL
+  acct_nm         VARCHAR(20)                           NOT NULL                    DEFAULT ''
   COMMENT '户名',
-  mobile          VARCHAR(11)                           NOT NULL
+  mobile          VARCHAR(11)                           NOT NULL                    DEFAULT ''
   COMMENT '手机号',
   id_tp           VARCHAR(1)                            NOT NULL                    DEFAULT '0'
   COMMENT '证件类型, 默认身份证：0',
-  id_no           VARCHAR(40)                           NOT NULL
+  id_no           VARCHAR(40)                           NOT NULL                    DEFAULT ''
   COMMENT '证件号码',
   currCo          VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '币种, 默认人民币：00',
-  amount          DECIMAL(16, 2)                        NOT NULL
+  amount          DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
   COMMENT '交易金额',
   sndr_acct_tp    VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '付款方式账户类型',
   rcvr_acct_tp    VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '收款方式账户类型',
-  settle_date     VARCHAR(8)                            NOT NULL
+  settle_date     VARCHAR(8)                            NOT NULL                    DEFAULT ''
   COMMENT '清算日期',
   remark          VARCHAR(30)                           NOT NULL                    DEFAULT ''
   COMMENT '备注',
@@ -379,14 +385,10 @@ CREATE UNIQUE INDEX id_UNIQUE
   ON command (id);
 CREATE INDEX created_time_ix
   ON command (created_time);
-CREATE UNIQUE INDEX protocol_UNIQUE
-  ON command (protocol);
-CREATE UNIQUE INDEX merch_co_acct_no_UNIQUE
-  ON command (merch_co, acct_no);
+CREATE UNIQUE INDEX merch_co_merch_serial_no_UNIQUE
+  ON command (merch_co, merch_serial_no);
 CREATE INDEX merch_co_ix
   ON command (merch_co);
-CREATE INDEX acct_no_ix
-  ON command (acct_no);
 
 -- ----------------------------
 --  Table structure for resp
@@ -488,5 +490,34 @@ VALUES
   ('3', '外国护照', 'ID_TP', 3),
   ('4', '其他', 'ID_TP', 4),
 
+  # 账户类型
+  ('00', '借记卡', 'ACCT_TP', 0),
+  ('01', '货记卡', 'ACCT_TP', 1),
+  ('02', '信用卡', 'ACCT_TP', 2),
+
   # 币种
   ('00', '人民币', 'CURR_CO', 0);
+
+INSERT INTO resp
+(resp_co, resp_msg, trans_st)
+VALUES
+  ('0000', '交易成功', 'Y'),
+  ('0001', '交易处理中', 'I'),
+  ('0002', '接收报文异常', 'F'),
+  ('0003', '发送报文异常', 'E'),
+  ('0004', '解析报文异常', 'F'),
+  ('0005', '构建报文异常', 'E'),
+  ('0006', '必填字段缺失', 'F'),
+  ('0007', '交易落库失败', 'F'),
+  ('0008', '解密失败', 'F'),
+  ('0009', '验签失败', 'F'),
+  ('0010', '签名失败', 'E'),
+  ('0011', '加密失败', 'E'),
+  ('0012', '不支持的交易码', 'F'),
+  ('0013', '不存在的商户号', 'F'),
+  ('0014', '商户未开通此类交易', 'F'),
+  ('0015', '商户已暂停此类交易', 'F'),
+  ('0016', '不存在的证件类型', 'F'),
+  ('0017', '不存在的币种', 'F'),
+  ('9999', '未知异常', 'E');
+

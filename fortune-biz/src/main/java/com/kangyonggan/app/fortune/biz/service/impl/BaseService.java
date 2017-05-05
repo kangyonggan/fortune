@@ -142,5 +142,25 @@ public abstract class BaseService<T> {
         return myMapper.selectAll();
     }
 
+    /**
+     * 查找数量
+     *
+     * @param entity
+     * @return
+     */
+    public int selectCount(T entity) {
+        return myMapper.selectCount(entity);
+    }
+
+    /**
+     * 判断是否存在
+     *
+     * @param entity
+     * @return
+     */
+    public boolean exists(T entity) {
+        return myMapper.selectCount(entity) > 0;
+    }
+
 }
 

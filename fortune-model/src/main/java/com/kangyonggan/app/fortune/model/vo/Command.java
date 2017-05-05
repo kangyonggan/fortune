@@ -40,6 +40,24 @@ public class Command implements Serializable {
     private String fpaySerialNo;
 
     /**
+     * 交易码
+     */
+    @Column(name = "tran_co")
+    private String tranCo;
+
+    /**
+     * 请求方交易日期
+     */
+    @Column(name = "req_date")
+    private String reqDate;
+
+    /**
+     * 请求方交易时间
+     */
+    @Column(name = "req_time")
+    private String reqTime;
+
+    /**
      * 发财付交易日期
      */
     @Column(name = "fpay_date")

@@ -1,5 +1,6 @@
 package com.kangyonggan.app.fortune.web.controller;
 
+import com.kangyonggan.app.fortune.biz.service.CommandService;
 import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.biz.service.FpayService;
 import com.kangyonggan.app.fortune.common.exception.BuildException;
@@ -7,6 +8,7 @@ import com.kangyonggan.app.fortune.common.exception.ReceiveException;
 import com.kangyonggan.app.fortune.common.exception.SendException;
 import com.kangyonggan.app.fortune.common.util.XStreamUtil;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
+import com.kangyonggan.app.fortune.model.constants.RespCo;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
 import com.thoughtworks.xstream.XStream;
@@ -22,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
 
 /**
  * 发财付接口
@@ -41,6 +42,9 @@ public class FpayController {
     @Autowired
     private FpayHelper fpayHelper;
 
+    @Autowired
+    private CommandService commandService;
+
     /**
      * 交易总入口
      *
@@ -55,10 +59,12 @@ public class FpayController {
         try {
             reqXml = readReqXml(request);
         } catch (ReceiveException e) {
-            processException(response, "0002");
+            log.warn(e);
+            processException(response, RespCo.RESP_CO_0002.getRespCo());
             return;
         } catch (Exception e) {
-            processException(response, "0003");
+            log.warn(e);
+            processException(response, RespCo.RESP_CO_9999.getRespCo());
             return;
         }
 
@@ -69,29 +75,38 @@ public class FpayController {
             xStream.processAnnotations(Fpay.class);
             fpay = (Fpay) xStream.fromXML(reqXml);
         } catch (Exception e) {
-            processException(response, "0004");
+            log.warn(e);
+            processException(response, RespCo.RESP_CO_9999.getRespCo());
             return;
         }
-
-        // TODO 交易落库, command表的约束不能那么强
 
         // 3. 入参校验
         try {
-            Map<String, Object> validResult = fpayHelper.validParams(fpay);
-            boolean isValid = (boolean) validResult.get("isValid");
-            log.info("入参校验结果:{}", isValid);
-
-            if (!isValid) {
-                log.info("入参校验失败，错误码：{}", validResult.get("respCo"));
-                fpayHelper.buildErrorXml(fpay, (String) validResult.get("respCo"));
+            // 数据非空校验
+            if (!fpayHelper.validEmpty(fpay)) {
+                fpayHelper.buildErrorXml(fpay, RespCo.RESP_CO_0006.getRespCo());
+                return;
+            }
+            // 数据合法性校验
+            if (!fpayHelper.validData(fpay)) {
                 return;
             }
         } catch (Exception e) {
-            processException(response, "0004");
+            log.warn(e);
+            processException(response, RespCo.RESP_CO_9999.getRespCo());
             return;
         }
 
-        // 4. 分发请求
+        // 4. 交易落库
+        try {
+            commandService.saveCommand(fpay);
+        } catch (Exception e) {
+            log.warn(e);
+            processException(response, RespCo.RESP_CO_0007.getRespCo());
+            return;
+        }
+
+        // 5. 分发请求
         String respXml;
         try {
             String tranCo = fpay.getHeader().getTranCo();
@@ -115,25 +130,29 @@ public class FpayController {
                 // 余额查询
                 respXml = fpayService.queryBalance(fpay);
             } else {
-                processException(response, fpay, "0009");
+                processException(response, fpay, RespCo.RESP_CO_0012.getRespCo());
                 return;
             }
-        } catch (BuildException pe) {
-            processException(response, fpay, "0005");
+        } catch (BuildException e) {
+            log.warn(e);
+            processException(response, fpay, RespCo.RESP_CO_0005.getRespCo());
             return;
         } catch (Exception e) {
-            processException(response, fpay, "0006");
+            log.warn(e);
+            processException(response, fpay, RespCo.RESP_CO_9999.getRespCo());
             return;
         }
 
-        // 5. 写响应
+        // 6. 写响应
         try {
             wirteRespXml(response, respXml);
         } catch (SendException e) {
-            processException(response, fpay, "0007");
+            log.warn(e);
+            processException(response, fpay, RespCo.RESP_CO_0003.getRespCo());
             return;
         } catch (Exception e) {
-            processException(response, fpay, "0008");
+            log.warn(e);
+            processException(response, fpay, RespCo.RESP_CO_9999.getRespCo());
             return;
         }
         log.info("==================== 离开发财付平台交易总入口 ====================");
