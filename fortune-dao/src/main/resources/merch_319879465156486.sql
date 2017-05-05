@@ -1,9 +1,9 @@
 # 商户 319879465156486 的初始化数据
 USE fortune_dev;
 INSERT INTO merchant
-(merch_co, merch_nm, merch_acct_no, merch_acct_nm, merch_mobile, merch_id_no)
+(merch_co, merch_nm, merch_acct_no, merch_acct_nm, balance, merch_mobile, merch_id_no)
 VALUES
-  ('319879465156486', '公测商户', '6228216660054088518', '康永敢', '15121119571', '340321199103173095');
+  ('319879465156486', '公测商户', '6228216660054088518', '康永敢', 1000000000, '15121119571', '340321199103173095');
 
 INSERT INTO trans
 (merch_co, tran_co, tran_nm)
