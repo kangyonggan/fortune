@@ -2,11 +2,11 @@
 <Configuration status="WARN" monitorInterval="300">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%logger{36}.%t:%L] - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t %logger{36}:%L] - %msg%n"/>
         </Console>
         <RollingRandomAccessFile name="AllFile" fileName="${fortune.log4j2.home}/all.log"
                                  filePattern="${fortune.log4j2.home}/all-%d{yyyy-MM-dd}-%i.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%logger{36}.%t:%L] - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t %logger{36}:%L] - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="500 MB"/>
@@ -19,7 +19,7 @@
         </RollingRandomAccessFile>
         <RollingRandomAccessFile name="ErrorFile" fileName="${fortune.log4j2.home}/error.log"
                                  filePattern="${fortune.log4j2.home}/error-%d{yyyy-MM-dd}-%i.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%logger{36}.%t:%L] - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t %logger{36}:%L] - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="500 MB"/>

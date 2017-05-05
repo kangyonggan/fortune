@@ -1,13 +1,14 @@
 package com.kangyonggan.app.fortune.biz.service;
 
+import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.common.util.XStreamUtil;
 import com.kangyonggan.app.fortune.common.util.XmlUtil;
+import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.DictionaryType;
 import com.kangyonggan.app.fortune.model.constants.RespCo;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.vo.Merchant;
-import com.kangyonggan.app.fortune.model.vo.Resp;
 import com.kangyonggan.app.fortune.model.vo.Trans;
 import com.kangyonggan.app.fortune.model.xml.Body;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
@@ -26,8 +27,10 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class FpayHelper {
 
-    @Autowired
-    private RespService respService;
+    /**
+     * redis键的前缀
+     */
+    private String prefix = PropertiesUtil.getProperties("redis.prefix") + ":";
 
     @Autowired
     private MerchantService merchantService;
@@ -37,6 +40,9 @@ public class FpayHelper {
 
     @Autowired
     private DictionaryService dictionaryService;
+
+    @Autowired
+    private RedisService redisService;
 
     /**
      * 构建异常报文
@@ -48,7 +54,7 @@ public class FpayHelper {
      */
     public String buildErrorXml(Fpay reqFpay, String respCode) throws Exception {
         // 响应码
-        Resp resp = respService.findRespByRespCo(respCode);
+        RespCo resp = RespCo.getRespCo(respCode);
 
         XStream xStream = XStreamUtil.getXStream();
         xStream.processAnnotations(Fpay.class);
@@ -228,5 +234,29 @@ public class FpayHelper {
 
         log.info("数据合法性校验通过");
         return true;
+    }
+
+    /**
+     * 生成流水号
+     *
+     * @return
+     */
+    public String genSerialNo() {
+        String nextVal = String.valueOf(redisService.incr(prefix + AppConstants.COMMAND_SERIAL_NO));
+        String currentDate = DateUtil.getDate();
+
+        return currentDate + StringUtils.leftPad(nextVal, 12, "0");
+    }
+
+    /**
+     * 生成协议号
+     *
+     * @return
+     */
+    public String genProtocolNo() {
+        String nextVal = String.valueOf(redisService.incr(prefix + AppConstants.SIGN_PROTOCOL_NO));
+        String currentDate = DateUtil.getDate();
+
+        return currentDate + StringUtils.leftPad(nextVal, 40, "0");
     }
 }

@@ -17,10 +17,10 @@ public interface CommandService {
     void saveCommand(Fpay fpay) throws Exception;
 
     /**
-     * 更新
+     * 更新交易状态
      *
      * @param serialNo
-     * @param fullDateTime
+     * @param tranSt
      */
-    void updateCommandProtocolNo(String serialNo, String fullDateTime);
+    void updateComanndTranSt(String serialNo, String tranSt);
 }

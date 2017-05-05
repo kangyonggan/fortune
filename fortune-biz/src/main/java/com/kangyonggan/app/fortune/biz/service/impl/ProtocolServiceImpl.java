@@ -23,4 +23,16 @@ public class ProtocolServiceImpl extends BaseService<Protocol> implements Protoc
 
         return super.selectOne(protocol);
     }
+
+    @Override
+    @LogTime
+    public void updateProtocol(Protocol protocol) {
+        super.updateByPrimaryKeySelective(protocol);
+    }
+
+    @Override
+    @LogTime
+    public void saveProtocol(Protocol protocol) {
+        super.insertSelective(protocol);
+    }
 }

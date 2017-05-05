@@ -67,7 +67,7 @@ public class LogAspect {
             log.info("方法耗时:" + time + "ms - " + targetName);
 
             if (time > slowMethodTime * 1000) {
-                log.error("方法执行超过设定时间" + slowMethodTime + "s," + targetName);
+                log.warn("方法执行超过设定时间" + slowMethodTime + "s," + targetName);
             }
         } else {
             result = joinPoint.proceed(args);

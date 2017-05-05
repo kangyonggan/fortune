@@ -69,7 +69,11 @@ public class CacheAspect {
 
         CacheGetOrSave cacheGetOrSave = method.getAnnotation(CacheGetOrSave.class);
         if (cacheGetOrSave != null) {
-            return doGetOrSave(joinPoint, targetName, cacheGetOrSave);
+            try {
+                return doGetOrSave(joinPoint, targetName, cacheGetOrSave);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
         CacheDelete cacheDelete = method.getAnnotation(CacheDelete.class);
         if (cacheDelete != null) {
@@ -102,7 +106,8 @@ public class CacheAspect {
         try {
             val = redisService.get(key);
         } catch (Exception e) {
-            log.error("@CacheGetOrSave出错了", e);
+            log.warn("@CacheGetOrSave出错了:{}", e.getMessage());
+            return joinPoint.proceed(args);
         }
         if (val != null) {
             log.info(targetName + "走缓存,key=" + key);
@@ -119,10 +124,10 @@ public class CacheAspect {
             if (timeout > 0) {
                 redisService.set(key, val, timeout);
             } else {
-                redisService.set(key, val);
+                redisService.set(key, val, 15 * 60);// 默认15分钟
             }
         } catch (Exception e) {
-            log.error("@CacheGetOrSave出错了", e);
+            log.warn("@CacheGetOrSave放入缓存出错了:{}", e.getMessage());
         }
 
         return val;
@@ -155,7 +160,7 @@ public class CacheAspect {
                 }
             }
         } catch (Exception e) {
-            log.error("处理key时异常, key=" + key, e);
+            log.warn("处理key时异常, key={}, {}", key, e.getMessage());
         }
 
         return key;
@@ -176,7 +181,7 @@ public class CacheAspect {
             }
             log.info(targetName + "清除缓存,key=" + key);
         } catch (Exception e) {
-            log.error("@CacheDelete出错了", e);
+            log.warn("@CacheDelete出错了:{}", e.getMessage());
         }
     }
 
@@ -195,7 +200,7 @@ public class CacheAspect {
             }
             log.info(targetName + "清除所有缓存,key=" + key);
         } catch (Exception e) {
-            log.error("@CacheDeleteAllLike出错了", e);
+            log.warn("@CacheDeleteAllLike出错了:{}", e.getMessage());
         }
     }
 }

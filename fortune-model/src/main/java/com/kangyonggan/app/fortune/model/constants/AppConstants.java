@@ -47,5 +47,10 @@ public interface AppConstants {
      * command流水号在redis中的key
      */
     String COMMAND_SERIAL_NO = "command:serialNo";
+
+    /**
+     * 签约协议号在redis中的key
+     */
+    String SIGN_PROTOCOL_NO = "sign:protocolNo";
 }
 

@@ -35,6 +35,10 @@ public class BaseController {
             }
             PATH_ROOT += arr[i];
         }
+
+        if (!PATH_ROOT.startsWith("dashboard")) {
+            PATH_ROOT = "web/" + PATH_ROOT;
+        }
     }
 
     protected String getPathRoot() {

@@ -17,4 +17,17 @@ public interface ProtocolService {
      */
     Protocol findProtocolByMerchCoAndAcctNo(String merchCo, String acctNo);
 
+    /**
+     * 更新协议号
+     *
+     * @param protocol
+     */
+    void updateProtocol(Protocol protocol);
+
+    /**
+     * 保存协议
+     *
+     * @param protocol
+     */
+    void saveProtocol(Protocol protocol);
 }

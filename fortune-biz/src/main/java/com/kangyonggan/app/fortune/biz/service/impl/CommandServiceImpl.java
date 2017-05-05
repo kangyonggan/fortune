@@ -1,9 +1,13 @@
 package com.kangyonggan.app.fortune.biz.service.impl;
 
 import com.kangyonggan.app.fortune.biz.service.CommandService;
+import com.kangyonggan.app.fortune.biz.service.FpayHelper;
+import com.kangyonggan.app.fortune.biz.service.FpayService;
 import com.kangyonggan.app.fortune.biz.service.RedisService;
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
+import com.kangyonggan.app.fortune.mapper.CommandMapper;
+import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.vo.Command;
 import com.kangyonggan.app.fortune.model.xml.Body;
@@ -14,6 +18,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * @author kangyonggan
@@ -23,13 +28,11 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class CommandServiceImpl extends BaseService<Command> implements CommandService {
 
-    /**
-     * redis键的前缀
-     */
-    private String prefix = PropertiesUtil.getProperties("redis.prefix") + ":";
+    @Autowired
+    private CommandMapper commandMapper;
 
     @Autowired
-    private RedisService redisService;
+    private FpayHelper fpayHelper;
 
     @Override
     public void saveCommand(Fpay fpay) throws Exception {
@@ -44,7 +47,7 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         command.setMerchSerialNo(header.getSerialNo());
 
         // 发财付相关属性
-        command.setFpaySerialNo(genSerialNo());
+        command.setFpaySerialNo(fpayHelper.genSerialNo());
         command.setFpayDate(DateUtil.getDate());
         if (StringUtils.isEmpty(command.getSettleDate())) {
             command.setSettleDate(DateUtil.getDate());
@@ -54,15 +57,15 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         log.info("交易落库成功");
     }
 
-    /**
-     * 生成流水号
-     *
-     * @return
-     */
-    private String genSerialNo() {
-        String nextVal = String.valueOf(redisService.incr(prefix + AppConstants.COMMAND_SERIAL_NO));
-        String currentDate = DateUtil.getDate();
+    @Override
+    @LogTime
+    public void updateComanndTranSt(String serialNo, String tranSt) {
+        Command command = new Command();
+        command.setTranSt(tranSt);
 
-        return currentDate + StringUtils.leftPad(nextVal, 12, "0");
+        Example example = new Example(Command.class);
+        example.createCriteria().andEqualTo("merchSerialNo", serialNo);
+
+        commandMapper.updateByExampleSelective(command, example);
     }
 }

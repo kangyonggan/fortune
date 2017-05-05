@@ -390,37 +390,6 @@ CREATE UNIQUE INDEX merch_co_merch_serial_no_UNIQUE
 CREATE INDEX merch_co_ix
   ON command (merch_co);
 
--- ----------------------------
---  Table structure for resp
--- ----------------------------
-DROP TABLE
-IF EXISTS resp;
-
-CREATE TABLE resp
-(
-  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
-  COMMENT '主键, 自增',
-  resp_co      VARCHAR(4)                            NOT NULL
-  COMMENT '响应码',
-  resp_msg     VARCHAR(40)                           NOT NULL
-  COMMENT '响应码描述',
-  trans_st     VARCHAR(1)                            NOT NULL
-  COMMENT '交易状态',
-  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
-  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
-  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
-  COMMENT '创建时间',
-  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  COMMENT '更新时间'
-)
-  COMMENT '错误码表';
-CREATE UNIQUE INDEX id_UNIQUE
-  ON resp (id);
-CREATE INDEX created_time_ix
-  ON resp (created_time);
-CREATE UNIQUE INDEX resp_co_UNIQUE
-  ON resp (resp_co);
-
 #====================初始数据====================#
 
 -- ----------------------------
@@ -498,26 +467,4 @@ VALUES
   # 币种
   ('00', '人民币', 'CURR_CO', 0);
 
-INSERT INTO resp
-(resp_co, resp_msg, trans_st)
-VALUES
-  ('0000', '交易成功', 'Y'),
-  ('0001', '交易处理中', 'I'),
-  ('0002', '接收报文异常', 'F'),
-  ('0003', '发送报文异常', 'E'),
-  ('0004', '解析报文异常', 'F'),
-  ('0005', '构建报文异常', 'E'),
-  ('0006', '必填字段缺失', 'F'),
-  ('0007', '交易落库失败', 'F'),
-  ('0008', '解密失败', 'F'),
-  ('0009', '验签失败', 'F'),
-  ('0010', '签名失败', 'E'),
-  ('0011', '加密失败', 'E'),
-  ('0012', '不支持的交易码', 'F'),
-  ('0013', '不存在的商户号', 'F'),
-  ('0014', '商户未开通此类交易', 'F'),
-  ('0015', '商户已暂停此类交易', 'F'),
-  ('0016', '不存在的证件类型', 'F'),
-  ('0017', '不存在的币种', 'F'),
-  ('9999', '未知异常', 'E');
 

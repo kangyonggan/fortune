@@ -69,10 +69,10 @@ public class FpayController {
         }
 
         // 2. 解析xml
+        XStream xStream = XStreamUtil.getXStream();
+        xStream.processAnnotations(Fpay.class);
         Fpay fpay;
         try {
-            XStream xStream = XStreamUtil.getXStream();
-            xStream.processAnnotations(Fpay.class);
             fpay = (Fpay) xStream.fromXML(reqXml);
         } catch (Exception e) {
             log.warn(e);
@@ -106,29 +106,30 @@ public class FpayController {
             return;
         }
 
-        // 5. 分发请求
-        String respXml;
+        // TODO 5. 解密验签
+
+        // 6. 分发请求
         try {
             String tranCo = fpay.getHeader().getTranCo();
             log.info("交易代码：{}", tranCo);
             if (TranCo.K001.name().equals(tranCo)) {
                 // 签约
-                respXml = fpayService.sign(fpay);
+                fpayService.sign(fpay);
             } else if (TranCo.K002.name().equals(tranCo)) {
                 // 解约
-                respXml = fpayService.unsign(fpay);
+                fpayService.unsign(fpay);
             } else if (TranCo.K003.name().equals(tranCo)) {
                 // 单笔代扣
-                respXml = fpayService.pay(fpay);
+                fpayService.pay(fpay);
             } else if (TranCo.K004.name().equals(tranCo)) {
                 // 单笔代付
-                respXml = fpayService.redeem(fpay);
+                fpayService.redeem(fpay);
             } else if (TranCo.K005.name().equals(tranCo)) {
                 // 交易查询
-                respXml = fpayService.query(fpay);
+                fpayService.query(fpay);
             } else if (TranCo.K006.name().equals(tranCo)) {
                 // 余额查询
-                respXml = fpayService.queryBalance(fpay);
+                fpayService.queryBalance(fpay);
             } else {
                 processException(response, fpay, RespCo.RESP_CO_0012.getRespCo());
                 return;
@@ -143,9 +144,11 @@ public class FpayController {
             return;
         }
 
-        // 6. 写响应
+        // TODO 7. 签名加密
+
+        // 8. 写响应
         try {
-            wirteRespXml(response, respXml);
+            wirteRespXml(response, xStream.toXML(fpay));
         } catch (SendException e) {
             log.warn(e);
             processException(response, fpay, RespCo.RESP_CO_0003.getRespCo());
