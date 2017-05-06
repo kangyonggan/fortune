@@ -25,7 +25,8 @@ public class Command implements Serializable {
     /**
      * 协议号
      */
-    private String protocol;
+    @Column(name = "protocol_no")
+    private String protocolNo;
 
     /**
      * 商户流水号

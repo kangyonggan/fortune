@@ -53,6 +53,9 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
             command.setSettleDate(DateUtil.getDate());
         }
 
+        body.setFpayDate(command.getFpayDate());
+        body.setFpaySerialNo(command.getFpaySerialNo());
+
         super.insertSelective(command);
         log.info("交易落库成功");
     }

@@ -7,7 +7,7 @@
         -->
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merch_co" jdbcType="VARCHAR" property="merchCo"/>
-        <result column="protocol" jdbcType="VARCHAR" property="protocol"/>
+        <result column="protocol_no" jdbcType="VARCHAR" property="protocolNo"/>
         <result column="merch_serial_no" jdbcType="VARCHAR" property="merchSerialNo"/>
         <result column="fpay_serial_no" jdbcType="VARCHAR" property="fpaySerialNo"/>
         <result column="tran_co" jdbcType="VARCHAR" property="tranCo"/>

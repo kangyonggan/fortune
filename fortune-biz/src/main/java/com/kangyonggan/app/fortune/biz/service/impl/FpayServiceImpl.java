@@ -11,6 +11,7 @@ import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.RespCo;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.constants.TranSt;
+import com.kangyonggan.app.fortune.model.vo.Command;
 import com.kangyonggan.app.fortune.model.vo.Protocol;
 import com.kangyonggan.app.fortune.model.xml.Body;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
@@ -126,19 +127,28 @@ public class FpayServiceImpl implements FpayService {
     public void pay(Fpay fpay) throws Exception {
         log.info("==================== 进入发财付平台单笔代扣入口 ====================");
         Header header = fpay.getHeader();
-        String merchCo = header.getMerchCo();
+        Body body = fpay.getBody();
 
-
-
-        RespCo resp = RespCo.RESP_CO_0000;
         // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
+        String amount = body.getAmount().toString();
+        log.info("交易金额为：{}", amount);
+
+        int index = amount.lastIndexOf(".");
+        String end = "0000";
+        if (index != -1) {
+            end = "00" + amount.substring(index + 1);
+            end = StringUtils.rightPad(end, 4, "0");
+        }
+        RespCo resp = RespCo.getRespCo(end);
+
         commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
         log.info("更新交易状态成功");
 
         // 组装响应报文
         header.setRespCo(resp.getRespCo());
         header.setRespMsg(resp.getRespMsg());
-//        body.setProtocolNo(protocolNo);
+        body.setFpaySettleDate(body.getSettleDate());
+
         log.info("==================== 离开发财付平台单笔代扣入口 ====================");
     }
 
