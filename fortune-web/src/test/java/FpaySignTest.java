@@ -5,12 +5,12 @@ import com.kangyonggan.app.fortune.common.util.HttpUtil;
  * @author kangyonggan
  * @since 5/4/17
  */
-public class FpayTest {
+public class FpaySignTest {
 
     private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<fpay>\n" +
             "   <header>\n" +
-            "      <merchCo>319879465156486</merchCo>\n" +
+            "      <merchCo>201705050000001</merchCo>\n" +
             "      <tranCo>K001</tranCo>\n" +
             "      <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>\n" +
             "      <reqDate>20170502</reqDate>\n" +

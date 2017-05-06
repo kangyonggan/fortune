@@ -3,6 +3,7 @@ package com.kangyonggan.app.fortune.web.controller;
 import com.kangyonggan.app.fortune.biz.service.CommandService;
 import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.biz.service.FpayService;
+import com.kangyonggan.app.fortune.biz.service.MerchantService;
 import com.kangyonggan.app.fortune.common.exception.BuildException;
 import com.kangyonggan.app.fortune.common.exception.ReceiveException;
 import com.kangyonggan.app.fortune.common.exception.SendException;
@@ -10,6 +11,7 @@ import com.kangyonggan.app.fortune.common.util.XStreamUtil;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.RespCo;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
+import com.kangyonggan.app.fortune.model.vo.Merchant;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
 import com.thoughtworks.xstream.XStream;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * 发财付接口
@@ -44,6 +47,9 @@ public class FpayController {
 
     @Autowired
     private CommandService commandService;
+
+    @Autowired
+    private MerchantService merchantService;
 
     /**
      * 交易总入口
@@ -84,16 +90,19 @@ public class FpayController {
         try {
             // 数据非空校验
             if (!fpayHelper.validEmpty(fpay)) {
-                fpayHelper.buildErrorXml(fpay, RespCo.RESP_CO_0006.getRespCo());
+                processException(response, fpay, RespCo.RESP_CO_0006.getRespCo());
                 return;
             }
             // 数据合法性校验
-            if (!fpayHelper.validData(fpay)) {
+            Map<String, String> result = fpayHelper.validData(fpay);
+            if (!"Y".equals(result.get("isValid"))) {
+                log.info("数据合法性校验失败, respCo:{}", result.get("respCo"));
+                processException(response, fpay, result.get("respCo"));
                 return;
             }
         } catch (Exception e) {
             log.warn(e);
-            processException(response, RespCo.RESP_CO_9999.getRespCo());
+            processException(response, fpay, RespCo.RESP_CO_9999.getRespCo());
             return;
         }
 
@@ -102,11 +111,17 @@ public class FpayController {
             commandService.saveCommand(fpay);
         } catch (Exception e) {
             log.warn(e);
-            processException(response, RespCo.RESP_CO_0007.getRespCo());
+            processException(response, fpay, RespCo.RESP_CO_0007.getRespCo());
             return;
         }
 
         // TODO 5. 解密验签
+        Merchant merchant = merchantService.findMerchantByMerchCo(fpay.getHeader().getMerchCo());
+        if (merchant.getIsDebug() == 1) {
+            log.info("debug模式不解密验签");
+        } else {
+
+        }
 
         // 6. 分发请求
         try {
@@ -145,6 +160,11 @@ public class FpayController {
         }
 
         // TODO 7. 签名加密
+        if (merchant.getIsDebug() == 1) {
+            log.info("debug模式不签名加密");
+        } else {
+
+        }
 
         // 8. 写响应
         try {

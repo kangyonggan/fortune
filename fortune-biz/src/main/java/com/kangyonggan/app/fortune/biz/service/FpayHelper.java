@@ -9,6 +9,7 @@ import com.kangyonggan.app.fortune.model.constants.DictionaryType;
 import com.kangyonggan.app.fortune.model.constants.RespCo;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.vo.Merchant;
+import com.kangyonggan.app.fortune.model.vo.Protocol;
 import com.kangyonggan.app.fortune.model.vo.Trans;
 import com.kangyonggan.app.fortune.model.xml.Body;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
@@ -18,6 +19,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author kangyonggan
@@ -43,6 +47,9 @@ public class FpayHelper {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private ProtocolService protocolService;
 
     /**
      * 构建异常报文
@@ -194,46 +201,67 @@ public class FpayHelper {
 
     /**
      * 入参合法性校验
+     * isValid：校验是否通过
+     * respCo：校验不通过时的错误码
      *
      * @param fpay
      * @return
      */
-    public boolean validData(Fpay fpay) throws Exception {
+    public Map<String, String> validData(Fpay fpay) throws Exception {
+        Map<String, String> result = new HashMap();
+        result.put("isValid", "F");
+
         Merchant merchant = merchantService.findMerchantByMerchCo(fpay.getHeader().getMerchCo());
         if (merchant == null) {
-            buildErrorXml(fpay, RespCo.RESP_CO_0013.getRespCo());
-            return false;
+            result.put("respCo", RespCo.RESP_CO_0013.getRespCo());
+            return result;
         }
 
         Trans trans = transService.findTransByMerchCoAndTranCo(merchant.getMerchCo(), fpay.getHeader().getTranCo());
         if (trans == null) {
-            buildErrorXml(fpay, RespCo.RESP_CO_0014.getRespCo());
-            return false;
+            result.put("respCo", RespCo.RESP_CO_0014.getRespCo());
+            return result;
         }
 
         if (trans.getIsPaused() == 1) {
-            buildErrorXml(fpay, RespCo.RESP_CO_0015.getRespCo());
-            return false;
+            result.put("respCo", RespCo.RESP_CO_0015.getRespCo());
+            return result;
         }
 
-        if (TranCo.K001.name().equals(fpay.getHeader().getTranCo()) || TranCo.K002.name().equals(fpay.getHeader().getTranCo())) {
-            // 签约解约验证件类型
+        if (TranCo.K001.name().equals(fpay.getHeader().getTranCo())) {
+            // 签约验证件类型
             if (!dictionaryService.exists(DictionaryType.ID_TP.name(), fpay.getBody().getIdTp())) {
-                buildErrorXml(fpay, RespCo.RESP_CO_0016.getRespCo());
-                return false;
+                result.put("respCo", RespCo.RESP_CO_0016.getRespCo());
+                return result;
+            }
+        }
+
+        if (TranCo.K002.name().equals(fpay.getHeader().getTranCo())) {
+            // 解约验证件类型
+            if (!dictionaryService.exists(DictionaryType.ID_TP.name(), fpay.getBody().getIdTp())) {
+                result.put("respCo", RespCo.RESP_CO_0016.getRespCo());
+                return result;
+            }
+
+            // 解约验证协议号是否存在
+            Protocol protocol = protocolService.findProtocolByMerchCoAndAcctNo(merchant.getMerchCo(), fpay.getBody().getAcctNo());
+            if (protocol == null) {
+                result.put("respCo", RespCo.RESP_CO_0022.getRespCo());
+                return result;
             }
         }
 
         if (TranCo.K003.name().equals(fpay.getHeader().getTranCo()) || TranCo.K004.name().equals(fpay.getHeader().getTranCo())) {
             // 代扣代付验币种
             if (!dictionaryService.exists(DictionaryType.CURR_CO.name(), fpay.getBody().getCurrCo())) {
-                buildErrorXml(fpay, RespCo.RESP_CO_0017.getRespCo());
-                return false;
+                result.put("respCo", RespCo.RESP_CO_0017.getRespCo());
+                return result;
             }
         }
 
+        result.put("isValid", "Y");
         log.info("数据合法性校验通过");
-        return true;
+        return result;
     }
 
     /**

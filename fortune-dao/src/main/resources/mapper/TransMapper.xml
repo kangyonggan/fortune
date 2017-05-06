@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kangyonggan.app.fortune.mapper.TransMapper">
     <resultMap id="BaseResultMap" type="com.kangyonggan.app.fortune.model.vo.Trans">
         <!--
           WARNING - @mbggenerated
         -->
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="merch_co" property="merchCo" jdbcType="VARCHAR"/>
-        <result column="tran_co" property="tranCo" jdbcType="VARCHAR"/>
-        <result column="tran_nm" property="tranNm" jdbcType="VARCHAR"/>
-        <result column="is_paused" property="isPaused" jdbcType="TINYINT"/>
-        <result column="resume_time" property="resumeTime" jdbcType="TIMESTAMP"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
-        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
-        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merch_co" jdbcType="VARCHAR" property="merchCo"/>
+        <result column="tran_co" jdbcType="VARCHAR" property="tranCo"/>
+        <result column="tran_nm" jdbcType="VARCHAR" property="tranNm"/>
+        <result column="sing_quota" jdbcType="DECIMAL" property="singQuota"/>
+        <result column="date_quota" jdbcType="DECIMAL" property="dateQuota"/>
+        <result column="is_paused" jdbcType="TINYINT" property="isPaused"/>
+        <result column="resume_time" jdbcType="TIMESTAMP" property="resumeTime"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
     </resultMap>
 </mapper>

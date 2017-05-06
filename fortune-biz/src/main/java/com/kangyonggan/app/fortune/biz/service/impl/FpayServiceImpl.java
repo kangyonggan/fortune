@@ -62,6 +62,8 @@ public class FpayServiceImpl implements FpayService {
             prot.setIdNo(body.getIdNo());
             prot.setIdTp(body.getIdTp());
             prot.setMobile(body.getMobile());
+            // 协议有效期
+            prot.setExpiredTime(DateUtil.plusYears(10));// 10年
 
             protocolService.saveProtocol(prot);
             log.info("新协议保存成功");
@@ -71,12 +73,14 @@ public class FpayServiceImpl implements FpayService {
             Protocol prot = new Protocol();
             prot.setId(protocol.getId());
             prot.setIsUnsign((byte) 0);
+            // 协议有效期
+            prot.setExpiredTime(DateUtil.plusYears(10));// 10年
             protocolService.updateProtocol(prot);
             log.info("重复签约，已激活协议号");
         }
 
         RespCo resp = RespCo.RESP_CO_0000;
-        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约月查询写死成功。
+        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
         commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
         log.info("更新交易状态成功");
 
@@ -89,6 +93,33 @@ public class FpayServiceImpl implements FpayService {
 
     @Override
     public void unsign(Fpay fpay) throws BuildException, Exception {
+        log.info("==================== 进入发财付平台解约入口 ====================");
+        Header header = fpay.getHeader();
+        String merchCo = header.getMerchCo();
+
+        // 取出协议号回送
+        Body body = fpay.getBody();
+        Protocol protocol = protocolService.findProtocolByMerchCoAndAcctNo(merchCo, body.getAcctNo());
+        String protocolNo = protocol.getProtocolNo();
+        log.info("解约的协议号为：{}", protocolNo);
+
+        // 更新协议状态
+        Protocol prot = new Protocol();
+        prot.setId(protocol.getId());
+        prot.setIsUnsign((byte) 1);
+        protocolService.updateProtocol(prot);
+        log.info("解约协议成功");
+
+        RespCo resp = RespCo.RESP_CO_0000;
+        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
+        commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
+        log.info("更新交易状态成功");
+
+        // 组装响应报文
+        header.setRespCo(resp.getRespCo());
+        header.setRespMsg(resp.getRespMsg());
+        body.setProtocolNo(protocolNo);
+        log.info("==================== 离开发财付平台解约入口 ====================");
     }
 
     @Override

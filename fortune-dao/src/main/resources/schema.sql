@@ -251,6 +251,10 @@ CREATE TABLE trans
   COMMENT '交易码',
   tran_nm      VARCHAR(20)                           NOT NULL
   COMMENT '交易名称',
+  sing_quota   DECIMAL(16, 2)                        NOT NULL                    DEFAULT -1
+  COMMENT '单笔限额, -1代表无限额',
+  date_quota   DECIMAL(16, 2)                        NOT NULL                    DEFAULT -1
+  COMMENT '日累计限额, -1代表无限额',
   is_paused    TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '交易暂停:{0:正常, 1:暂停}',
   resume_time  TIMESTAMP                             NULL

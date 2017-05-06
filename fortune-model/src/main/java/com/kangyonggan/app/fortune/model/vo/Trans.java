@@ -1,10 +1,10 @@
 package com.kangyonggan.app.fortune.model.vo;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.*;
+import lombok.Data;
 
 @Data
 @Table(name = "trans")
@@ -33,6 +33,18 @@ public class Trans implements Serializable {
      */
     @Column(name = "tran_nm")
     private String tranNm;
+
+    /**
+     * 单笔限额
+     */
+    @Column(name = "sing_quota")
+    private BigDecimal singQuota;
+
+    /**
+     * 日累计限额
+     */
+    @Column(name = "date_quota")
+    private BigDecimal dateQuota;
 
     /**
      * 交易暂停:{0:正常, 1:暂停}
