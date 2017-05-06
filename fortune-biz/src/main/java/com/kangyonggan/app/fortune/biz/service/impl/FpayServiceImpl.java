@@ -42,7 +42,7 @@ public class FpayServiceImpl implements FpayService {
     private FpayHelper fpayHelper;
 
     @Override
-    public void sign(Fpay fpay) throws BuildException, Exception {
+    public void sign(Fpay fpay) throws Exception {
         log.info("==================== 进入发财付平台签约入口 ====================");
         Header header = fpay.getHeader();
         String merchCo = header.getMerchCo();
@@ -71,11 +71,11 @@ public class FpayServiceImpl implements FpayService {
             // 重复签约
             protocolNo = protocol.getProtocolNo();
             Protocol prot = new Protocol();
-            prot.setId(protocol.getId());
+            prot.setProtocolNo(protocolNo);
             prot.setIsUnsign((byte) 0);
             // 协议有效期
             prot.setExpiredTime(DateUtil.plusYears(10));// 10年
-            protocolService.updateProtocol(prot);
+            protocolService.updateProtocolByProtocolNo(prot);
             log.info("重复签约，已激活协议号");
         }
 
@@ -92,7 +92,7 @@ public class FpayServiceImpl implements FpayService {
     }
 
     @Override
-    public void unsign(Fpay fpay) throws BuildException, Exception {
+    public void unsign(Fpay fpay) throws Exception {
         log.info("==================== 进入发财付平台解约入口 ====================");
         Header header = fpay.getHeader();
         String merchCo = header.getMerchCo();
@@ -105,9 +105,9 @@ public class FpayServiceImpl implements FpayService {
 
         // 更新协议状态
         Protocol prot = new Protocol();
-        prot.setId(protocol.getId());
+        prot.setProtocolNo(protocolNo);
         prot.setIsUnsign((byte) 1);
-        protocolService.updateProtocol(prot);
+        protocolService.updateProtocolByProtocolNo(prot);
         log.info("解约协议成功");
 
         RespCo resp = RespCo.RESP_CO_0000;
@@ -123,18 +123,34 @@ public class FpayServiceImpl implements FpayService {
     }
 
     @Override
-    public void pay(Fpay fpay) throws BuildException, Exception {
+    public void pay(Fpay fpay) throws Exception {
+        log.info("==================== 进入发财付平台单笔代扣入口 ====================");
+        Header header = fpay.getHeader();
+        String merchCo = header.getMerchCo();
+
+
+
+        RespCo resp = RespCo.RESP_CO_0000;
+        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
+        commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
+        log.info("更新交易状态成功");
+
+        // 组装响应报文
+        header.setRespCo(resp.getRespCo());
+        header.setRespMsg(resp.getRespMsg());
+//        body.setProtocolNo(protocolNo);
+        log.info("==================== 离开发财付平台单笔代扣入口 ====================");
     }
 
     @Override
-    public void redeem(Fpay fpay) throws BuildException, Exception {
+    public void redeem(Fpay fpay) throws Exception {
     }
 
     @Override
-    public void query(Fpay fpay) throws BuildException, Exception {
+    public void query(Fpay fpay) throws Exception {
     }
 
     @Override
-    public void queryBalance(Fpay fpay) throws BuildException, Exception {
+    public void queryBalance(Fpay fpay) throws Exception {
     }
 }

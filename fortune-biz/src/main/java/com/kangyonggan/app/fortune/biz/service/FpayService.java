@@ -15,54 +15,48 @@ public interface FpayService {
      * 签约
      *
      * @param fpay 签约请求
-     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    void sign(Fpay fpay) throws BuildException, Exception;
+    void sign(Fpay fpay) throws Exception;
 
     /**
      * 解约
      *
      * @param fpay 解约请求
-     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    void unsign(Fpay fpay) throws BuildException, Exception;
+    void unsign(Fpay fpay) throws Exception;
 
     /**
      * 单笔代扣
      *
      * @param fpay 代扣请求
-     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    void pay(Fpay fpay) throws BuildException, Exception;
+    void pay(Fpay fpay) throws Exception;
 
     /**
      * 单笔代付
      *
      * @param fpay 代付请求
-     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    void redeem(Fpay fpay) throws BuildException, Exception;
+    void redeem(Fpay fpay) throws Exception;
 
     /**
      * 交易查询
      *
      * @param fpay 查询请求
-     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    void query(Fpay fpay) throws BuildException, Exception;
+    void query(Fpay fpay) throws Exception;
 
     /**
      * 余额查询
      *
      * @param fpay 余额查询请求
-     * @throws BuildException 构建报文异常
      * @throws Exception      未知异常
      */
-    void queryBalance(Fpay fpay) throws BuildException, Exception;
+    void queryBalance(Fpay fpay) throws Exception;
 
 }

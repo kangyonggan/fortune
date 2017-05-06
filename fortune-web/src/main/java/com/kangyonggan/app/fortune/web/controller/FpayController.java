@@ -126,7 +126,7 @@ public class FpayController {
         // 6. 分发请求
         try {
             String tranCo = fpay.getHeader().getTranCo();
-            log.info("交易代码：{}", tranCo);
+            log.info("分发交易，交易代码：{}", tranCo);
             if (TranCo.K001.name().equals(tranCo)) {
                 // 签约
                 fpayService.sign(fpay);
@@ -149,10 +149,6 @@ public class FpayController {
                 processException(response, fpay, RespCo.RESP_CO_0012.getRespCo());
                 return;
             }
-        } catch (BuildException e) {
-            log.warn(e);
-            processException(response, fpay, RespCo.RESP_CO_0005.getRespCo());
-            return;
         } catch (Exception e) {
             log.warn(e);
             processException(response, fpay, RespCo.RESP_CO_9999.getRespCo());

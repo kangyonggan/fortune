@@ -68,14 +68,10 @@ public class FpayHelper {
 
         // 响应头
         Header header = new Header();
+        Body body = new Body();
         if (reqFpay != null) {
-            header.setMerchCo(reqFpay.getHeader().getMerchCo());
-            header.setTranCo(reqFpay.getHeader().getTranCo());
-            header.setSerialNo(reqFpay.getHeader().getSerialNo());
-        } else {
-            header.setMerchCo("");
-            header.setTranCo("");
-            header.setSerialNo("");
+            header = reqFpay.getHeader();
+            body = reqFpay.getBody();
         }
         header.setRespCo(resp.getRespCo());
         header.setRespMsg(resp.getRespMsg());
@@ -83,6 +79,7 @@ public class FpayHelper {
         // 响应报文整体
         Fpay respFpay = new Fpay();
         respFpay.setHeader(header);
+        respFpay.setBody(body);
 
         // 转xml
         String respXml = xStream.toXML(respFpay);
@@ -255,6 +252,25 @@ public class FpayHelper {
             // 代扣代付验币种
             if (!dictionaryService.exists(DictionaryType.CURR_CO.name(), fpay.getBody().getCurrCo())) {
                 result.put("respCo", RespCo.RESP_CO_0017.getRespCo());
+                return result;
+            }
+
+            // 验证协议号是否存在
+            Protocol protocol = protocolService.findProtocolByProtocolNo(fpay.getBody().getProtocolNo());
+            if (protocol == null) {
+                result.put("respCo", RespCo.RESP_CO_0022.getRespCo());
+                return result;
+            }
+
+            // 验是否解约
+            if (protocol.getIsUnsign() == 1) {
+                result.put("respCo", RespCo.RESP_CO_0021.getRespCo());
+                return result;
+            }
+
+            // 验单笔超限
+            if (fpay.getBody().getAmount().compareTo(trans.getSingQuota()) > 0) {
+                result.put("respCo", RespCo.RESP_CO_0018.getRespCo());
                 return result;
             }
         }

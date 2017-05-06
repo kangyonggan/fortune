@@ -18,11 +18,11 @@ public interface ProtocolService {
     Protocol findProtocolByMerchCoAndAcctNo(String merchCo, String acctNo);
 
     /**
-     * 更新协议号
+     * 更新协议, 根据协议号
      *
      * @param protocol
      */
-    void updateProtocol(Protocol protocol);
+    void updateProtocolByProtocolNo(Protocol protocol);
 
     /**
      * 保存协议
@@ -30,4 +30,12 @@ public interface ProtocolService {
      * @param protocol
      */
     void saveProtocol(Protocol protocol);
+
+    /**
+     * 查找协议
+     *
+     * @param protocolNo
+     * @return
+     */
+    Protocol findProtocolByProtocolNo(String protocolNo);
 }
