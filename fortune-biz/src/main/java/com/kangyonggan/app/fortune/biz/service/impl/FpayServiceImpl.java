@@ -76,12 +76,8 @@ public class FpayServiceImpl implements FpayService {
             log.info("重复签约，已激活协议号");
         }
 
-        RespCo resp = RespCo.RESP_CO_0000;
-        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
-        commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
-        log.info("更新交易状态成功");
-
         // 组装响应报文
+        RespCo resp = RespCo.RESP_CO_0000;
         header.setRespCo(resp.getRespCo());
         header.setRespMsg(resp.getRespMsg());
         body.setProtocolNo(protocolNo);
@@ -107,12 +103,8 @@ public class FpayServiceImpl implements FpayService {
         protocolService.updateProtocolByProtocolNo(prot);
         log.info("解约协议成功");
 
-        RespCo resp = RespCo.RESP_CO_0000;
-        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
-        commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
-        log.info("更新交易状态成功");
-
         // 组装响应报文
+        RespCo resp = RespCo.RESP_CO_0000;
         header.setRespCo(resp.getRespCo());
         header.setRespMsg(resp.getRespMsg());
         body.setProtocolNo(protocolNo);
@@ -175,16 +167,6 @@ public class FpayServiceImpl implements FpayService {
         String amount = body.getAmount().toString();
         log.info("交易金额为：{}", amount);
 
-        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNo(header.getMerchCo());
-
-        // 加头寸
-        MerchAcct ma = new MerchAcct();
-        ma.setMerchCo(header.getMerchCo());
-        ma.setBalance(merchAcct.getBalance().add(body.getAmount()));
-
-        merchAcctService.updateMerchAcct(ma);
-        log.info("商户头寸已增加");
-
         int index = amount.lastIndexOf(".");
         String end = "0000";
         if (index != -1) {
@@ -192,6 +174,19 @@ public class FpayServiceImpl implements FpayService {
             end = StringUtils.rightPad(end, 4, "0");
         }
         RespCo resp = RespCo.getRespCo(end);
+
+        if ("Y,E,I".indexOf(resp.getTranSt()) > -1) {
+            // 注定成功的交易才加头寸
+            MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNo(header.getMerchCo());
+
+            // 加头寸
+            MerchAcct ma = new MerchAcct();
+            ma.setMerchCo(header.getMerchCo());
+            ma.setBalance(merchAcct.getBalance().add(body.getAmount()));
+
+            merchAcctService.updateMerchAcct(ma);
+            log.info("商户头寸已增加");
+        }
 
         commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
         log.info("更新交易状态成功");
@@ -230,9 +225,6 @@ public class FpayServiceImpl implements FpayService {
             body.setFpaySettleDate(command.getSettleDate());
         }
 
-        commandService.updateComanndTranSt(header.getSerialNo(), RespCo.RESP_CO_0000.getTranSt());
-        log.info("更新交易状态成功");
-
         log.info("==================== 离开发财付平台交易查询入口 ====================");
     }
 
@@ -255,9 +247,6 @@ public class FpayServiceImpl implements FpayService {
         body.setIdTp(merchAcct.getMerchIdTp());
         body.setIdNo(merchAcct.getMerchIdNo());
         body.setMobile(merchAcct.getMerchMobile());
-
-        commandService.updateComanndTranSt(header.getSerialNo(), RespCo.RESP_CO_0000.getTranSt());
-        log.info("更新交易状态成功");
 
         log.info("==================== 离开发财付平台账户余额查询入口 ====================");
     }

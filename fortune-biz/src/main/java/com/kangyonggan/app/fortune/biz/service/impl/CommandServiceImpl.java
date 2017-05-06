@@ -5,6 +5,7 @@ import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
+import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.constants.TranSt;
 import com.kangyonggan.app.fortune.model.vo.Command;
 import com.kangyonggan.app.fortune.model.xml.Body;
@@ -35,6 +36,11 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
     public void saveCommand(Fpay fpay) throws Exception {
         Header header = fpay.getHeader();
         Body body = fpay.getBody();
+
+        // 只有代扣和代付才落库
+        if (!header.getTranCo().equals(TranCo.K003.name()) && !header.getTranCo().equals(TranCo.K004.name())) {
+            return;
+        }
 
         Command command = new Command();
         PropertyUtils.copyProperties(command, header);
