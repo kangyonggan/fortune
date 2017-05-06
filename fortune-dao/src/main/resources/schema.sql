@@ -190,29 +190,33 @@ IF EXISTS merchant;
 
 CREATE TABLE merchant
 (
-  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  id               BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
   COMMENT '主键, 自增',
-  merch_co     VARCHAR(15)                           NOT NULL
+  merch_co         VARCHAR(15)                           NOT NULL
   COMMENT '商户号',
-  merch_nm     VARCHAR(15)                           NOT NULL
+  merch_nm         VARCHAR(15)                           NOT NULL
   COMMENT '商户名称',
-  charset      VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
+  charset          VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
   COMMENT '编码',
-  ftp_host     VARCHAR(20)                           NOT NULL                    DEFAULT ''
+  public_key_path  VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  COMMENT '商户公钥路径',
+  private_key_path VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  COMMENT '发财付私钥路径',
+  ftp_host         VARCHAR(20)                           NOT NULL                    DEFAULT ''
   COMMENT 'ftp主机名',
-  ftp_user     VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  ftp_user         VARCHAR(64)                           NOT NULL                    DEFAULT ''
   COMMENT 'ftp用户名',
-  ftp_pwd      VARCHAR(128)                          NOT NULL                    DEFAULT ''
+  ftp_pwd          VARCHAR(128)                          NOT NULL                    DEFAULT ''
   COMMENT 'ftp密码',
-  ftp_dir      VARCHAR(128)                          NOT NULL                    DEFAULT ''
+  ftp_dir          VARCHAR(128)                          NOT NULL                    DEFAULT ''
   COMMENT 'ftp目录',
-  is_debug     TINYINT                               NOT NULL                    DEFAULT 0
+  is_debug         TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '是否是测试环境:{0:生产环境, 1:测试环境}',
-  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
+  is_deleted       TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '逻辑删除:{0:未删除, 1:已删除}',
-  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  created_time     TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
-  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_time     TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   COMMENT '更新时间'
 )
   COMMENT '商户信息表';
@@ -504,9 +508,9 @@ VALUES
 
 # 商户 201705050000001 的初始化数据
 INSERT INTO merchant
-(merch_co, merch_nm, is_debug)
+(merch_co, merch_nm, public_key_path, private_key_path)
 VALUES
-  ('201705050000001', '公测商户', 1);
+  ('201705050000001', '公测商户', '/upload/merch_rsa_public_key_2048.pem', 'E:/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
 
 INSERT INTO merch_acct
 (merch_co, merch_acct_no, merch_acct_nm, merch_mobile, merch_id_no, balance, is_master)

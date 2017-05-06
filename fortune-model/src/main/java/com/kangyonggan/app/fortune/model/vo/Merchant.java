@@ -34,6 +34,18 @@ public class Merchant implements Serializable {
     private String charset;
 
     /**
+     * 商户公钥路径
+     */
+    @Column(name = "public_key_path")
+    private String publicKeyPath;
+
+    /**
+     * 发财付私钥路径
+     */
+    @Column(name = "private_key_path")
+    private String privateKeyPath;
+
+    /**
      * ftp主机名
      */
     @Column(name = "ftp_host")

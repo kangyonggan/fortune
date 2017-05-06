@@ -9,6 +9,8 @@
         <result column="merch_co" jdbcType="VARCHAR" property="merchCo"/>
         <result column="merch_nm" jdbcType="VARCHAR" property="merchNm"/>
         <result column="charset" jdbcType="VARCHAR" property="charset"/>
+        <result column="public_key_path" jdbcType="VARCHAR" property="publicKeyPath"/>
+        <result column="private_key_path" jdbcType="VARCHAR" property="privateKeyPath"/>
         <result column="ftp_host" jdbcType="VARCHAR" property="ftpHost"/>
         <result column="ftp_user" jdbcType="VARCHAR" property="ftpUser"/>
         <result column="ftp_pwd" jdbcType="VARCHAR" property="ftpPwd"/>
