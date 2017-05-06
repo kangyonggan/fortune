@@ -18,7 +18,7 @@ public class FpayQueryTest {
             "      <signature>...</signature>\n" +
             "   </header>\n" +
             "   <body>\n" +
-            "      <orgnSerialNo>2017050613022312</orgnSerialNo>\n" +
+            "      <orgnSerialNo>20170506154624509</orgnSerialNo>\n" +
             "   </body>\n" +
             "</fpay>";
 

@@ -136,13 +136,16 @@ public class FpayServiceImpl implements FpayService {
             }
             resp = RespCo.getRespCo(end);
 
-            // 减头寸
-            MerchAcct ma = new MerchAcct();
-            ma.setMerchCo(header.getMerchCo());
-            ma.setBalance(merchAcct.getBalance().subtract(body.getAmount()));
 
-            merchAcctService.updateMerchAcct(ma);
-            log.info("商户头寸已扣除");
+            if ("Y,E,I".indexOf(resp.getTranSt()) > -1) {
+                // 注定成功的交易才扣头寸
+                MerchAcct ma = new MerchAcct();
+                ma.setMerchCo(header.getMerchCo());
+                ma.setBalance(merchAcct.getBalance().subtract(body.getAmount()));
+
+                merchAcctService.updateMerchAcct(ma);
+                log.info("商户头寸已扣除");
+            }
         }
 
         commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
