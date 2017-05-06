@@ -16,10 +16,10 @@ public class MerchAcctServiceImpl extends BaseService<MerchAcct> implements Merc
 
     @Override
     @LogTime
-    public MerchAcct findMerAcctByMerchNoAndAcctNo(String merchCo, String acctNo) {
+    public MerchAcct findMerAcctByMerchNo(String merchCo) {
         MerchAcct merchAcct = new MerchAcct();
         merchAcct.setMerchCo(merchCo);
-        merchAcct.setMerchAcctNo(acctNo);
+        merchAcct.setIsMaster((byte) 1);
         merchAcct.setIsDeleted(AppConstants.IS_DELETED_NO);
 
         return myMapper.selectOne(merchAcct);
@@ -29,8 +29,19 @@ public class MerchAcctServiceImpl extends BaseService<MerchAcct> implements Merc
     @LogTime
     public void updateMerchAcct(MerchAcct ma) {
         Example example = new Example(MerchAcct.class);
-        example.createCriteria().andEqualTo("merchCo", ma.getMerchCo()).andEqualTo("merchAcctNo", ma.getMerchAcctNo());
+        example.createCriteria().andEqualTo("merchCo", ma.getMerchCo()).andEqualTo("isMaster", 1);
 
         myMapper.updateByExampleSelective(ma, example);
+    }
+
+    @Override
+    @LogTime
+    public MerchAcct findMerAcctByMerchNoAndAcctNo(String merchCo, String acctNo) {
+        MerchAcct merchAcct = new MerchAcct();
+        merchAcct.setMerchCo(merchCo);
+        merchAcct.setMerchAcctNo(acctNo);
+        merchAcct.setIsDeleted(AppConstants.IS_DELETED_NO);
+
+        return myMapper.selectOne(merchAcct);
     }
 }

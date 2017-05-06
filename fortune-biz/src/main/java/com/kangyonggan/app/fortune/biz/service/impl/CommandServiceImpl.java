@@ -5,6 +5,7 @@ import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
+import com.kangyonggan.app.fortune.model.constants.TranSt;
 import com.kangyonggan.app.fortune.model.vo.Command;
 import com.kangyonggan.app.fortune.model.xml.Body;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
@@ -15,6 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kangyonggan
@@ -73,5 +77,31 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         command.setIsDeleted(AppConstants.IS_DELETED_NO);
 
         return myMapper.selectOne(command);
+    }
+
+    @Override
+    public void updateCommandsToSuccess() {
+        Command command = new Command();
+        command.setTranSt(TranSt.Y.name());
+
+        List<String> list = new ArrayList();
+        list.add(TranSt.E.name());
+        list.add(TranSt.I.name());
+
+        Example example = new Example(Command.class);
+        example.createCriteria().andIn("tranSt", list);
+
+        myMapper.updateByExampleSelective(command, example);
+    }
+
+    @Override
+    public void updateCommandsToFailure() {
+        Command command = new Command();
+        command.setTranSt(TranSt.F.name());
+
+        Example example = new Example(Command.class);
+        example.createCriteria().andEqualTo("tranSt", TranSt.N.name()).andLessThan("createdTime", DateUtil.plusMinutes(-10));
+
+        myMapper.updateByExampleSelective(command, example);
     }
 }

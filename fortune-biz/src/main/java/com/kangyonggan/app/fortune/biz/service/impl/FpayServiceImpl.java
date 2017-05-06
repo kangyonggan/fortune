@@ -131,7 +131,7 @@ public class FpayServiceImpl implements FpayService {
         log.info("交易金额为：{}", amount);
 
         RespCo resp;
-        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNoAndAcctNo(header.getMerchCo(), body.getAcctNo());
+        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNo(header.getMerchCo());
         if (body.getAmount().compareTo(merchAcct.getBalance()) > 0) {
             resp = RespCo.RESP_CO_0024;
             log.info(resp.getRespMsg());
@@ -147,7 +147,6 @@ public class FpayServiceImpl implements FpayService {
             // 减头寸
             MerchAcct ma = new MerchAcct();
             ma.setMerchCo(header.getMerchCo());
-            ma.setMerchAcctNo(body.getAcctNo());
             ma.setBalance(merchAcct.getBalance().subtract(body.getAmount()));
 
             merchAcctService.updateMerchAcct(ma);
@@ -176,12 +175,11 @@ public class FpayServiceImpl implements FpayService {
         String amount = body.getAmount().toString();
         log.info("交易金额为：{}", amount);
 
-        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNoAndAcctNo(header.getMerchCo(), body.getAcctNo());
+        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNo(header.getMerchCo());
 
         // 加头寸
         MerchAcct ma = new MerchAcct();
         ma.setMerchCo(header.getMerchCo());
-        ma.setMerchAcctNo(body.getAcctNo());
         ma.setBalance(merchAcct.getBalance().add(body.getAmount()));
 
         merchAcctService.updateMerchAcct(ma);

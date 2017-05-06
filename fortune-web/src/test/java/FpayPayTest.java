@@ -19,7 +19,7 @@ public class FpayPayTest {
             "   </header>\n" +
             "   <body>\n" +
             "      <protocolNo>201705060000000000000000000000000000000000000001</protocolNo>\n" +
-            "      <amount>2000000</amount>\n" +
+            "      <amount>2000000.01</amount>\n" +
             "   </body>\n" +
             "</fpay>";
 

@@ -9,13 +9,12 @@ import com.kangyonggan.app.fortune.model.vo.MerchAcct;
 public interface MerchAcctService {
 
     /**
-     * 根据商户号和卡号查找商户卡信息
+     * 根据商户号查找商户主卡信息
      *
      * @param merchCo
-     * @param acctNo
      * @return
      */
-    MerchAcct findMerAcctByMerchNoAndAcctNo(String merchCo, String acctNo);
+    MerchAcct findMerAcctByMerchNo(String merchCo);
 
     /**
      * 更新余额
@@ -23,4 +22,13 @@ public interface MerchAcctService {
      * @param ma
      */
     void updateMerchAcct(MerchAcct ma);
+
+    /**
+     * 根据商户号和卡号查找商户卡信息
+     *
+     * @param merchCo
+     * @param acctNo
+     * @return
+     */
+    MerchAcct findMerAcctByMerchNoAndAcctNo(String merchCo, String acctNo);
 }

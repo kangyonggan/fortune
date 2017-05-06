@@ -34,7 +34,8 @@
             <tx:method name="update*" propagation="REQUIRED"/>
             <tx:method name="save*" propagation="REQUIRED"/>
             <tx:method name="remove*" propagation="REQUIRED"/>
-            <tx:method name="send*" propagation="REQUIRED"/>
+            <tx:method name="pay*" propagation="REQUIRED"/>
+            <tx:method name="redeem*" propagation="REQUIRED"/>
 
             <tx:method name="search*" read-only="true" propagation="REQUIRED"/>
             <tx:method name="find*" read-only="true" propagation="REQUIRED"/>

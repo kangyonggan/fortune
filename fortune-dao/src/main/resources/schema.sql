@@ -263,6 +263,8 @@ CREATE INDEX created_time_ix
   ON merch_acct (created_time);
 CREATE UNIQUE INDEX merch_co_merch_acct_no_UNIQUE
   ON merch_acct (merch_co, merch_acct_no);
+CREATE UNIQUE INDEX merch_co_is_master_UNIQUE
+  ON merch_acct (merch_co, is_master);
 
 -- ----------------------------
 --  Table structure for trans
@@ -404,8 +406,8 @@ CREATE TABLE command
   COMMENT '预留字段1',
   resv2           VARCHAR(30)                           NOT NULL                    DEFAULT ''
   COMMENT '预留字段2',
-  tran_st         VARCHAR(1)                            NOT NULL                    DEFAULT 'I'
-  COMMENT '交易状态',
+  tran_st         VARCHAR(1)                            NOT NULL                    DEFAULT 'N'
+  COMMENT '交易状态:{N:待处理, I:处理中, Y: 交易成功, F: 交易失败, E:交易异常}',
   is_deleted      TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '逻辑删除:{0:未删除, 1:已删除}',
   created_time    TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP

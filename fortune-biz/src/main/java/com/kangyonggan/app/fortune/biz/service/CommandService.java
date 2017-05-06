@@ -32,4 +32,14 @@ public interface CommandService {
      * @return
      */
     Command findCommandBySerialNo(String serialNo);
+
+    /**
+     * 把I和E的交易更新为Y
+     */
+    void updateCommandsToSuccess();
+
+    /**
+     * 把10分钟之前的N更新为F
+     */
+    void updateCommandsToFailure();
 }
