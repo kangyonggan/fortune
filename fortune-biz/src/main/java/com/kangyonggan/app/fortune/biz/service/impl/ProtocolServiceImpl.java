@@ -1,13 +1,11 @@
 package com.kangyonggan.app.fortune.biz.service.impl;
 
 import com.kangyonggan.app.fortune.biz.service.ProtocolService;
-import com.kangyonggan.app.fortune.mapper.ProtocolMapper;
 import com.kangyonggan.app.fortune.model.annotation.CacheDelete;
 import com.kangyonggan.app.fortune.model.annotation.CacheGetOrSave;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.vo.Protocol;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -18,9 +16,6 @@ import tk.mybatis.mapper.entity.Example;
 @Service
 public class ProtocolServiceImpl extends BaseService<Protocol> implements ProtocolService {
 
-    @Autowired
-    private ProtocolMapper protocolMapper;
-
     @Override
     @LogTime
     public Protocol findProtocolByMerchCoAndAcctNo(String merchCo, String acctNo) {
@@ -29,7 +24,7 @@ public class ProtocolServiceImpl extends BaseService<Protocol> implements Protoc
         protocol.setAcctNo(acctNo);
         protocol.setIsDeleted(AppConstants.IS_DELETED_NO);
 
-        return super.selectOne(protocol);
+        return myMapper.selectOne(protocol);
     }
 
     @Override
@@ -39,13 +34,13 @@ public class ProtocolServiceImpl extends BaseService<Protocol> implements Protoc
         Example example = new Example(Protocol.class);
         example.createCriteria().andEqualTo("protocolNo", protocol.getProtocolNo());
 
-        protocolMapper.updateByExampleSelective(protocol, example);
+        myMapper.updateByExampleSelective(protocol, example);
     }
 
     @Override
     @LogTime
     public void saveProtocol(Protocol protocol) {
-        super.insertSelective(protocol);
+        myMapper.insertSelective(protocol);
     }
 
     @Override
@@ -56,6 +51,6 @@ public class ProtocolServiceImpl extends BaseService<Protocol> implements Protoc
         protocol.setProtocolNo(protocolNo);
         protocol.setIsDeleted(AppConstants.IS_DELETED_NO);
 
-        return super.selectOne(protocol);
+        return myMapper.selectOne(protocol);
     }
 }

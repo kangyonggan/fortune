@@ -22,6 +22,6 @@ public class MerchantServiceImpl extends BaseService<Merchant> implements Mercha
         merchant.setMerchCo(merchCo);
         merchant.setIsDeleted(AppConstants.IS_DELETED_NO);
 
-        return super.selectOne(merchant);
+        return myMapper.selectOne(merchant);
     }
 }

@@ -190,12 +190,51 @@ IF EXISTS merchant;
 
 CREATE TABLE merchant
 (
+  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
+  COMMENT '主键, 自增',
+  merch_co     VARCHAR(15)                           NOT NULL
+  COMMENT '商户号',
+  merch_nm     VARCHAR(15)                           NOT NULL
+  COMMENT '商户名称',
+  charset      VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
+  COMMENT '编码',
+  ftp_host     VARCHAR(20)                           NOT NULL                    DEFAULT ''
+  COMMENT 'ftp主机名',
+  ftp_user     VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  COMMENT 'ftp用户名',
+  ftp_pwd      VARCHAR(128)                          NOT NULL                    DEFAULT ''
+  COMMENT 'ftp密码',
+  ftp_dir      VARCHAR(128)                          NOT NULL                    DEFAULT ''
+  COMMENT 'ftp目录',
+  is_debug     TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '是否是测试环境:{0:生产环境, 1:测试环境}',
+  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
+  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间'
+)
+  COMMENT '商户信息表';
+CREATE UNIQUE INDEX id_UNIQUE
+  ON merchant (id);
+CREATE INDEX created_time_ix
+  ON merchant (created_time);
+CREATE UNIQUE INDEX merch_co_UNIQUE
+  ON merchant (merch_co);
+
+-- ----------------------------
+--  Table structure for merch_acct
+-- ----------------------------
+DROP TABLE
+IF EXISTS merch_acct;
+
+CREATE TABLE merch_acct
+(
   id            BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
   COMMENT '主键, 自增',
   merch_co      VARCHAR(15)                           NOT NULL
   COMMENT '商户号',
-  merch_nm      VARCHAR(15)                           NOT NULL
-  COMMENT '商户名称',
   merch_acct_no VARCHAR(20)                           NOT NULL
   COMMENT '商户银行卡号',
   merch_acct_nm VARCHAR(20)                           NOT NULL
@@ -206,20 +245,10 @@ CREATE TABLE merchant
   COMMENT '商户证件号',
   merch_id_tp   VARCHAR(1)                            NOT NULL                    DEFAULT '0'
   COMMENT '商户证件类型',
-  charset       VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
-  COMMENT '编码',
   balance       DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
   COMMENT '余额',
-  ftp_host      VARCHAR(20)                           NOT NULL                    DEFAULT ''
-  COMMENT 'ftp主机名',
-  ftp_user      VARCHAR(64)                           NOT NULL                    DEFAULT ''
-  COMMENT 'ftp用户名',
-  ftp_pwd       VARCHAR(128)                          NOT NULL                    DEFAULT ''
-  COMMENT 'ftp密码',
-  ftp_dir       VARCHAR(128)                          NOT NULL                    DEFAULT ''
-  COMMENT 'ftp目录',
-  is_debug      TINYINT                               NOT NULL                    DEFAULT 0
-  COMMENT '是否是测试环境:{0:生产环境, 1:测试环境}',
+  is_master     TINYINT                               NOT NULL                    DEFAULT 0
+  COMMENT '是否主卡:{0:主卡, 1:备用卡}',
   is_deleted    TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '逻辑删除:{0:未删除, 1:已删除}',
   created_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
@@ -227,13 +256,13 @@ CREATE TABLE merchant
   updated_time  TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   COMMENT '更新时间'
 )
-  COMMENT '商户信息表';
+  COMMENT '商户卡信息表';
 CREATE UNIQUE INDEX id_UNIQUE
-  ON merchant (id);
+  ON merch_acct (id);
 CREATE INDEX created_time_ix
-  ON merchant (created_time);
-CREATE UNIQUE INDEX merch_co_UNIQUE
-  ON merchant (merch_co);
+  ON merch_acct (created_time);
+CREATE UNIQUE INDEX merch_co_merch_acct_no_UNIQUE
+  ON merch_acct (merch_co, merch_acct_no);
 
 -- ----------------------------
 --  Table structure for trans
@@ -473,9 +502,14 @@ VALUES
 
 # 商户 201705050000001 的初始化数据
 INSERT INTO merchant
-(merch_co, merch_nm, merch_acct_no, merch_acct_nm, balance, merch_mobile, merch_id_no)
+(merch_co, merch_nm, is_debug)
 VALUES
-  ('201705050000001', '公测商户', '6228216660054088518', '康永敢', 10000000, '15121119571', '340321199103173095');
+  ('201705050000001', '公测商户', 1);
+
+INSERT INTO merch_acct
+(merch_co, merch_acct_no, merch_acct_nm, merch_mobile, merch_id_no, balance, is_master)
+VALUES
+  ('201705050000001', '6214831212408888', '康永敢', '15121119571', '340321199103173095', 10000000000, 1);
 
 INSERT INTO trans
 (merch_co, tran_co, tran_nm, sing_quota, date_quota)

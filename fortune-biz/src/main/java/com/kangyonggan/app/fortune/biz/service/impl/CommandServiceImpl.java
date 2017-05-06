@@ -2,11 +2,7 @@ package com.kangyonggan.app.fortune.biz.service.impl;
 
 import com.kangyonggan.app.fortune.biz.service.CommandService;
 import com.kangyonggan.app.fortune.biz.service.FpayHelper;
-import com.kangyonggan.app.fortune.biz.service.FpayService;
-import com.kangyonggan.app.fortune.biz.service.RedisService;
-import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
-import com.kangyonggan.app.fortune.mapper.CommandMapper;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.vo.Command;
@@ -27,9 +23,6 @@ import tk.mybatis.mapper.entity.Example;
 @Service
 @Log4j2
 public class CommandServiceImpl extends BaseService<Command> implements CommandService {
-
-    @Autowired
-    private CommandMapper commandMapper;
 
     @Autowired
     private FpayHelper fpayHelper;
@@ -56,7 +49,7 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         body.setFpayDate(command.getFpayDate());
         body.setFpaySerialNo(command.getFpaySerialNo());
 
-        super.insertSelective(command);
+        myMapper.insertSelective(command);
         log.info("交易落库成功");
     }
 
@@ -69,7 +62,7 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         Example example = new Example(Command.class);
         example.createCriteria().andEqualTo("merchSerialNo", serialNo);
 
-        commandMapper.updateByExampleSelective(command, example);
+        myMapper.updateByExampleSelective(command, example);
     }
 
     @Override
@@ -79,6 +72,6 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         command.setMerchSerialNo(serialNo);
         command.setIsDeleted(AppConstants.IS_DELETED_NO);
 
-        return super.selectOne(command);
+        return myMapper.selectOne(command);
     }
 }

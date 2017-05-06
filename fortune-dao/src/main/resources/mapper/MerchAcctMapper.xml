@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kangyonggan.app.fortune.mapper.MerchAcctMapper">
+    <resultMap id="BaseResultMap" type="com.kangyonggan.app.fortune.model.vo.MerchAcct">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="merch_co" property="merchCo" jdbcType="VARCHAR"/>
+        <result column="merch_acct_no" property="merchAcctNo" jdbcType="VARCHAR"/>
+        <result column="merch_acct_nm" property="merchAcctNm" jdbcType="VARCHAR"/>
+        <result column="merch_mobile" property="merchMobile" jdbcType="VARCHAR"/>
+        <result column="merch_id_no" property="merchIdNo" jdbcType="VARCHAR"/>
+        <result column="merch_id_tp" property="merchIdTp" jdbcType="VARCHAR"/>
+        <result column="balance" property="balance" jdbcType="DECIMAL"/>
+        <result column="is_master" property="isMaster" jdbcType="TINYINT"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+</mapper>

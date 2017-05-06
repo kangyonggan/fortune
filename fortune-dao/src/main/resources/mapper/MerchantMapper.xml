@@ -8,13 +8,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merch_co" jdbcType="VARCHAR" property="merchCo"/>
         <result column="merch_nm" jdbcType="VARCHAR" property="merchNm"/>
-        <result column="merch_acct_no" jdbcType="VARCHAR" property="merchAcctNo"/>
-        <result column="merch_acct_nm" jdbcType="VARCHAR" property="merchAcctNm"/>
-        <result column="merch_mobile" jdbcType="VARCHAR" property="merchMobile"/>
-        <result column="merch_id_no" jdbcType="VARCHAR" property="merchIdNo"/>
-        <result column="merch_id_tp" jdbcType="VARCHAR" property="merchIdTp"/>
         <result column="charset" jdbcType="VARCHAR" property="charset"/>
-        <result column="balance" jdbcType="DECIMAL" property="balance"/>
         <result column="ftp_host" jdbcType="VARCHAR" property="ftpHost"/>
         <result column="ftp_user" jdbcType="VARCHAR" property="ftpUser"/>
         <result column="ftp_pwd" jdbcType="VARCHAR" property="ftpPwd"/>

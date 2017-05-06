@@ -103,11 +103,11 @@ public class FpayHelper {
         Header header = fpay.getHeader();
         Body body = fpay.getBody();
 
-        if (fpay.getHeader() == null) {
+        if (header == null) {
             return false;
         }
 
-        if (fpay.getBody() == null) {
+        if (body == null) {
             return false;
         }
 

@@ -23,6 +23,6 @@ public class TransServiceImpl extends BaseService<Trans> implements TransService
         trans.setTranCo(tranCo);
         trans.setIsDeleted(AppConstants.IS_DELETED_NO);
 
-        return super.selectOne(trans);
+        return myMapper.selectOne(trans);
     }
 }

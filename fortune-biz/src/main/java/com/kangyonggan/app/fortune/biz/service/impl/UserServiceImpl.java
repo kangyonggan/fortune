@@ -24,7 +24,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setIsDeleted(AppConstants.IS_DELETED_NO);
         user.setUsername(username);
 
-        return super.selectOne(user);
+        return myMapper.selectOne(user);
     }
 
     @Override
