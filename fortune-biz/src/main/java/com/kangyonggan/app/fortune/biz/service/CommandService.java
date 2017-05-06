@@ -1,5 +1,6 @@
 package com.kangyonggan.app.fortune.biz.service;
 
+import com.kangyonggan.app.fortune.model.vo.Command;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
 
 /**
@@ -23,4 +24,12 @@ public interface CommandService {
      * @param tranSt
      */
     void updateComanndTranSt(String serialNo, String tranSt);
+
+    /**
+     * 查找交易
+     *
+     * @param serialNo
+     * @return
+     */
+    Command findCommandBySerialNo(String serialNo);
 }

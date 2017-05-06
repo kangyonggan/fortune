@@ -154,10 +154,58 @@ public class FpayServiceImpl implements FpayService {
 
     @Override
     public void redeem(Fpay fpay) throws Exception {
+        log.info("==================== 进入发财付平台单笔代付入口 ====================");
+        Header header = fpay.getHeader();
+        Body body = fpay.getBody();
+
+        // 更新交易状态, 交易金额后两位即响应码，没对应的响应码则为成功, 签约解约余额查询写死成功。
+        String amount = body.getAmount().toString();
+        log.info("交易金额为：{}", amount);
+
+        int index = amount.lastIndexOf(".");
+        String end = "0000";
+        if (index != -1) {
+            end = "00" + amount.substring(index + 1);
+            end = StringUtils.rightPad(end, 4, "0");
+        }
+        RespCo resp = RespCo.getRespCo(end);
+
+        commandService.updateComanndTranSt(header.getSerialNo(), resp.getTranSt());
+        log.info("更新交易状态成功");
+
+        // 组装响应报文
+        header.setRespCo(resp.getRespCo());
+        header.setRespMsg(resp.getRespMsg());
+        body.setFpaySettleDate(body.getSettleDate());
+
+        log.info("==================== 离开发财付平台单笔代付入口 ====================");
     }
 
     @Override
     public void query(Fpay fpay) throws Exception {
+        log.info("==================== 进入发财付平台交易查询入口 ====================");
+        Header header = fpay.getHeader();
+        Body body = fpay.getBody();
+
+        Command command = commandService.findCommandBySerialNo(body.getOrgnSerialNo());
+
+        RespCo resp = RespCo.RESP_CO_0000;
+        if (command == null) {
+            resp = RespCo.RESP_CO_0023;
+        }
+
+        // 组装响应报文
+        header.setRespCo(resp.getRespCo());
+        header.setRespMsg(resp.getRespMsg());
+
+        body.setTranSt(command.getTranSt());
+        body.setProtocolNo(command.getProtocolNo());
+        body.setCurrCo(command.getCurrco());
+        body.setAmount(command.getAmount());
+        body.setFpayDate(command.getFpayDate());
+        body.setFpaySettleDate(body.getSettleDate());
+
+        log.info("==================== 离开发财付平台交易查询入口 ====================");
     }
 
     @Override

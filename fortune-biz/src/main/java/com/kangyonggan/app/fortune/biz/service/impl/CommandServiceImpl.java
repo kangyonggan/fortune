@@ -71,4 +71,14 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
 
         commandMapper.updateByExampleSelective(command, example);
     }
+
+    @Override
+    @LogTime
+    public Command findCommandBySerialNo(String serialNo) {
+        Command command = new Command();
+        command.setMerchSerialNo(serialNo);
+        command.setIsDeleted(AppConstants.IS_DELETED_NO);
+
+        return super.selectOne(command);
+    }
 }
