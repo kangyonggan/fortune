@@ -11,10 +11,10 @@ import java.util.List;
 public interface MenuService {
 
     /**
-     * 查找用户菜单
+     * 查找商户菜单
      *
-     * @param username
+     * @param merchCo
      * @return
      */
-    List<Menu> findMenusByUsername(String username);
+    List<Menu> findMenusByMerchCo(String merchCo);
 }

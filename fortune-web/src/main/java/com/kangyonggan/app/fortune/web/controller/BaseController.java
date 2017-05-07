@@ -22,7 +22,10 @@ public class BaseController {
     private static final String LIST = "/list";
     private static final String INDEX = "/index";
     private static final String FORM = "/form";
+    private static final String FORM_MODAL = "/form-modal";
     private static final String DETAIL = "/detail";
+    private static final String DETAIL_MODAL = "/detail-modal";
+    private static final String TABLE_TR = "/table-tr";
 
     public BaseController() {
         String className = getClass().getSimpleName();
@@ -59,6 +62,18 @@ public class BaseController {
 
     protected String getPathDetail() {
         return PATH_ROOT + DETAIL;
+    }
+
+    protected String getPathFormModal() {
+        return PATH_ROOT + FORM_MODAL;
+    }
+
+    protected String getPathDetailModal() {
+        return PATH_ROOT + DETAIL_MODAL;
+    }
+
+    protected String getPathTableTr() {
+        return PATH_ROOT + TABLE_TR;
     }
 
     protected Map<String, Object> getResultMap() {

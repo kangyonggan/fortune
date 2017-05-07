@@ -17,14 +17,14 @@
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="selectMenusByUsername" resultMap="BaseResultMap">
+    <select id="selectMenusByMerchCo" resultMap="BaseResultMap">
         SELECT
         DISTINCT m.*
-        FROM menu m, role_menu rm, user_role ur
+        FROM menu m, role_menu rm, merchant_role mr
         <where>
             m.code = rm.menu_code
-            AND rm.role_code = ur.role_code
-            AND ur.username = #{username}
+            AND rm.role_code = mr.role_code
+            AND mr.merch_co = #{merchCo}
             AND m.is_deleted = 0
             ORDER BY m.sort ASC
         </where>

@@ -5,21 +5,25 @@ $(function () {
 
     $form.validate({
         rules: {
-            username: {
+            merchCo: {
                 required: true,
-                isUsername: true,
+                rangelength: [5, 15],
                 remote: {
-                    url: ctx + "/validate/user",
+                    url: ctx + "/validate/merchant",
                     type: 'post',
                     data: {
-                        'username': function () {
-                            return $('#username').val()
+                        'merchCo': function () {
+                            return $('#merchCo').val()
                         },
-                        'oldUsername': function () {
-                            return $('#old-username').val();
+                        'oldMerchCo': function () {
+                            return $('#old-merchCo').val();
                         }
                     }
                 }
+            },
+            merchNm: {
+                required: true,
+                maxlength: 64
             },
             password: {
                 required: true,
@@ -29,42 +33,29 @@ $(function () {
                 required: true,
                 equalTo: "#password"
             },
-            fullname: {
-                required: true,
-                isFullname: true
-            },
-            mobile: {
+            charset: {
                 required: false,
-                isMobile: true,
-                remote: {
-                    url: "/validate/mobile",
-                    type: 'post',
-                    data: {
-                        'mobile': function () {
-                            return $('#mobile').val()
-                        },
-                        'oldMobile': function () {
-                            return $('#old-mobile').val()
-                        }
-                    }
-                }
+                maxlength: 8
             },
-            email: {
+            isDebug: {
                 required: false,
-                email: true,
-                remote: {
-                    url: "/validate/email2",
-                    type: 'post',
-                    data: {
-                        'email': function () {
-                            return $('#email').val()
-                        },
-                        'oldEmail': function () {
-                            return $('#old-email').val()
-                        }
-                    }
-                },
+                range: [0, 1]
+            },
+            ftpHost: {
+                required: false,
+                maxlength: 20
+            },
+            ftpUser: {
+                required: false,
                 maxlength: 64
+            },
+            ftpPwd: {
+                required: false,
+                maxlength: 128
+            },
+            ftpDir: {
+                required: false,
+                maxlength: 128
             }
         },
         submitHandler: function (form, event) {

@@ -9,9 +9,9 @@ $(function () {
 
     $form.validate({
         rules: {
-            username: {
+            merchCo: {
                 required: true,
-                rangelength: [5, 20]
+                rangelength: [5, 15]
             },
             password: {
                 required: true,

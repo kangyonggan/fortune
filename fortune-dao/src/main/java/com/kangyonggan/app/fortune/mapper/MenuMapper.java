@@ -10,11 +10,11 @@ import java.util.List;
 public interface MenuMapper extends MyMapper<Menu> {
 
     /**
-     * 查找用户菜单
+     * 查找商户菜单
      *
-     * @param username
+     * @param merchCo
      * @return
      */
-    List<Menu> selectMenusByUsername(@Param("username") String username);
+    List<Menu> selectMenusByMerchCo(@Param("merchCo") String merchCo);
 
 }

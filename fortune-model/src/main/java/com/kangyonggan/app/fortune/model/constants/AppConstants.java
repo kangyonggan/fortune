@@ -17,9 +17,10 @@ public interface AppConstants {
     int PAGE_SIZE = 10;
 
     /**
-     * 未删除
+     * 是否删除
      */
     byte IS_DELETED_NO = 0;
+    byte IS_DELETED_YES = 1;
 
     /**
      * 文件根路径的key
@@ -67,5 +68,10 @@ public interface AppConstants {
      * 默认账户类型， 借记卡
      */
     String DEFAULT_ACCT_TP = "00";
+
+    /**
+     * 商户角色
+     */
+    String DEFAULT_ROLE_CODE = "ROLE_MERCHANT";
 }
 

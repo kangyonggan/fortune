@@ -8,6 +8,8 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merch_co" jdbcType="VARCHAR" property="merchCo"/>
         <result column="merch_nm" jdbcType="VARCHAR" property="merchNm"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="salt" property="salt" jdbcType="VARCHAR"/>
         <result column="charset" jdbcType="VARCHAR" property="charset"/>
         <result column="public_key_path" jdbcType="VARCHAR" property="publicKeyPath"/>
         <result column="private_key_path" jdbcType="VARCHAR" property="privateKeyPath"/>
@@ -20,4 +22,12 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
     </resultMap>
+
+    <insert id="insertMerchantRoles">
+        INSERT INTO merchant_role (merch_co, role_code)
+        VALUES
+        <foreach collection="roleCodes" item="roleCode" separator=",">
+            (#{merchCo}, #{roleCode})
+        </foreach>
+    </insert>
 </mapper>

@@ -31,11 +31,6 @@
 }));
 
 //下面是自定义校验
-$.extend($.validator.addMethod("isUsername", function (value) {
-    var str = /^[a-z][0-9a-z]{4,19}$/;
-    return str.test(value);
-}, "请输入5至20位以字母开头的小写字母和数字的组合"));
-
 $.extend($.validator.addMethod("isPassword", function (value) {
     var str = /[a-zA-Z0-9]{6,20}$/;
     return str.test(value);
@@ -46,12 +41,7 @@ $.extend($.validator.addMethod("isCaptcha", function (value) {
     return str.test(value);
 }, "请输入4位数字的验证码"));
 
-$.extend($.validator.addMethod("isFullname", function (value) {
-    var str = /^[\u4E00-\u9FA5]{2,4}$/;
-    return str.test(value);
-}, "请输入2至4个汉字"));
-
-$.extend($.validator.addMethod("isIdCard", function (value) {
+$.extend($.validator.addMethod("isIdNo", function (value) {
     var str = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
     return str.test(value);
 }, "请输入正确的18位身份证号码"));
@@ -60,11 +50,6 @@ $.extend($.validator.addMethod("isRoleCode", function (value) {
     var str = /^ROLE[A-Z_]{0,28}$/;
     return str.test(value);
 }, "以ROLE开头,纯大写,可带下划线,不超过32位"));
-
-$.extend($.validator.addMethod("isName", function (value) {
-    var str = /^[\u4E00-\u9FA5]{2,12}$/;
-    return str.test(value);
-}, "请输入2至12个汉字"));
 
 $.extend($.validator.addMethod("isMenuCode", function (value) {
     var str = /^[A-Z_]{1,32}$/;

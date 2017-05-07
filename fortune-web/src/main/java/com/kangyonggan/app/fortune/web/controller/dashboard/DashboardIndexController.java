@@ -1,10 +1,10 @@
 package com.kangyonggan.app.fortune.web.controller.dashboard;
 
 import com.kangyonggan.app.fortune.biz.service.MenuService;
-import com.kangyonggan.app.fortune.biz.service.UserService;
+import com.kangyonggan.app.fortune.biz.service.MerchantService;
 import com.kangyonggan.app.fortune.model.vo.Menu;
-import com.kangyonggan.app.fortune.model.vo.ShiroUser;
-import com.kangyonggan.app.fortune.model.vo.User;
+import com.kangyonggan.app.fortune.model.vo.Merchant;
+import com.kangyonggan.app.fortune.model.vo.ShiroMerchant;
 import com.kangyonggan.app.fortune.web.controller.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
 public class DashboardIndexController extends BaseController {
 
     @Autowired
-    private UserService userService;
+    private MerchantService merchantService;
 
     @Autowired
     private MenuService menuService;
@@ -38,11 +38,11 @@ public class DashboardIndexController extends BaseController {
     @RequestMapping(method = RequestMethod.GET)
     @RequiresPermissions("DASHBOARD")
     public String layout(Model model) {
-        ShiroUser shiroUser = userService.getShiroUser();
-        User user = userService.findUserByUsername(shiroUser.getUsername());
-        List<Menu> menus = menuService.findMenusByUsername(shiroUser.getUsername());
+        ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
+        Merchant merchant = merchantService.findMerchantByMerchCo(shiroMerchant.getMerchCo());
+        List<Menu> menus = menuService.findMenusByMerchCo(shiroMerchant.getMerchCo());
 
-        model.addAttribute("user", user);
+        model.addAttribute("merchant", merchant);
         model.addAttribute("menus", menus);
         return "dashboard/layout";
     }

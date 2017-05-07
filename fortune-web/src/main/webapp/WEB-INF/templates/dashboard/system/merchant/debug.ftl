@@ -1,0 +1,1 @@
+<#if merchant.isDebug==1>是<#else>否</#if>

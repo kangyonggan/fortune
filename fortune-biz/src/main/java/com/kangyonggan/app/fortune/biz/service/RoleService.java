@@ -11,10 +11,17 @@ import java.util.List;
 public interface RoleService {
 
     /**
-     * 查找用户角色
+     * 查找商户角色
      *
-     * @param username
+     * @param merchCo
      * @return
      */
-    List<Role> findRolesByUsername(String username);
+    List<Role> findRolesByMercoCo(String merchCo);
+
+    /**
+     * 查找所有角色
+     *
+     * @return
+     */
+    List<Role> findAllRoles();
 }

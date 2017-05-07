@@ -9,9 +9,9 @@ import java.io.Serializable;
  * @since 2016/12/2
  */
 @Data
-public class ShiroUser implements Serializable {
+public class ShiroMerchant implements Serializable {
 
     private Long id;
 
-    private String username;
+    private String merchCo;
 }

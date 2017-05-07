@@ -7,43 +7,6 @@ CREATE DATABASE fortune_dev
 USE fortune_dev;
 
 -- ----------------------------
---  Table structure for user
--- ----------------------------
-DROP TABLE
-IF EXISTS user;
-
-CREATE TABLE user
-(
-  id           BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL
-  COMMENT '主键, 自增',
-  username     VARCHAR(20)                           NOT NULL
-  COMMENT '用户名',
-  email        VARCHAR(64)                           NOT NULL
-  COMMENT '邮箱',
-  password     VARCHAR(64)                           NOT NULL
-  COMMENT '密码',
-  salt         VARCHAR(64)                           NOT NULL
-  COMMENT '密码盐',
-  fullname     VARCHAR(32)                           NOT NULL
-  COMMENT '姓名',
-  is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
-  COMMENT '逻辑删除:{0:未删除, 1:已删除}',
-  created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP
-  COMMENT '创建时间',
-  updated_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  COMMENT '更新时间'
-)
-  COMMENT '用户表';
-CREATE UNIQUE INDEX id_UNIQUE
-  ON user (id);
-CREATE INDEX created_time_ix
-  ON user (created_time);
-CREATE UNIQUE INDEX username_UNIQUE
-  ON user (username);
-CREATE UNIQUE INDEX email_UNIQUE
-  ON user (email);
-
--- ----------------------------
 --  Table structure for role
 -- ----------------------------
 DROP TABLE
@@ -112,20 +75,20 @@ CREATE UNIQUE INDEX code_UNIQUE
   ON menu (code);
 
 -- ----------------------------
---  Table structure for user_role
+--  Table structure for merchant_role
 -- ----------------------------
 DROP TABLE
-IF EXISTS user_role;
+IF EXISTS merchant_role;
 
-CREATE TABLE user_role
+CREATE TABLE merchant_role
 (
-  username  VARCHAR(20) NOT NULL
-  COMMENT '用户名',
+  merch_co  VARCHAR(15) NOT NULL
+  COMMENT '商户号',
   role_code VARCHAR(32) NOT NULL
   COMMENT '角色代码',
-  PRIMARY KEY (username, role_code)
+  PRIMARY KEY (merch_co, role_code)
 )
-  COMMENT '用户角色表';
+  COMMENT '商户角色表';
 
 -- ----------------------------
 --  Table structure for role_menu
@@ -194,8 +157,12 @@ CREATE TABLE merchant
   COMMENT '主键, 自增',
   merch_co         VARCHAR(15)                           NOT NULL
   COMMENT '商户号',
-  merch_nm         VARCHAR(15)                           NOT NULL
+  merch_nm         VARCHAR(64)                           NOT NULL
   COMMENT '商户名称',
+  password         VARCHAR(64)                           NOT NULL
+  COMMENT '密码',
+  salt             VARCHAR(64)                           NOT NULL
+  COMMENT '密码盐',
   charset          VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
   COMMENT '编码',
   public_key_path  VARCHAR(64)                           NOT NULL                    DEFAULT ''
@@ -419,13 +386,11 @@ CREATE INDEX merch_co_ix
 
 #====================初始数据====================#
 
--- ----------------------------
---  data for user
--- ----------------------------
-INSERT INTO user
-(username, email, password, salt, fullname)
+# 商户 admin
+INSERT INTO merchant
+(merch_co, merch_nm, password, salt)
 VALUES
-  ('admin', 'java@kangyonggan.com', '9606b0029ba4a8c9369f288cced0dc465eb5eabd', '3685072edcf8aad8', '管理员');
+  ('admin', '管理员', '9606b0029ba4a8c9369f288cced0dc465eb5eabd', '3685072edcf8aad8');
 
 -- ----------------------------
 --  data for role
@@ -433,7 +398,8 @@ VALUES
 INSERT INTO role
 (code, name)
 VALUES
-  ('ROLE_ADMIN', '管理员');
+  ('ROLE_ADMIN', '管理员'),
+  ('ROLE_MERCHANT', '商户');
 
 -- ----------------------------
 --  data for menu
@@ -444,21 +410,21 @@ VALUES
   ('DASHBOARD', '工作台', '', 'index', 0, 'menu-icon fa fa-dashboard'),
 
   ('SYSTEM', '系统', 'DASHBOARD', 'system', 1, 'menu-icon fa fa-cogs'),
-  ('SYSTEM_USER', '用户管理', 'SYSTEM', 'system/user', 0, ''),
+  ('SYSTEM_MERCHANT', '商户管理', 'SYSTEM', 'system/merchant', 0, ''),
   ('SYSTEM_ROLE', '角色管理', 'SYSTEM', 'system/role', 1, ''),
   ('SYSTEM_MENU', '菜单管理', 'SYSTEM', 'system/menu', 2, ''),
 
   ('DATA', '数据', 'DASHBOARD', 'data', 2, 'menu-icon fa fa-gavel'),
   ('DATA_CACHE', '缓存管理', 'CONTENT', 'data/cache', 0, ''),
-  ('DATA_DICTIONARY', '数据字典', 'CONTENT', 'data/dictionary', 1, ''),
-  ('DATA_MERCHANT', '商户信息', 'DATA', 'data/merchant', 2, '');
+  ('DATA_DICTIONARY', '数据字典', 'CONTENT', 'data/dictionary', 1, '');
 
 -- ----------------------------
 --  data for user_role
 -- ----------------------------
-INSERT INTO user_role
+INSERT INTO merchant_role
 VALUES
-  ('admin', 'ROLE_ADMIN');
+  ('admin', 'ROLE_ADMIN'),
+  ('201705050000001', 'ROLE_MERCHANT');
 
 -- ----------------------------
 --  data for role_menu
@@ -496,9 +462,10 @@ VALUES
 
 # 商户 201705050000001 的初始化数据
 INSERT INTO merchant
-(merch_co, merch_nm, public_key_path, private_key_path)
+(merch_co, merch_nm, password, salt, public_key_path, private_key_path)
 VALUES
-  ('201705050000001', '公测商户', '/upload/merch_rsa_public_key_2048.pem',
+  ('201705050000001', '公测商户', '9606b0029ba4a8c9369f288cced0dc465eb5eabd', '3685072edcf8aad8',
+   '/upload/merch_rsa_public_key_2048.pem',
    'E:/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
 
 INSERT INTO merch_acct

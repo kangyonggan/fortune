@@ -2,13 +2,13 @@
 
 <@override name="modal-body">
 <form class="form-horizontal" role="form" id="modal-form" method="post"
-      action="${ctx}/dashboard/system/user/${userId}/roles">
+      action="${ctx}/dashboard/system/merchant/${merchCo}/roles">
     <div class="control-group">
         <#list all_roles as role>
             <div class="checkbox">
                 <label>
                     <input name="roles" type="checkbox" value="${role.code}"
-                           class="ace" ${user_roles?seq_contains(role.code)?string("checked", "")}/>
+                           class="ace" ${merchant_roles?seq_contains(role.code)?string("checked", "")}/>
                     <span class="lbl"> ${role.name} </span>
                 </label>
             </div>
@@ -27,7 +27,7 @@
     <i class="ace-icon fa fa-check"></i>
     <@s.message "app.button.save"/>
 </button>
-<script src="${ctx}/static/app/js/dashboard/system/user/roles-modal.js"></script>
+<script src="${ctx}/static/app/js/dashboard/system/merchant/roles-modal.js"></script>
 </@override>
 
 <@extends name="../../../modal-layout.ftl"/>

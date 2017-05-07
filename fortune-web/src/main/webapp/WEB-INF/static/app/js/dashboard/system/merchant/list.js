@@ -1,9 +1,9 @@
 $(function () {
-    updateState("system/user");
+    updateState("system/merchant");
 
-    var $table = $('#user-table');
+    var $table = $('#merchant-table');
 
-    $table.on('click', 'a[data-role=user-delete]', function () {
+    $table.on('click', 'a[data-role=merchant-delete]', function () {
         var $trigger = $(this);
         var url = $trigger.data('url');
 

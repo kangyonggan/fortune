@@ -29,6 +29,16 @@ public class Merchant implements Serializable {
     private String merchNm;
 
     /**
+     * 密码
+     */
+    private String password;
+
+    /**
+     * 密码盐
+     */
+    private String salt;
+
+    /**
      * 编码
      */
     private String charset;

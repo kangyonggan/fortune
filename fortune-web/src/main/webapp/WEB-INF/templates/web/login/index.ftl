@@ -13,10 +13,10 @@
 
             <form id="login-form" action="${ctx}/login" method="post" novalidate="novalidate">
                 <div>
-                    <label for="username">用户名</label>
+                    <label for="merchCo">商户号</label>
                     <div class="input-icon input-icon-right">
-                        <input value="admin" type="text" name="username" class="form-control"
-                               placeholder="密码:5至20位的字母数字组合"/>
+                        <input type="text" name="merchCo" class="form-control"
+                               placeholder="密码:5至15位的字母数字组合"/>
                         <i class="ace-icon fa fa-user"></i>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                 <div>
                     <label for="password">密码</label>
                     <div class="input-icon input-icon-right">
-                        <input value="123456" type="password" name="password" class="form-control"
+                        <input type="password" name="password" class="form-control"
                                placeholder="密码:6至20位的字母数字组合">
                         <i class="ace-icon fa fa-key"></i>
                     </div>

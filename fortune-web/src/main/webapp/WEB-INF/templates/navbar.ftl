@@ -21,15 +21,15 @@
 
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
         <@shiro.user>
-            <#if user??>
+            <#if merchant??>
                 <ul class="nav ace-nav">
                     <li class="dark">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <img class="nav-user-photo" src="${ctx}/static/ace/dist/avatars/profile-pic.jpg"
-                                 alt="${user.fullname}">
+                                 alt="${merchant.merchNm}">
                             <span class="user-info">
 									<small>欢迎,</small>
-                            <span id="navFullname">${user.fullname}</span>
+                            <span id="navFullname">${merchant.merchNm}</span>
 								</span>
 
                             <i class="ace-icon fa fa-caret-down"></i>

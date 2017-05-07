@@ -10,10 +10,17 @@ import java.util.List;
 public interface RoleMapper extends MyMapper<Role> {
 
     /**
-     * 查找用户角色
+     * 查找商户角色
      *
-     * @param username
+     * @param merchCo
      * @return
      */
-    List<Role> selectRolesByUsername(@Param("username") String username);
+    List<Role> selectRolesByMerchCo(@Param("merchCo") String merchCo);
+
+    /**
+     * 删除商户全部角色
+     *
+     * @param merchCo
+     */
+    void deleteAllRolesByMerchCo(@Param("merchCo") String merchCo);
 }

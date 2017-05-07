@@ -13,14 +13,21 @@
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="selectRolesByUsername" resultMap="BaseResultMap">
+    <select id="selectRolesByMerchCo" resultMap="BaseResultMap">
         SELECT r.*
-        FROM role r, user_role ur
+        FROM role r, merchant_role mr
         <where>
-            r.code = ur.role_code
-            AND ur.username = #{username}
+            r.code = mr.role_code
+            AND mr.merch_co = #{merchCo}
             AND r.is_deleted = 0
             ORDER BY r.id DESC
         </where>
     </select>
+
+    <delete id="deleteAllRolesByMerchCo">
+        DELETE FROM merchant_role
+        <where>
+            merch_co = #{merchCo}
+        </where>
+    </delete>
 </mapper>

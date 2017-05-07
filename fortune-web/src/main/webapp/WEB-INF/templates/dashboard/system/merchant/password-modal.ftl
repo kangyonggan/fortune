@@ -1,25 +1,24 @@
 <#assign modal_title="修改密码" />
 
 <@override name="modal-body">
-<form class="form-horizontal" role="form" id="modal-form" method="post" action="${ctx}/dashboard/system/user/password">
-    <input type="hidden" name="id" value="${user.id}"/>
+<form class="form-horizontal" role="form" id="modal-form" method="post" action="${ctx}/dashboard/system/merchant/password">
     <div class="row">
         <div class="row form-group">
             <div class="col-md-3 control-label">
-                <label>用户名</label>
+                <label>商户号</label>
             </div>
             <div class="col-md-7 controls">
-                <input type="text" class="form-control readonly" value="${user.username}" readonly/>
+                <input type="text" class="form-control readonly" value="${merchant.merchCo}" readonly/>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="row form-group">
             <div class="col-md-3 control-label">
-                <label>姓名</label>
+                <label>商户名称</label>
             </div>
             <div class="col-md-7 controls">
-                <input type="text" class="form-control readonly" value="${user.fullname}" readonly/>
+                <input type="text" class="form-control readonly" value="${merchant.merchNm}" readonly/>
             </div>
         </div>
     </div>
@@ -56,7 +55,7 @@
     <i class="ace-icon fa fa-check"></i>
     <@s.message "app.button.save"/>
 </button>
-<script src="${ctx}/static/app/js/dashboard/system/user/password-modal.js"></script>
+<script src="${ctx}/static/app/js/dashboard/system/merchant/password-modal.js"></script>
 </@override>
 
 <@extends name="../../../modal-layout.ftl"/>

@@ -1,15 +1,15 @@
 <#assign ctx="${(rca.contextPath)!''}">
 
-<tr id="user-${user.id}">
-    <td>${user.username}</td>
-    <td>${user.fullname}</td>
-    <td>${user.mobile}</td>
-    <td>${user.email}</td>
+<tr id="merchant-${merchant.id}">
+    <td>${merchant.merchCo}</td>
+    <td>${merchant.merchNm}</td>
+    <td>${merchant.charset}</td>
+    <td><#include "debug.ftl"></td>
     <td><#include "delete.ftl"></td>
-    <td><@c.relative_date datetime=user.createdTime/></td>
+    <td><@c.relative_date datetime=merchant.createdTime/></td>
     <td>
         <div class="btn-group">
-            <a data-toggle="modal" class="btn btn-xs btn-inverse" href="${ctx}/dashboard/system/user/${user.id}"
+            <a data-toggle="modal" class="btn btn-xs btn-inverse" href="${ctx}/dashboard/system/merchant/${merchant.merchCo}"
                data-target="#myModal">查看</a>
 
             <button data-toggle="dropdown" class="btn btn-xs btn-inverse dropdown-toggle">
@@ -18,15 +18,15 @@
 
             <ul class="dropdown-menu dropdown-menu-right dropdown-inverse">
                 <li>
-                    <a href="${ctx}/dashboard/system/user/${user.id}/edit" data-toggle="modal" data-target="#myModal"
+                    <a href="${ctx}/dashboard/system/merchant/${merchant.merchCo}/edit" data-toggle="modal" data-target="#myModal"
                        data-backdrop="static">编辑</a>
                 </li>
                 <li>
-                    <a href="${ctx}/dashboard/system/user/${user.id}/password" data-toggle="modal" data-target="#myModal"
+                    <a href="${ctx}/dashboard/system/merchant/${merchant.merchCo}/password" data-toggle="modal" data-target="#myModal"
                        data-backdrop="static">修改密码</a>
                 </li>
                 <li>
-                    <a href="${ctx}/dashboard/system/user/${user.id}/roles" data-toggle="modal" data-target="#myModal"
+                    <a href="${ctx}/dashboard/system/merchant/${merchant.merchCo}/roles" data-toggle="modal" data-target="#myModal"
                        data-backdrop="static">设置角色</a>
                 </li>
             </ul>

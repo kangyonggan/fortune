@@ -24,9 +24,8 @@ public class MenuServiceImpl extends BaseService<Menu> implements MenuService {
 
     @Override
     @LogTime
-    @CacheGetOrSave("menu:username:{0}")
-    public List<Menu> findMenusByUsername(String username) {
-        List<Menu> menus = menuMapper.selectMenusByUsername(username);
+    public List<Menu> findMenusByMerchCo(String merchCo) {
+        List<Menu> menus = menuMapper.selectMenusByMerchCo(merchCo);
         List<Menu> wrapList = new ArrayList();
 
         return recursionList(menus, wrapList, "", 0L);

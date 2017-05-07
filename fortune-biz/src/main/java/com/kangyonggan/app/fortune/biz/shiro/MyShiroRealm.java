@@ -1,14 +1,14 @@
 package com.kangyonggan.app.fortune.biz.shiro;
 
 import com.kangyonggan.app.fortune.biz.service.MenuService;
+import com.kangyonggan.app.fortune.biz.service.MerchantService;
 import com.kangyonggan.app.fortune.biz.service.RoleService;
-import com.kangyonggan.app.fortune.biz.service.UserService;
 import com.kangyonggan.app.fortune.common.util.Encodes;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.vo.Menu;
+import com.kangyonggan.app.fortune.model.vo.Merchant;
 import com.kangyonggan.app.fortune.model.vo.Role;
-import com.kangyonggan.app.fortune.model.vo.ShiroUser;
-import com.kangyonggan.app.fortune.model.vo.User;
+import com.kangyonggan.app.fortune.model.vo.ShiroMerchant;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -32,7 +32,7 @@ import java.util.List;
 public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private MerchantService merchantService;
 
     @Autowired
     private RoleService roleService;
@@ -48,10 +48,10 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        ShiroUser shiroUser = (ShiroUser) principalCollection.getPrimaryPrincipal();
-        log.info("Shiro权限认证, username={}", shiroUser.getUsername());
-        List<Role> roles = roleService.findRolesByUsername(shiroUser.getUsername());
-        List<Menu> menus = menuService.findMenusByUsername(shiroUser.getUsername());
+        ShiroMerchant shiroMerchant = (ShiroMerchant) principalCollection.getPrimaryPrincipal();
+        log.info("Shiro权限认证, merchCo={}", shiroMerchant.getMerchCo());
+        List<Role> roles = roleService.findRolesByMercoCo(shiroMerchant.getMerchCo());
+        List<Menu> menus = menuService.findMenusByMerchCo(shiroMerchant.getMerchCo());
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         // 基于Role的权限信息
@@ -74,25 +74,25 @@ public class MyShiroRealm extends AuthorizingRealm {
             AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
 
-        log.info("Shiro登录认证, username={}", token.getUsername());
+        log.info("Shiro登录认证, merchCo={}", token.getUsername());
 
-        String username = token.getUsername();
-        User user = userService.findUserByUsername(username);
+        String merchCo = token.getUsername();
+        Merchant merchant = merchantService.findMerchantByMerchCo(merchCo);
 
-        if (null == user) {
+        if (null == merchant) {
             throw new UnknownAccountException();
         }
 
-        if (user.getIsDeleted() == 1) {
+        if (merchant.getIsDeleted() == 1) {
             throw new DisabledAccountException();
         }
 
-        byte[] salt = Encodes.decodeHex(user.getSalt());
-        ShiroUser shiroUser = new ShiroUser();
-        shiroUser.setId(user.getId());
-        shiroUser.setUsername(user.getUsername());
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(shiroUser,
-                user.getPassword(), ByteSource.Util.bytes(salt), getName());
+        byte[] salt = Encodes.decodeHex(merchant.getSalt());
+        ShiroMerchant shiroMerchant = new ShiroMerchant();
+        shiroMerchant.setId(merchant.getId());
+        shiroMerchant.setMerchCo(merchant.getMerchCo());
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(shiroMerchant,
+                merchant.getPassword(), ByteSource.Util.bytes(salt), getName());
 
         return simpleAuthenticationInfo;
     }
