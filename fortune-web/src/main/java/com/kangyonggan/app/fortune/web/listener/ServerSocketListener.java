@@ -192,6 +192,13 @@ public class ServerSocketListener implements ServletContextListener {
                 FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0009, fpay);
                 return;
             }
+            // 代扣代付单笔限额
+            if (TranCo.K003.name().equals(tranCo) || TranCo.K004.name().equals(tranCo)) {
+                if (fpay.getAmount().compareTo(trans.getSingQuota()) > 0) {
+                    log.warn("单笔超限");
+                    FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0015, fpay);
+                }
+            }
         } catch (Exception e) {
             log.warn(e.getMessage());
             FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_9999, fpay);

@@ -60,7 +60,7 @@ public class PayTest {
                 "    <reqDate>20170507</reqDate>  \n" +
                 "    <reqTime>153623</reqTime>  \n" +
                 "    <protocolNo>201705070000000000000000000000000000000000000001</protocolNo>  \n" +
-                "    <amount>1.00</amount>  \n" +
+                "    <amount>10000001.00</amount>  \n" +
                 "</fpay>";
         log.info("请求报文明文:{}", plain);
 

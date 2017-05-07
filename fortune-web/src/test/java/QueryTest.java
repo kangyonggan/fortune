@@ -59,7 +59,7 @@ public class QueryTest {
                 "    <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>  \n" +
                 "    <reqDate>20170507</reqDate>  \n" +
                 "    <reqTime>153623</reqTime>  \n" +
-                "    <orgnSerialNo>20170507174631446</orgnSerialNo>  \n" +
+                "    <orgnSerialNo>20170507180912908</orgnSerialNo>  \n" +
                 "</fpay>";
         log.info("请求报文明文:{}", plain);
 
