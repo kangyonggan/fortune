@@ -1,5 +1,6 @@
 package com.kangyonggan.app.fortune.web.controller.web;
 
+import com.kangyonggan.app.fortune.biz.service.MenuService;
 import com.kangyonggan.app.fortune.biz.service.MerchantService;
 import com.kangyonggan.app.fortune.biz.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class ValidateController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private MenuService menuService;
 
     /**
      * 校验商户号是否可用
@@ -57,6 +61,24 @@ public class ValidateController {
         }
 
         return !roleService.existsRoleCode(code);
+    }
+
+    /**
+     * 校验菜单代码是否可用
+     *
+     * @param code
+     * @param oldCode
+     * @return
+     */
+    @RequestMapping(value = "menu", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean validateMenuCode(@RequestParam("code") String code,
+                                    @RequestParam(value = "oldCode", required = false, defaultValue = "") String oldCode) {
+        if (code.equals(oldCode)) {
+            return true;
+        }
+
+        return !menuService.existsMenuCode(code);
     }
 
 }

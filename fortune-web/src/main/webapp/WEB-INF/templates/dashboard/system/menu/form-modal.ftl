@@ -25,7 +25,7 @@
                 <label for="description">菜单名称</label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "menu.name" 'class="form-control" placeholder="菜单名称:2至12个汉字"'/>
+                <@s.formInput "menu.name" 'class="form-control" placeholder="菜单名称:2至12个汉字"'/>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                 <label for="name">菜单代码</label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "menu.code" 'class="form-control" placeholder="格式参考:SYSTEM_USER"'/>
+                <@s.formInput "menu.code" 'class="form-control" placeholder="格式参考:SYSTEM_USER"'/>
                 <input type="hidden" id="old-code" value="${menu.code!''}">
             </div>
         </div>
@@ -44,7 +44,7 @@
                 <label for="url">菜单地址</label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "menu.url" 'class="form-control" placeholder="格式参考:system/user"'/>
+                <@s.formInput "menu.url" 'class="form-control" placeholder="格式参考:system/user"'/>
             </div>
         </div>
 
@@ -53,7 +53,7 @@
                 <label for="sort">排序</label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "menu.sort" 'class="form-control" placeholder="0排在最上面"'/>
+                <@s.formInput "menu.sort" 'class="form-control" placeholder="0排在最上面"'/>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
                 <label for="icon">图标</label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "menu.icon" 'class="form-control" placeholder="格式参考:menu-icon fa fa-dashboard"'/>
+                <@s.formInput "menu.icon" 'class="form-control" placeholder="格式参考:menu-icon fa fa-dashboard"'/>
             </div>
         </div>
 

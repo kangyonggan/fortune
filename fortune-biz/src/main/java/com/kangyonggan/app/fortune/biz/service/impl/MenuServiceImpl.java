@@ -38,6 +38,15 @@ public class MenuServiceImpl extends BaseService<Menu> implements MenuService {
     }
 
     @Override
+    @LogTime
+    public boolean existsMenuCode(String code) {
+        Menu menu = new Menu();
+        menu.setCode(code);
+
+        return super.exists(menu);
+    }
+
+    @Override
     public List<Menu> findAllMenus() {
         Example example = new Example(Menu.class);
         example.setOrderByClause("sort asc");
@@ -46,6 +55,39 @@ public class MenuServiceImpl extends BaseService<Menu> implements MenuService {
         List<Menu> wrapList = new ArrayList();
 
         return recursionTreeList(menus, wrapList, "", 0L);
+    }
+
+    @Override
+    @LogTime
+    public Menu findMenuByCode(String code) {
+        Menu menu = new Menu();
+        menu.setCode(code);
+
+        return myMapper.selectOne(menu);
+    }
+
+    @Override
+    @LogTime
+    public void saveMenu(Menu menu) {
+        myMapper.insertSelective(menu);
+    }
+
+    @Override
+    @LogTime
+    public Menu findMenuById(Long id) {
+        return myMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    @LogTime
+    public void updateMenu(Menu menu) {
+        myMapper.updateByPrimaryKeySelective(menu);
+    }
+
+    @Override
+    @LogTime
+    public void deleteMenu(Menu menu) {
+        myMapper.deleteByPrimaryKey(menu);
     }
 
     /**
