@@ -3,16 +3,18 @@ package com.kangyonggan.app.fortune.web.listener;
 import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.biz.service.FpayService;
 import com.kangyonggan.app.fortune.biz.service.MerchantService;
+import com.kangyonggan.app.fortune.biz.service.TransService;
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
 import com.kangyonggan.app.fortune.biz.util.SpringContextHolder;
 import com.kangyonggan.app.fortune.common.exception.EmptyParamsException;
-import com.kangyonggan.app.fortune.common.exception.VaildParamsException;
+import com.kangyonggan.app.fortune.common.exception.ValidParamsException;
 import com.kangyonggan.app.fortune.common.util.FpayUtil;
 import com.kangyonggan.app.fortune.common.util.XStreamUtil;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.Resp;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
 import com.kangyonggan.app.fortune.model.vo.Merchant;
+import com.kangyonggan.app.fortune.model.vo.Trans;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
 import com.thoughtworks.xstream.XStream;
 import lombok.extern.log4j.Log4j2;
@@ -40,6 +42,8 @@ public class ServerSocketListener implements ServletContextListener {
     private MerchantService merchantService;
 
     private FpayService fpayService;
+
+    private TransService transService;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -148,6 +152,7 @@ public class ServerSocketListener implements ServletContextListener {
             xStream.processAnnotations(Fpay.class);
             fpay = (Fpay) xStream.fromXML(reqXml);
         } catch (Exception e) {
+            log.warn(e.getMessage());
             FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0003, null);
             return;
         }
@@ -171,31 +176,50 @@ public class ServerSocketListener implements ServletContextListener {
             fpayService = SpringContextHolder.getBean(FpayService.class);
         }
 
+        // 商户是否支持此交易
+        if (transService == null) {
+            transService = SpringContextHolder.getBean(TransService.class);
+        }
+        try {
+            Trans trans = transService.findTransByMerchCoAndTranCo(merchCo, tranCo);
+            if (trans == null || trans.getIsPaused() == 1) {
+                FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0009, fpay);
+                return;
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_9999, fpay);
+            return;
+        }
+
         // 分发请求
         try {
             if (TranCo.K001.name().equals(tranCo)) {
-                fpayService.sign(fpay);
+                fpayService.sign(merchCo, fpay);
             } else if (TranCo.K002.name().equals(tranCo)) {
-                fpayService.sign(fpay);
+                fpayService.sign(merchCo, fpay);
             } else if (TranCo.K003.name().equals(tranCo)) {
-                fpayService.sign(fpay);
+                fpayService.sign(merchCo, fpay);
             } else if (TranCo.K004.name().equals(tranCo)) {
-                fpayService.sign(fpay);
+                fpayService.sign(merchCo, fpay);
             } else if (TranCo.K005.name().equals(tranCo)) {
-                fpayService.sign(fpay);
+                fpayService.sign(merchCo, fpay);
             } else if (TranCo.K006.name().equals(tranCo)) {
-                fpayService.sign(fpay);
+                fpayService.sign(merchCo, fpay);
             } else {
                 FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0006, fpay);
                 return;
             }
         } catch (EmptyParamsException e) {
+            log.warn(e.getMessage());
             FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0007, fpay);
             return;
-        } catch (VaildParamsException e) {
+        } catch (ValidParamsException e) {
+            log.warn(e.getMessage());
             FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0008, fpay);
             return;
         } catch (Exception e) {
+            log.warn(e.getMessage());
             FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_9999, fpay);
             return;
         }

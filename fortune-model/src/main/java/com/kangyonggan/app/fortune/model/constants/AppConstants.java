@@ -52,5 +52,10 @@ public interface AppConstants {
      * 签约协议号在redis中的key
      */
     String SIGN_PROTOCOL_NO = "sign:protocolNo";
+
+    /**
+     * 默认证件类型
+     */
+    String DEFAULT_ID_TP = "0";
 }
 

@@ -6,21 +6,21 @@ package com.kangyonggan.app.fortune.common.exception;
  * @author kangyonggan
  * @since 5/4/17
  */
-public class VaildParamsException extends Exception {
+public class ValidParamsException extends Exception {
 
-    public VaildParamsException() {
+    public ValidParamsException() {
         super("数据不合法");
     }
 
-    public VaildParamsException(String msg) {
+    public ValidParamsException(String msg) {
         super(msg);
     }
 
-    public VaildParamsException(String msg, Throwable cause) {
+    public ValidParamsException(String msg, Throwable cause) {
         super(msg, cause);
     }
 
-    public VaildParamsException(Throwable cause) {
+    public ValidParamsException(Throwable cause) {
         super(cause);
     }
 }

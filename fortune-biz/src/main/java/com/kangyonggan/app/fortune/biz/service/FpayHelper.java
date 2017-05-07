@@ -1,6 +1,8 @@
 package com.kangyonggan.app.fortune.biz.service;
 
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
+import com.kangyonggan.app.fortune.common.exception.EmptyParamsException;
+import com.kangyonggan.app.fortune.common.exception.ValidParamsException;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.common.util.FpayUtil;
 import com.kangyonggan.app.fortune.common.util.XStreamUtil;
@@ -132,5 +134,52 @@ public class FpayHelper {
         String currentDate = DateUtil.getDate();
 
         return currentDate + StringUtils.leftPad(nextVal, 40, "0");
+    }
+
+    /**
+     * 签约必填域校验
+     *
+     * @param fpay
+     * @throws EmptyParamsException
+     */
+    public static void checkSignEmpty(Fpay fpay) throws EmptyParamsException {
+        if (fpay == null) {
+            throw new EmptyParamsException("主标签缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getSerialNo())) {
+            throw new EmptyParamsException("流水号缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getReqDate())) {
+            throw new EmptyParamsException("请求方交易日期缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getReqTime())) {
+            throw new EmptyParamsException("请求方交易时间缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getAcctNo())) {
+            throw new EmptyParamsException("卡号缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getAcctNm())) {
+            throw new EmptyParamsException("户名缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getIdTp())) {
+            fpay.setIdTp(AppConstants.DEFAULT_ID_TP);
+        }
+        if (StringUtils.isEmpty(fpay.getIdNo())) {
+            throw new EmptyParamsException("证件号码缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getMobile())) {
+            throw new EmptyParamsException("手机号缺失");
+        }
+    }
+
+    /**
+     * 签约合法性校验
+     *
+     * @param fpay
+     * @throws ValidParamsException
+     */
+    public static void checkSignValid(Fpay fpay) throws ValidParamsException {
+        // TODO 使用正则校验
+
     }
 }

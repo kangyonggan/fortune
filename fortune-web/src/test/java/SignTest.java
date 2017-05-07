@@ -1,4 +1,5 @@
 import com.kangyonggan.app.fortune.biz.service.FpayHelper;
+import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.common.util.FpayUtil;
 import com.kangyonggan.app.fortune.model.constants.Resp;
 import lombok.extern.log4j.Log4j2;
@@ -16,12 +17,17 @@ import java.util.Map;
  * @since 2017/5/6 0006
  */
 @Log4j2
-public class SocketTest {
+public class SignTest {
 
     /**
      * 商户号
      */
     private static String merchCo = "201705050000001";
+
+    /**
+     * 交易码
+     */
+    private static String tranCo = "K001";
 
     /**
      * 对方公钥路径
@@ -41,7 +47,17 @@ public class SocketTest {
         PrivateKey privateKey = FpayUtil.getPrivateKey(privateKeyPath);
 
         // 报文
-        String plain = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        String plain = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "\n" +
+                "<fpay> \n" +
+                "    <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>  \n" +
+                "    <reqDate>20170507</reqDate>  \n" +
+                "    <reqTime>153623</reqTime>  \n" +
+                "    <acctNo>6228218880054088518</acctNo>  \n" +
+                "    <acctNm>公测用户</acctNm>  \n" +
+                "    <idNo>340321199103173095</idNo>  \n" +
+                "    <mobile>15121119571</mobile>  \n" +
+                "</fpay>";
         log.info("请求报文明文:{}", plain);
 
         // 签名
@@ -52,7 +68,7 @@ public class SocketTest {
         byte[] encryptedBytes = FpayUtil.encrypt(plain, publicKey);
         log.info("请求报文密文长度{}", encryptedBytes.length);
 
-        byte bytes[] = FpayUtil.build("201705050000001", "K011", signBytes, encryptedBytes);
+        byte bytes[] = FpayUtil.build(merchCo, tranCo, signBytes, encryptedBytes);
 
         Socket socket = new Socket("127.0.0.1", 8888);
         OutputStream out = socket.getOutputStream();

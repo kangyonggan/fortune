@@ -1,5 +1,7 @@
 package com.kangyonggan.app.fortune.biz.service;
 
+import com.kangyonggan.app.fortune.common.exception.EmptyParamsException;
+import com.kangyonggan.app.fortune.common.exception.ValidParamsException;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
 
 /**
@@ -13,49 +15,66 @@ public interface FpayService {
     /**
      * 签约
      *
+     * @param merchCo 商户号
      * @param fpay 请求
-     * @throws Exception 未知异常
+     * @throws EmptyParamsException 必填域缺失
+     * @throws ValidParamsException 数据不合法
+     * @throws Exception            未知异常
      */
-    void sign(Fpay fpay) throws Exception;
+    void sign(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception;
 
     /**
      * 解约
      *
+     * @param merchCo 商户号
      * @param fpay 请求
-     * @throws Exception 未知异常
+     * @throws EmptyParamsException 必填域缺失
+     * @throws ValidParamsException 数据不合法
+     * @throws Exception            未知异常
      */
-    void unsign(Fpay fpay) throws Exception;
+    void unsign(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception;
 
     /**
      * 单笔代扣
      *
+     * @param merchCo 商户号
      * @param fpay 请求
-     * @throws Exception 未知异常
+     * @throws EmptyParamsException 必填域缺失
+     * @throws ValidParamsException 数据不合法
+     * @throws Exception            未知异常
      */
-    void pay(Fpay fpay) throws Exception;
+    void pay(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception;
 
     /**
      * 单笔代付
      *
+     * @param merchCo 商户号
      * @param fpay 请求
-     * @throws Exception 未知异常
+     * @throws EmptyParamsException 必填域缺失
+     * @throws ValidParamsException 数据不合法
+     * @throws Exception            未知异常
      */
-    void redeem(Fpay fpay) throws Exception;
+    void redeem(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception;
 
     /**
      * 交易查询
      *
+     * @param merchCo 商户号
      * @param fpay 请求
-     * @throws Exception 未知异常
+     * @throws EmptyParamsException 必填域缺失
+     * @throws ValidParamsException 数据不合法
+     * @throws Exception            未知异常
      */
-    void query(Fpay fpay) throws Exception;
+    void query(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception;
 
     /**
      * 余额查询
      *
+     * @param merchCo 商户号
      * @param fpay 请求
-     * @throws Exception 未知异常
+     * @throws EmptyParamsException 必填域缺失
+     * @throws ValidParamsException 数据不合法
+     * @throws Exception            未知异常
      */
-    void queryBalance(Fpay fpay) throws Exception;
-
+    void queryBalance(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception;
 }
