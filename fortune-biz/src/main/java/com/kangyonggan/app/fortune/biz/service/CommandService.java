@@ -9,12 +9,11 @@ import com.kangyonggan.app.fortune.model.vo.Command;
 public interface CommandService {
 
     /**
-     * 更新交易状态
+     * 交易落库
      *
-     * @param serialNo
-     * @param tranSt
+     * @param command
      */
-    void updateComanndTranSt(String serialNo, String tranSt);
+    void saveCommand(Command command);
 
     /**
      * 查找交易

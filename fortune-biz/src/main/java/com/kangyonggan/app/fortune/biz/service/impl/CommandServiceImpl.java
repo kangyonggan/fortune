@@ -1,14 +1,12 @@
 package com.kangyonggan.app.fortune.biz.service.impl;
 
 import com.kangyonggan.app.fortune.biz.service.CommandService;
-import com.kangyonggan.app.fortune.biz.service.FpayHelper;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.TranSt;
 import com.kangyonggan.app.fortune.model.vo.Command;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -23,19 +21,10 @@ import java.util.List;
 @Log4j2
 public class CommandServiceImpl extends BaseService<Command> implements CommandService {
 
-    @Autowired
-    private FpayHelper fpayHelper;
-
     @Override
     @LogTime
-    public void updateComanndTranSt(String serialNo, String tranSt) {
-        Command command = new Command();
-        command.setTranSt(tranSt);
-
-        Example example = new Example(Command.class);
-        example.createCriteria().andEqualTo("merchSerialNo", serialNo);
-
-        myMapper.updateByExampleSelective(command, example);
+    public void saveCommand(Command command) {
+        myMapper.insertSelective(command);
     }
 
     @Override

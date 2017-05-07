@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -185,5 +186,51 @@ public class FpayHelper {
     public static void checkSignValid(Fpay fpay) throws ValidParamsException {
         // TODO 使用正则校验
 
+    }
+
+    /**
+     * 代扣必填域校验
+     *
+     * @param fpay
+     * @throws EmptyParamsException
+     */
+    public static void checkPayEmpty(Fpay fpay) throws EmptyParamsException {
+        if (fpay == null) {
+            throw new EmptyParamsException("主标签缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getSerialNo())) {
+            throw new EmptyParamsException("流水号缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getReqDate())) {
+            throw new EmptyParamsException("请求方交易日期缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getReqTime())) {
+            throw new EmptyParamsException("请求方交易时间缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getProtocolNo())) {
+            throw new EmptyParamsException("协议号缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getCurrCo())) {
+            fpay.setCurrCo(AppConstants.DEFAULT_CUUR_CO);
+        }
+        if (fpay.getAmount() == null || fpay.getAmount().compareTo(BigDecimal.valueOf(0)) <= 0) {
+            throw new EmptyParamsException("交易金额缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getAcctTp())) {
+            fpay.setAcctTp(AppConstants.DEFAULT_ACCT_TP);
+        }
+        if (StringUtils.isEmpty(fpay.getSettleDate())) {
+            fpay.setSettleDate(DateUtil.getDate());
+        }
+    }
+
+    /**
+     * 代扣合法性校验
+     *
+     * @param fpay
+     * @throws ValidParamsException
+     */
+    public static void checkPayValid(Fpay fpay) throws ValidParamsException {
+        // TODO 使用正则校验
     }
 }

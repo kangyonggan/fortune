@@ -116,4 +116,13 @@ public class DateUtil {
     public static Date plusYears(long yearsToAdd) {
         return Date.from( LocalDateTime.now().plusYears(yearsToAdd).atZone(zoneId).toInstant());
     }
+
+    /**
+     * 获取当前日期
+     *
+     * @return
+     */
+    public static Date now() {
+        return Date.from(LocalDateTime.now().atZone(zoneId).toInstant());
+    }
 }

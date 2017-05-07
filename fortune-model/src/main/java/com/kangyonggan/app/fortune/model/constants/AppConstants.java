@@ -54,8 +54,18 @@ public interface AppConstants {
     String SIGN_PROTOCOL_NO = "sign:protocolNo";
 
     /**
-     * 默认证件类型
+     * 默认证件类型， 身份证
      */
     String DEFAULT_ID_TP = "0";
+
+    /**
+     * 默认币种， 人民币
+     */
+    String DEFAULT_CUUR_CO = "00";
+
+    /**
+     * 默认账户类型， 借记卡
+     */
+    String DEFAULT_ACCT_TP = "00";
 }
 
