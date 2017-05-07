@@ -30,6 +30,16 @@ public class SignTest {
     private static String tranCo = "K001";
 
     /**
+     * 字符集
+     */
+    private static String charset = "UTF-8";
+
+    /**
+     * 调试模式
+     */
+    private static boolean isDebug = false;
+
+    /**
      * 对方公钥路径
      */
     private static String publicKeyPath = "E:/data/fpay/fpay/fpay_rsa_public_key_2048.pem";
@@ -41,10 +51,10 @@ public class SignTest {
 
     public static void main(String[] args) throws Exception {
         // 公钥
-        PublicKey publicKey = FpayUtil.getPublicKey(publicKeyPath);
-
+        PublicKey publicKey = FpayUtil.getPublicKey(publicKeyPath, isDebug);
         // 私钥
-        PrivateKey privateKey = FpayUtil.getPrivateKey(privateKeyPath);
+        PrivateKey privateKey = FpayUtil.getPrivateKey(privateKeyPath, isDebug);
+        log.info("加载公钥私钥完成");
 
         // 报文
         String plain = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -61,11 +71,11 @@ public class SignTest {
         log.info("请求报文明文:{}", plain);
 
         // 签名
-        byte[] signBytes = FpayUtil.sign(plain, privateKey);
+        byte[] signBytes = FpayUtil.sign(plain, privateKey, charset, isDebug);
         log.info("请求报文签名数据长度:{}", signBytes.length);
 
         // 加密
-        byte[] encryptedBytes = FpayUtil.encrypt(plain, publicKey);
+        byte[] encryptedBytes = FpayUtil.encrypt(plain, publicKey, charset, isDebug);
         log.info("请求报文密文长度{}", encryptedBytes.length);
 
         byte bytes[] = FpayUtil.build(merchCo, tranCo, signBytes, encryptedBytes);
@@ -82,7 +92,7 @@ public class SignTest {
         // 解密
         String reqXml;
         try {
-            reqXml = FpayUtil.decrypt((byte[]) resMap.get("encryptedBytes"), privateKey);
+            reqXml = FpayUtil.decrypt((byte[]) resMap.get("encryptedBytes"), privateKey, charset, isDebug);
             log.info("报文解密后:\n{}", reqXml);
         } catch (Exception e) {
             log.warn(e.getMessage());

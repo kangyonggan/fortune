@@ -121,13 +121,19 @@ public class ServerSocketListener implements ServletContextListener {
             return;
         }
 
+        // 是否是调试模式
+        boolean isDebug = merchant.getIsDebug() == 1;
+        // 字符集
+        String charset = merchant.getCharset();
+
         // 公钥
         PublicKey publicKey;
         // 私钥
         PrivateKey privateKey;
         try {
-            publicKey = FpayUtil.getPublicKey(PropertiesUtil.getProperties(AppConstants.FILE_PATH_ROOT) + merchant.getPublicKeyPath());
-            privateKey = FpayUtil.getPrivateKey(merchant.getPrivateKeyPath());
+            publicKey = FpayUtil.getPublicKey(PropertiesUtil.getProperties(AppConstants.FILE_PATH_ROOT) + merchant.getPublicKeyPath(), isDebug);
+            privateKey = FpayUtil.getPrivateKey(merchant.getPrivateKeyPath(), isDebug);
+            log.info("加载公钥使用完成");
         } catch (Exception e) {
             log.warn(e.getMessage());
             close(socket);
@@ -137,11 +143,11 @@ public class ServerSocketListener implements ServletContextListener {
         // 解密
         String reqXml;
         try {
-            reqXml = FpayUtil.decrypt((byte[]) requestMap.get("encryptedBytes"), privateKey);
+            reqXml = FpayUtil.decrypt((byte[]) requestMap.get("encryptedBytes"), privateKey, charset, isDebug);
             log.info("报文解密后:{}", reqXml);
         } catch (Exception e) {
             log.warn(e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0002, null);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0002, null);
             return;
         }
 
@@ -153,22 +159,22 @@ public class ServerSocketListener implements ServletContextListener {
             fpay = (Fpay) xStream.fromXML(reqXml);
         } catch (Exception e) {
             log.warn(e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0003, null);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0003, null);
             return;
         }
 
         // 验签
         boolean isValid;
         try {
-            isValid = FpayUtil.isValid(reqXml, (byte[]) requestMap.get("signBytes"), publicKey);
+            isValid = FpayUtil.isValid(reqXml, (byte[]) requestMap.get("signBytes"), publicKey, charset, isDebug);
             log.info("报文验签结果:{}", isValid);
         } catch (Exception e) {
             log.warn("验签异常:{}", e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0004, fpay);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0004, fpay);
             return;
         }
         if (!isValid) {
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0005, fpay);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0005, fpay);
             return;
         }
 
@@ -183,12 +189,12 @@ public class ServerSocketListener implements ServletContextListener {
         try {
             Trans trans = transService.findTransByMerchCoAndTranCo(merchCo, tranCo);
             if (trans == null || trans.getIsPaused() == 1) {
-                FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0009, fpay);
+                FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0009, fpay);
                 return;
             }
         } catch (Exception e) {
             log.warn(e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_9999, fpay);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_9999, fpay);
             return;
         }
 
@@ -207,25 +213,25 @@ public class ServerSocketListener implements ServletContextListener {
             } else if (TranCo.K006.name().equals(tranCo)) {
                 fpayService.sign(merchCo, fpay);
             } else {
-                FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0006, fpay);
+                FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0006, fpay);
                 return;
             }
         } catch (EmptyParamsException e) {
             log.warn(e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0007, fpay);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0007, fpay);
             return;
         } catch (ValidParamsException e) {
             log.warn(e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_0008, fpay);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0008, fpay);
             return;
         } catch (Exception e) {
             log.warn(e.getMessage());
-            FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, Resp.RESP_CO_9999, fpay);
+            FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_9999, fpay);
             return;
         }
 
         // 回写正常响应
-        FpayHelper.writeResponse(out, publicKey, privateKey, merchCo, tranCo, null, fpay);
+        FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, null, fpay);
     }
 
     /**

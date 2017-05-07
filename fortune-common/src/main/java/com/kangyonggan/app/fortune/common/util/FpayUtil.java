@@ -29,6 +29,11 @@ public class FpayUtil {
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     /**
+     * 默认不是调试模式
+     */
+    private static final boolean IS_DEBUG = false;
+
+    /**
      * 生成密钥工厂算法
      */
     private static final String KEY_ALGORITHM = "RSA";
@@ -51,6 +56,22 @@ public class FpayUtil {
      * @throws Exception
      */
     public static PublicKey getPublicKey(String publicKeyPath) throws Exception {
+        return getPublicKey(publicKeyPath, IS_DEBUG);
+    }
+
+    /**
+     * 获取对方公钥
+     *
+     * @param publicKeyPath 公钥绝对路径
+     * @param isDebug       是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static PublicKey getPublicKey(String publicKeyPath, boolean isDebug) throws Exception {
+        if (isDebug) {
+            return null;
+        }
+
         InputStream in = null;
         try {
             in = new FileInputStream(publicKeyPath);
@@ -86,6 +107,22 @@ public class FpayUtil {
      * @throws Exception
      */
     public static PrivateKey getPrivateKey(String privateKeyPath) throws Exception {
+        return getPrivateKey(privateKeyPath, IS_DEBUG);
+    }
+
+    /**
+     * 获取己方私钥
+     *
+     * @param privateKeyPath 私钥绝对路径
+     * @param isDebug        是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static PrivateKey getPrivateKey(String privateKeyPath, boolean isDebug) throws Exception {
+        if (isDebug) {
+            return null;
+        }
+
         InputStream in = null;
         try {
             in = new FileInputStream(privateKeyPath);
@@ -123,7 +160,50 @@ public class FpayUtil {
      * @throws Exception
      */
     public static byte[] sign(String plain, PrivateKey privateKey) throws Exception {
-        byte plainBytes[] = plain.getBytes(DEFAULT_CHARSET);
+        return sign(plain, privateKey, DEFAULT_CHARSET, IS_DEBUG);
+    }
+
+    /**
+     * 签名
+     *
+     * @param plain      明文
+     * @param privateKey 己方私钥
+     * @param charset    字符集
+     * @return
+     * @throws Exception
+     */
+    public static byte[] sign(String plain, PrivateKey privateKey, String charset) throws Exception {
+        return sign(plain, privateKey, charset, IS_DEBUG);
+    }
+
+    /**
+     * 签名
+     *
+     * @param plain      明文
+     * @param privateKey 己方私钥
+     * @param isDebug    是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static byte[] sign(String plain, PrivateKey privateKey, boolean isDebug) throws Exception {
+        return sign(plain, privateKey, DEFAULT_CHARSET, isDebug);
+    }
+
+    /**
+     * 签名
+     *
+     * @param plain      明文
+     * @param privateKey 己方私钥
+     * @param charset    字符集
+     * @param isDebug    是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static byte[] sign(String plain, PrivateKey privateKey, String charset, boolean isDebug) throws Exception {
+        if (isDebug) {
+            return plain.getBytes(charset);
+        }
+        byte plainBytes[] = plain.getBytes(charset);
         Signature signature = Signature.getInstance(SIGN_ALGORITHM);
         signature.initSign(privateKey);
         signature.update(plainBytes);
@@ -141,9 +221,55 @@ public class FpayUtil {
      * @throws Exception
      */
     public static boolean isValid(String plain, byte[] signBytes, PublicKey publicKey) throws Exception {
+        return isValid(plain, signBytes, publicKey, DEFAULT_CHARSET, IS_DEBUG);
+    }
+
+    /**
+     * 验签
+     *
+     * @param plain     明文
+     * @param signBytes 签名数据
+     * @param publicKey 对方公钥
+     * @param charset   字符集
+     * @return
+     * @throws Exception
+     */
+    public static boolean isValid(String plain, byte[] signBytes, PublicKey publicKey, String charset) throws Exception {
+        return isValid(plain, signBytes, publicKey, charset, IS_DEBUG);
+    }
+
+    /**
+     * 验签
+     *
+     * @param plain     明文
+     * @param signBytes 签名数据
+     * @param publicKey 对方公钥
+     * @param isDebug   是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static boolean isValid(String plain, byte[] signBytes, PublicKey publicKey, boolean isDebug) throws Exception {
+        return isValid(plain, signBytes, publicKey, DEFAULT_CHARSET, isDebug);
+    }
+
+    /**
+     * 验签
+     *
+     * @param plain     明文
+     * @param signBytes 签名数据
+     * @param publicKey 对方公钥
+     * @param charset   字符集
+     * @param isDebug   是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static boolean isValid(String plain, byte[] signBytes, PublicKey publicKey, String charset, boolean isDebug) throws Exception {
+        if (isDebug) {
+            return true;
+        }
         Signature signature = Signature.getInstance(SIGN_ALGORITHM);
         signature.initVerify(publicKey);
-        signature.update(plain.getBytes(DEFAULT_CHARSET));
+        signature.update(plain.getBytes(charset));
         return signature.verify(signBytes);
     }
 
@@ -156,7 +282,51 @@ public class FpayUtil {
      * @throws Exception
      */
     public static byte[] encrypt(String plain, PublicKey publicKey) throws Exception {
-        byte plainBytes[] = plain.getBytes(DEFAULT_CHARSET);
+        return encrypt(plain, publicKey, DEFAULT_CHARSET, IS_DEBUG);
+    }
+
+    /**
+     * 加密
+     *
+     * @param plain     明文
+     * @param publicKey 对方公钥
+     * @param charset   字符集
+     * @return
+     * @throws Exception
+     */
+    public static byte[] encrypt(String plain, PublicKey publicKey, String charset) throws Exception {
+        return encrypt(plain, publicKey, charset, IS_DEBUG);
+    }
+
+    /**
+     * 加密
+     *
+     * @param plain     明文
+     * @param publicKey 对方公钥
+     * @param isDebug   是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static byte[] encrypt(String plain, PublicKey publicKey, boolean isDebug) throws Exception {
+        return encrypt(plain, publicKey, DEFAULT_CHARSET, isDebug);
+    }
+
+    /**
+     * 加密
+     *
+     * @param plain     明文
+     * @param publicKey 对方公钥
+     * @param charset   字符集
+     * @param isDebug   是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static byte[] encrypt(String plain, PublicKey publicKey, String charset, boolean isDebug) throws Exception {
+        if (isDebug) {
+            return plain.getBytes(charset);
+        }
+
+        byte plainBytes[] = plain.getBytes(charset);
         int keyByteSize = 2048 / 8;
         int encryptBlockSize = keyByteSize - 11;
         int nBlock = plainBytes.length / encryptBlockSize;
@@ -199,6 +369,50 @@ public class FpayUtil {
      * @throws Exception
      */
     public static String decrypt(byte[] encryptedBytes, PrivateKey privateKey) throws Exception {
+        return decrypt(encryptedBytes, privateKey, DEFAULT_CHARSET, IS_DEBUG);
+    }
+
+    /**
+     * 解密
+     *
+     * @param encryptedBytes 密文
+     * @param privateKey     己方私钥
+     * @param charset        字符集
+     * @return
+     * @throws Exception
+     */
+    public static String decrypt(byte[] encryptedBytes, PrivateKey privateKey, String charset) throws Exception {
+        return decrypt(encryptedBytes, privateKey, charset, IS_DEBUG);
+    }
+
+    /**
+     * 解密
+     *
+     * @param encryptedBytes 密文
+     * @param privateKey     己方私钥
+     * @param isDebug        是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static String decrypt(byte[] encryptedBytes, PrivateKey privateKey, boolean isDebug) throws Exception {
+        return decrypt(encryptedBytes, privateKey, DEFAULT_CHARSET, isDebug);
+    }
+
+    /**
+     * 解密
+     *
+     * @param encryptedBytes 密文
+     * @param privateKey     己方私钥
+     * @param charset        字符集
+     * @param isDebug        是否调试模式
+     * @return
+     * @throws Exception
+     */
+    public static String decrypt(byte[] encryptedBytes, PrivateKey privateKey, String charset, boolean isDebug) throws Exception {
+        if (isDebug) {
+            return new String(encryptedBytes, charset);
+        }
+
         int keyByteSize = 2048 / 8;
         int decryptBlockSize = keyByteSize - 11;
         int nBlock = encryptedBytes.length / keyByteSize;
@@ -218,7 +432,7 @@ public class FpayUtil {
             }
 
             out.flush();
-            return new String(out.toByteArray(), DEFAULT_CHARSET);
+            return new String(out.toByteArray(), charset);
         } catch (Exception e) {
             throw new Exception("解密异常", e);
         } finally {
@@ -246,7 +460,7 @@ public class FpayUtil {
         sb.append(StringUtils.leftPad(String.valueOf(signBytes.length), 4, "0"));// 域4 签名长度
 
         byte[] bytes = null;
-        bytes = ArrayUtils.addAll(bytes, sb.toString().getBytes("UTF-8"));// 前4域的组合
+        bytes = ArrayUtils.addAll(bytes, sb.toString().getBytes());// 前4域的组合，没中文，无需指定字符集
         bytes = ArrayUtils.addAll(bytes, signBytes);// 域5 签名数据
         return ArrayUtils.addAll(bytes, encryptedBytes);// 域6 加密数据
     }
@@ -274,10 +488,10 @@ public class FpayUtil {
 
             // 读取报文头结构, 报文总长度8位+商户号15位+交易码4位+签名与长度4位=31位
             in.read(buff, 0, 35);
-            int totalLen = Integer.parseInt(new String(buff, 0, 8, DEFAULT_CHARSET));
-            merchCo = new String(buff, 8, 15, DEFAULT_CHARSET).trim();
-            tranCo = new String(buff, 23, 8, DEFAULT_CHARSET).trim();
-            int signLen = Integer.parseInt(new String(buff, 31, 4, DEFAULT_CHARSET));
+            int totalLen = Integer.parseInt(new String(buff, 0, 8));// 无中文，无需指定字符集
+            merchCo = new String(buff, 8, 15).trim();
+            tranCo = new String(buff, 23, 8).trim();
+            int signLen = Integer.parseInt(new String(buff, 31, 4));
             int encryLen = totalLen - 15 - 8 - 4 - signLen;
 
             in.read(buff, 0, signLen);

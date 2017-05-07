@@ -42,15 +42,17 @@ public class FpayHelper {
      * @param out        输出流
      * @param publicKey  对方公钥
      * @param privateKey 己方私钥
+     * @param charset    字符集
+     * @param isDebug    是否调试模式
      * @param merchCo    商户号
      * @param tranCo     交易码
      * @param resp       响应码
      * @param fpay       请求/响应
      */
-    public static void writeResponse(OutputStream out, PublicKey publicKey, PrivateKey privateKey, String merchCo, String tranCo, Resp resp, Fpay fpay) {
+    public static void writeResponse(OutputStream out, PublicKey publicKey, PrivateKey privateKey, String charset, boolean isDebug, String merchCo, String tranCo, Resp resp, Fpay fpay) {
         try {
             String respXml = buildRespXml(resp, fpay);
-            writeResponse(out, publicKey, privateKey, merchCo, tranCo, respXml);
+            writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, respXml);
         } catch (Exception e) {
             log.warn(e.getMessage());
         }
@@ -62,20 +64,22 @@ public class FpayHelper {
      * @param out        输出流
      * @param publicKey  对方公钥
      * @param privateKey 己方私钥
+     * @param charset    字符集
+     * @param isDebug    是否调试模式
      * @param merchCo    商户号
      * @param tranCo     交易码
      * @param respXml    响应报文
      */
-    private static void writeResponse(OutputStream out, PublicKey publicKey, PrivateKey privateKey, String merchCo, String tranCo, String respXml) {
+    private static void writeResponse(OutputStream out, PublicKey publicKey, PrivateKey privateKey, String charset, boolean isDebug, String merchCo, String tranCo, String respXml) {
         try {
             respXml = XmlUtil.format(respXml);
             log.info("响应报文明文:\n{}", respXml);
             // 签名
-            byte[] signBytes = FpayUtil.sign(respXml, privateKey);
+            byte[] signBytes = FpayUtil.sign(respXml, privateKey, charset, isDebug);
             log.info("响应报文签名数据长度:{}", signBytes.length);
 
             // 加密
-            byte[] encryptedBytes = FpayUtil.encrypt(respXml, publicKey);
+            byte[] encryptedBytes = FpayUtil.encrypt(respXml, publicKey, charset, isDebug);
             log.info("响应报文密文长度{}", encryptedBytes.length);
 
             // 构建报文
