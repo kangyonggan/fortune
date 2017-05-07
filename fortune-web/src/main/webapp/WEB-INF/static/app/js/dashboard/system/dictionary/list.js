@@ -1,5 +1,5 @@
 $(function () {
-    updateState("content/dictionary");
+    updateState("system/dictionary");
     var $table = $('#dictionary-table');
 
     $table.on('click', 'a[data-role=dictionary-delete]', function () {

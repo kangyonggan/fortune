@@ -10,7 +10,7 @@
     <td>
         <div class="btn-group">
             <a data-toggle="modal" class="btn btn-xs btn-inverse"
-               href="${ctx}/dashboard/content/dictionary/${dictionary.id}/edit"
+               href="${ctx}/dashboard/system/dictionary/${dictionary.id}/edit"
                data-target="#myModal">编辑</a>
         </div>
     </td>

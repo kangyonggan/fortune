@@ -6,7 +6,7 @@
     <h1>
         字典列表
         <small class="pull-right">
-            <a href="${ctx}/dashboard/content/dictionary/create" class="btn btn-sm btn-inverse" data-backdrop="static"
+            <a href="${ctx}/dashboard/system/dictionary/create" class="btn btn-sm btn-inverse" data-backdrop="static"
                data-toggle="modal"
                data-target="#myModal">添加</a>
         </small>
@@ -62,6 +62,6 @@
     </#if>
     </tbody>
 </table>
-<@c.pagination url="#content/dictionary" param="type=${type}&value=${value}"/>
+<@c.pagination url="#system/dictionary" param="type=${type}&value=${value}"/>
 
-<script src="${ctx}/static/app/js/dashboard/content/dictionary/list.js"></script>
+<script src="${ctx}/static/app/js/dashboard/system/dictionary/list.js"></script>
