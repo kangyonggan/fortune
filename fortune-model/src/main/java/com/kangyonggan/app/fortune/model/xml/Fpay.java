@@ -111,7 +111,7 @@ public class Fpay {
     /**
      * 余额
      */
-    private String balance;
+    private BigDecimal balance;
 
     /**
      * 备注

@@ -261,7 +261,31 @@ public class FpayServiceImpl implements FpayService {
 
     @Override
     public void queryBalance(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
+        log.info("==================== 进入发财付账户余额查询接口 ====================");
+        // 必填域校验
+        FpayHelper.checkQueryBalanceEmpty(fpay);
 
+        // 合法性校验
+        FpayHelper.checkQueryBalanceValid(fpay);
+
+        Resp resp = Resp.RESP_CO_0000;
+
+        // 查询账户
+        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNoAndAcctNo(merchCo, fpay.getAcctNo());
+        if (merchAcct == null) {
+            resp = Resp.RESP_CO_0014;
+        } else {
+            fpay.setAcctNm(merchAcct.getMerchAcctNm());
+            fpay.setIdTp(merchAcct.getMerchIdTp());
+            fpay.setIdNo(merchAcct.getMerchIdNo());
+            fpay.setMobile(merchAcct.getMerchMobile());
+            fpay.setBalance(merchAcct.getBalance());
+        }
+
+        // 回写响应数据
+        writeCommonResp(fpay, resp);
+
+        log.info("==================== 离开发财付账户余额查询接口 ====================");
     }
 
     /**
