@@ -4,8 +4,6 @@ import com.kangyonggan.app.fortune.biz.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -16,7 +14,6 @@ import java.util.concurrent.TimeUnit;
  * @since 2016/12/2
  */
 @Service
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class RedisServiceImpl implements RedisService {
 
     @Autowired

@@ -8,6 +8,7 @@ import com.kangyonggan.app.fortune.model.vo.Menu;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,22 @@ public class MenuServiceImpl extends BaseService<Menu> implements MenuService {
         List<Menu> wrapList = new ArrayList();
 
         return recursionList(menus, wrapList, "", 0L);
+    }
+
+    @Override
+    public List<Menu> findMenus4Role(String code) {
+        return menuMapper.selectMenus4Role(code);
+    }
+
+    @Override
+    public List<Menu> findAllMenus() {
+        Example example = new Example(Menu.class);
+        example.setOrderByClause("sort asc");
+
+        List<Menu> menus = myMapper.selectByExample(example);
+        List<Menu> wrapList = new ArrayList();
+
+        return recursionTreeList(menus, wrapList, "", 0L);
     }
 
     /**

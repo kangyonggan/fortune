@@ -29,4 +29,14 @@
             ORDER BY m.sort ASC
         </where>
     </select>
+
+    <select id="selectMenus4Role" resultMap="BaseResultMap">
+        SELECT m.*
+        FROM menu m, role_menu rm
+        <where>
+            m.code = rm.menu_code
+            AND rm.role_code = #{code}
+            ORDER BY m.sort
+        </where>
+    </select>
 </mapper>

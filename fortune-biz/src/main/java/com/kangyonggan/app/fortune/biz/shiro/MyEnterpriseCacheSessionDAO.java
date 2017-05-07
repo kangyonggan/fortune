@@ -2,9 +2,11 @@ package com.kangyonggan.app.fortune.biz.shiro;
 
 import com.kangyonggan.app.fortune.biz.service.RedisService;
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
+import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 
@@ -12,6 +14,7 @@ import java.io.Serializable;
  * @author kangyonggan
  * @since 2016/12/31
  */
+@Log4j2
 public class MyEnterpriseCacheSessionDAO extends EnterpriseCacheSessionDAO {
 
     @Autowired
@@ -31,7 +34,11 @@ public class MyEnterpriseCacheSessionDAO extends EnterpriseCacheSessionDAO {
     @Override
     protected Serializable doCreate(Session session) {
         Serializable sessionId = super.doCreate(session);
-        redisService.set(prefix + sessionId.toString(), session);
+        try {
+            redisService.set(prefix + sessionId.toString(), session);
+        } catch (Exception e) {
+            log.warn("创建session保存到redis异常:{}", e.getMessage());
+        }
 
         return sessionId;
     }
@@ -47,7 +54,11 @@ public class MyEnterpriseCacheSessionDAO extends EnterpriseCacheSessionDAO {
         // 先从缓存中获取session，如果没有再去数据库中获取
         Session session = super.doReadSession(sessionId);
         if (session == null) {
-            session = (Session) redisService.get(prefix + sessionId.toString());
+            try {
+                session = (Session) redisService.get(prefix + sessionId.toString());
+            } catch (Exception e) {
+                log.warn("从redis中获取session异常:{}", e.getMessage());
+            }
         }
         return session;
     }
@@ -60,7 +71,11 @@ public class MyEnterpriseCacheSessionDAO extends EnterpriseCacheSessionDAO {
     @Override
     protected void doUpdate(Session session) {
         super.doUpdate(session);
-        redisService.set(prefix + session.getId().toString(), session);
+        try {
+            redisService.set(prefix + session.getId().toString(), session);
+        } catch (Exception e) {
+            log.warn("更新redis中的session异常:{}", e.getMessage());
+        }
     }
 
     /**
@@ -71,7 +86,11 @@ public class MyEnterpriseCacheSessionDAO extends EnterpriseCacheSessionDAO {
     @Override
     protected void doDelete(Session session) {
         super.doDelete(session);
-        redisService.delete(prefix + session.getId().toString());
+        try {
+            redisService.delete(prefix + session.getId().toString());
+        } catch (Exception e) {
+            log.warn("删除redis中的session异常:{}", e.getMessage());
+        }
     }
 
 }

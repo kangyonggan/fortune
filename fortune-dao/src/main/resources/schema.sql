@@ -413,10 +413,15 @@ VALUES
   ('SYSTEM_MERCHANT', '商户管理', 'SYSTEM', 'system/merchant', 0, ''),
   ('SYSTEM_ROLE', '角色管理', 'SYSTEM', 'system/role', 1, ''),
   ('SYSTEM_MENU', '菜单管理', 'SYSTEM', 'system/menu', 2, ''),
+  ('SYSTEM_CACHE', '缓存管理', 'SYSTEM', 'system/cache', 3, ''),
+  ('SYSTEM_DICTIONARY', '数据字典', 'SYSTEM', 'system/dictionary', 4, ''),
 
-  ('DATA', '数据', 'DASHBOARD', 'data', 2, 'menu-icon fa fa-gavel'),
-  ('DATA_CACHE', '缓存管理', 'CONTENT', 'data/cache', 0, ''),
-  ('DATA_DICTIONARY', '数据字典', 'CONTENT', 'data/dictionary', 1, '');
+  ('MERCHANT', '商户', 'DASHBOARD', 'merchant', 1, 'menu-icon fa fa-user'),
+  ('MERCHANT_INFO', '基本信息', 'MERCHANT', 'merchant/info', 0, ''),
+  ('MERCHANT_ACCT', '对公账户', 'MERCHANT', 'merchant/acct', 1, ''),
+  ('MERCHANT_TRANS', '交易列表', 'MERCHANT', 'merchant/trans', 2, ''),
+  ('MERCHANT_PROTOCOL', '协议管理', 'MERCHANT', 'merchant/protocol', 3, ''),
+  ('MERCHANT_COMMAND', '交易查询', 'MERCHANT', 'merchant/command', 4, '');
 
 -- ----------------------------
 --  data for user_role
@@ -429,10 +434,9 @@ VALUES
 -- ----------------------------
 --  data for role_menu
 -- ----------------------------
-INSERT INTO role_menu SELECT
-                        'ROLE_ADMIN',
-                        code
-                      FROM menu;
+INSERT INTO role_menu SELECT 'ROLE_ADMIN', code FROM menu WHERE code LIKE 'SYSTEM%' OR code = 'DASHBOARD';
+
+INSERT INTO role_menu SELECT 'ROLE_MERCHANT', code FROM menu WHERE code LIKE 'MERCHANT%' OR code = 'DASHBOARD';
 
 INSERT INTO dictionary
 (code, value, type, sort)

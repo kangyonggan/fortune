@@ -17,4 +17,12 @@ public interface MenuMapper extends MyMapper<Menu> {
      */
     List<Menu> selectMenusByMerchCo(@Param("merchCo") String merchCo);
 
+    /**
+     * 查找角色菜单
+     *
+     * @param code
+     * @return
+     */
+    List<Menu> selectMenus4Role(@Param("code") String code);
+
 }

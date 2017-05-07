@@ -12,7 +12,7 @@
                 <label>角色编码<span class="red">*</span></label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "role.code" 'class="form-control" placeholder="格式参考:ROLE_ADMIN"'/>
+                <@s.formInput "role.code" 'class="form-control" placeholder="格式参考:ROLE_ADMIN"'/>
                 <input type="hidden" id="old-code" value="${role.code!''}"/>
             </div>
         </div>
@@ -23,7 +23,7 @@
                 <label>角色名称<span class="red">*</span></label>
             </div>
             <div class="col-md-7 controls">
-                <@spring.formInput "role.name" 'class="form-control" placeholder="角色名称:2至12个汉字"'/>
+                <@s.formInput "role.name" 'class="form-control" placeholder="角色名称:2至12个汉字"'/>
             </div>
         </div>
     </div>

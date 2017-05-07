@@ -41,6 +41,11 @@ $.extend($.validator.addMethod("isCaptcha", function (value) {
     return str.test(value);
 }, "请输入4位数字的验证码"));
 
+$.extend($.validator.addMethod("isName", function (value) {
+    var str = /^[\u4E00-\u9FA5]{2,12}$/;
+    return str.test(value);
+}, "请输入2至12个汉字"));
+
 $.extend($.validator.addMethod("isIdNo", function (value) {
     var str = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
     return str.test(value);

@@ -1,6 +1,7 @@
 package com.kangyonggan.app.fortune.web.controller.web;
 
 import com.kangyonggan.app.fortune.biz.service.MerchantService;
+import com.kangyonggan.app.fortune.biz.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,9 @@ public class ValidateController {
     @Autowired
     private MerchantService merchantServicel;
 
+    @Autowired
+    private RoleService roleService;
+
     /**
      * 校验商户号是否可用
      *
@@ -35,6 +39,24 @@ public class ValidateController {
         }
 
         return !merchantServicel.existsMerchCo(merchCo);
+    }
+
+    /**
+     * 校验角色代码是否可用
+     *
+     * @param code
+     * @param oldCode
+     * @return
+     */
+    @RequestMapping(value = "role", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean validateRoleCode(@RequestParam("code") String code,
+                                    @RequestParam(value = "oldCode", required = false, defaultValue = "") String oldCode) {
+        if (code.equals(oldCode)) {
+            return true;
+        }
+
+        return !roleService.existsRoleCode(code);
     }
 
 }

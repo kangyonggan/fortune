@@ -30,4 +30,17 @@
             merch_co = #{merchCo}
         </where>
     </delete>
+
+    <delete id="deleteRoleMenus">
+        DELETE FROM role_menu WHERE role_code = #{code}
+    </delete>
+
+    <insert id="insertRoleMenus">
+        INSERT INTO role_menu (role_code, menu_code) VALUES
+        <foreach collection="menuCodes" item="menuCode" separator=",">
+            (
+            #{code}, #{menuCode}
+            )
+        </foreach>
+    </insert>
 </mapper>
