@@ -6,6 +6,7 @@ import com.kangyonggan.app.fortune.common.exception.ValidParamsException;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.model.constants.Resp;
 import com.kangyonggan.app.fortune.model.constants.TranCo;
+import com.kangyonggan.app.fortune.model.constants.TranSt;
 import com.kangyonggan.app.fortune.model.vo.Command;
 import com.kangyonggan.app.fortune.model.vo.MerchAcct;
 import com.kangyonggan.app.fortune.model.vo.Protocol;
@@ -178,7 +179,7 @@ public class FpayServiceImpl implements FpayService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public void redeem(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
-        log.info("==================== 进入发财付单笔代扣接口 ====================");
+        log.info("==================== 进入发财付单笔代付接口 ====================");
         // 必填域校验
         FpayHelper.checkPayEmpty(fpay);
 
@@ -227,12 +228,35 @@ public class FpayServiceImpl implements FpayService {
         // 回写响应数据
         writeCommonResp(fpay, resp);
 
-        log.info("==================== 离开发财付单笔代扣接口 ====================");
+        log.info("==================== 离开发财付单笔代付接口 ====================");
     }
 
     @Override
     public void query(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
+        log.info("==================== 进入发财付交易查询接口 ====================");
+        // 必填域校验
+        FpayHelper.checkQueryEmpty(fpay);
 
+        // 合法性校验
+        FpayHelper.checkQueryValid(fpay);
+
+        Resp resp = Resp.RESP_CO_0000;
+
+        // 查询交易
+        Command command = commandService.findCommandBySerialNo(fpay.getOrgnSerialNo());
+        if (command == null) {
+            fpay.setTranSt(TranSt.F.name());
+        } else {
+            fpay.setTranSt(command.getTranSt());
+            fpay.setReqDate(command.getReqDate());
+            fpay.setReqTime(command.getReqTime());
+        }
+
+        // 回写响应数据
+        fpay.setRespCo(resp.getRespCo());
+        fpay.setRespMsg(resp.getRespMsg());
+
+        log.info("==================== 离开发财付交易查询接口 ====================");
     }
 
     @Override

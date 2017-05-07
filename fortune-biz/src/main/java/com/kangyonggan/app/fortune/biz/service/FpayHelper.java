@@ -233,4 +233,38 @@ public class FpayHelper {
     public static void checkPayValid(Fpay fpay) throws ValidParamsException {
         // TODO 使用正则校验
     }
+
+    /**
+     * 查询必填域校验
+     *
+     * @param fpay
+     * @throws EmptyParamsException
+     */
+    public static void checkQueryEmpty(Fpay fpay) throws EmptyParamsException {
+        if (fpay == null) {
+            throw new EmptyParamsException("主标签缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getSerialNo())) {
+            throw new EmptyParamsException("流水号缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getReqDate())) {
+            throw new EmptyParamsException("请求方交易日期缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getReqTime())) {
+            throw new EmptyParamsException("请求方交易时间缺失");
+        }
+        if (StringUtils.isEmpty(fpay.getOrgnSerialNo())) {
+            throw new EmptyParamsException("原交易流水号缺失");
+        }
+    }
+
+    /**
+     * 查询合法性校验
+     *
+     * @param fpay
+     * @throws ValidParamsException
+     */
+    public static void checkQueryValid(Fpay fpay) throws ValidParamsException {
+        // TODO 使用正则校验
+    }
 }
