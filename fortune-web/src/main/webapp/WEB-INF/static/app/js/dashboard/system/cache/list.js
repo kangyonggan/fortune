@@ -1,5 +1,5 @@
 $(function () {
-    updateState("content/cache");
+    updateState("system/cache");
     var $table = $('#cache-table');
 
     $table.on('click', 'a[data-role=clear-cache]', function () {

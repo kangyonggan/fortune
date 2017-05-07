@@ -1,11 +1,11 @@
 <#assign ctx="${(rca.contextPath)!''}">
-<#assign project = RequestParameters.project!'' />
+<#assign merchCo = RequestParameters.merchCo!'' />
 
 <div class="page-header">
     <h1>
         缓存列表
         <small class="pull-right">
-            <a href="${ctx}/dashboard/content/cache/clearall?project=${project}" id="clearall" class="btn btn-sm btn-danger">清空列表</a>
+            <a href="${ctx}/dashboard/system/cache/clearall?merchCo=${merchCo}" id="clearall" class="btn btn-sm btn-danger">清空列表</a>
         </small>
     </h1>
 </div>
@@ -14,11 +14,7 @@
 
 <form class="form-inline" method="get" novalidate>
     <div class="form-group">
-        <select name="project" class="form-control" style="min-width: 150px;">
-        <#list projects as proj>
-            <option value="${proj.code}" <#if project=='${proj.code}'>selected</#if>>${proj.value}</option>
-        </#list>
-        </select>
+        <input type="text" name="merchCo" value="${merchCo}" class="form-control" placeholder="商户号"/>
     </div>
 
     <button class="btn btn-sm btn-inverse" data-toggle="search-submit">
@@ -32,7 +28,7 @@
 <table id="cache-table" class="table table-striped table-bordered table-hover">
     <thead>
     <tr>
-        <th>系统</th>
+        <th>商户号</th>
         <th>键</th>
         <th>操作</th>
     </tr>
@@ -52,4 +48,4 @@
     </tbody>
 </table>
 
-<script src="${ctx}/static/app/js/dashboard/content/cache/list.js"></script>
+<script src="${ctx}/static/app/js/dashboard/system/cache/list.js"></script>

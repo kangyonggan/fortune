@@ -11,4 +11,4 @@
 ${cache}
 </#if>
 
-<script src="${ctx}/static/app/js/dashboard/data/cache/detail.js"></script>
+<script src="${ctx}/static/app/js/dashboard/system/cache/detail.js"></script>
