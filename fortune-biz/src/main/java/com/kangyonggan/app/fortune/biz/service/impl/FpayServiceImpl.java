@@ -77,7 +77,35 @@ public class FpayServiceImpl implements FpayService {
 
     @Override
     public void unsign(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
+        log.info("==================== 进入发财付解约接口 ====================");
+        // 必填域校验
+        FpayHelper.checkSignEmpty(fpay);
 
+        // 合法性校验
+        FpayHelper.checkSignValid(fpay);
+
+        Resp resp = Resp.RESP_CO_0000;
+
+        // 是否有签约记录
+        Protocol protocol = protocolService.findProtocolByMerchCoAndAcctNo(merchCo, fpay.getAcctNo());
+        String protocolNo = null;
+        if (protocol == null) {
+            resp = Resp.RESP_CO_0010;
+        } else {
+            protocolNo = protocol.getProtocolNo();
+            protocol = new Protocol();
+            protocol.setProtocolNo(protocolNo);
+            protocol.setIsUnsign((byte) 1);
+
+            protocolService.updateProtocolByProtocolNo(protocol);
+            log.info("解约成功");
+        }
+
+        // 回写响应数据
+        writeCommonResp(fpay, resp);
+        fpay.setProtocolNo(protocolNo);
+
+        log.info("==================== 离开发财付解约接口 ====================");
     }
 
     @Override

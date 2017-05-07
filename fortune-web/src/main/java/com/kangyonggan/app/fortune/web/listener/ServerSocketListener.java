@@ -203,15 +203,15 @@ public class ServerSocketListener implements ServletContextListener {
             if (TranCo.K001.name().equals(tranCo)) {
                 fpayService.sign(merchCo, fpay);
             } else if (TranCo.K002.name().equals(tranCo)) {
-                fpayService.sign(merchCo, fpay);
+                fpayService.unsign(merchCo, fpay);
             } else if (TranCo.K003.name().equals(tranCo)) {
-                fpayService.sign(merchCo, fpay);
+                fpayService.pay(merchCo, fpay);
             } else if (TranCo.K004.name().equals(tranCo)) {
-                fpayService.sign(merchCo, fpay);
+                fpayService.redeem(merchCo, fpay);
             } else if (TranCo.K005.name().equals(tranCo)) {
-                fpayService.sign(merchCo, fpay);
+                fpayService.query(merchCo, fpay);
             } else if (TranCo.K006.name().equals(tranCo)) {
-                fpayService.sign(merchCo, fpay);
+                fpayService.queryBalance(merchCo, fpay);
             } else {
                 FpayHelper.writeResponse(out, publicKey, privateKey, charset, isDebug, merchCo, tranCo, Resp.RESP_CO_0006, fpay);
                 return;
