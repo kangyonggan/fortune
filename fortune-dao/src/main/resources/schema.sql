@@ -398,10 +398,8 @@ CREATE TABLE command
   COMMENT '币种, 默认人民币：00',
   amount          DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
   COMMENT '交易金额',
-  sndr_acct_tp    VARCHAR(2)                            NOT NULL                    DEFAULT '00'
-  COMMENT '付款方式账户类型',
-  rcvr_acct_tp    VARCHAR(2)                            NOT NULL                    DEFAULT '00'
-  COMMENT '收款方式账户类型',
+  acct_tp         VARCHAR(2)                            NOT NULL                    DEFAULT '00'
+  COMMENT '账户类型',
   settle_date     VARCHAR(8)                            NOT NULL                    DEFAULT ''
   COMMENT '清算日期',
   remark          VARCHAR(30)                           NOT NULL                    DEFAULT ''
@@ -510,7 +508,8 @@ VALUES
 INSERT INTO merchant
 (merch_co, merch_nm, public_key_path, private_key_path)
 VALUES
-  ('201705050000001', '公测商户', '/upload/merch_rsa_public_key_2048.pem', 'E:/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
+  ('201705050000001', '公测商户', '/upload/merch_rsa_public_key_2048.pem',
+   'E:/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
 
 INSERT INTO merch_acct
 (merch_co, merch_acct_no, merch_acct_nm, merch_mobile, merch_id_no, balance, is_master)

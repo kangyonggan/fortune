@@ -70,7 +70,7 @@ public class FpayUtil {
             PublicKey publicKey = keyFactory.generatePublic(pubX509);
             return publicKey;
         } catch (Exception e) {
-            throw new Exception("加载对方公钥失败[" + publicKeyPath + "]", e);
+            throw new Exception("加载对方公钥异常[" + publicKeyPath + "]", e);
         } finally {
             if (in != null) {
                 in.close();
@@ -106,7 +106,7 @@ public class FpayUtil {
 
             return privateKey;
         } catch (Exception e) {
-            throw new Exception("加载己方私钥失败[" + privateKeyPath + "]", e);
+            throw new Exception("加载己方私钥异常[" + privateKeyPath + "]", e);
         } finally {
             if (in != null) {
                 in.close();
@@ -182,7 +182,7 @@ public class FpayUtil {
             out.flush();
             return out.toByteArray();
         } catch (Exception e) {
-            throw new Exception("加密失败", e);
+            throw new Exception("加密异常", e);
         } finally {
             if (out != null) {
                 out.close();
@@ -220,7 +220,7 @@ public class FpayUtil {
             out.flush();
             return new String(out.toByteArray(), DEFAULT_CHARSET);
         } catch (Exception e) {
-            throw new Exception("解密失败", e);
+            throw new Exception("解密异常", e);
         } finally {
             if (out != null) {
                 out.close();
@@ -240,9 +240,9 @@ public class FpayUtil {
      */
     public static byte[] build(String merchCo, String tranCo, byte signBytes[], byte encryptedBytes[]) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append(StringUtils.leftPad(String.valueOf(15 + 4 + 4 + signBytes.length + encryptedBytes.length), 8, "0"));// 域1 总长度
+        sb.append(StringUtils.leftPad(String.valueOf(15 + 8 + 4 + signBytes.length + encryptedBytes.length), 8, "0"));// 域1 总长度
         sb.append(StringUtils.leftPad(merchCo, 15, " "));// 域2 商户号
-        sb.append(StringUtils.leftPad(tranCo, 4, " "));// 域3 交易码
+        sb.append(StringUtils.leftPad(tranCo, 8, " "));// 域3 交易码
         sb.append(StringUtils.leftPad(String.valueOf(signBytes.length), 4, "0"));// 域4 签名长度
 
         byte[] bytes = null;
@@ -273,12 +273,12 @@ public class FpayUtil {
             byte buff[] = new byte[9999];
 
             // 读取报文头结构, 报文总长度8位+商户号15位+交易码4位+签名与长度4位=31位
-            in.read(buff, 0, 31);
+            in.read(buff, 0, 35);
             int totalLen = Integer.parseInt(new String(buff, 0, 8, DEFAULT_CHARSET));
             merchCo = new String(buff, 8, 15, DEFAULT_CHARSET).trim();
-            tranCo = new String(buff, 23, 4, DEFAULT_CHARSET).trim();
-            int signLen = Integer.parseInt(new String(buff, 27, 4, DEFAULT_CHARSET));
-            int encryLen = totalLen - 15 - 4 - 4 - signLen;
+            tranCo = new String(buff, 23, 8, DEFAULT_CHARSET).trim();
+            int signLen = Integer.parseInt(new String(buff, 31, 4, DEFAULT_CHARSET));
+            int encryLen = totalLen - 15 - 8 - 4 - signLen;
 
             in.read(buff, 0, signLen);
             signBytes = ArrayUtils.subarray(buff, 0, signLen);

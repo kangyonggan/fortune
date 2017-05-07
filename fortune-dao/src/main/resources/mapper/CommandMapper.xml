@@ -21,8 +21,7 @@
         <result column="id_no" jdbcType="VARCHAR" property="idNo"/>
         <result column="currCo" jdbcType="VARCHAR" property="currco"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
-        <result column="sndr_acct_tp" jdbcType="VARCHAR" property="sndrAcctTp"/>
-        <result column="rcvr_acct_tp" jdbcType="VARCHAR" property="rcvrAcctTp"/>
+        <result column="acct_tp" jdbcType="VARCHAR" property="acctTp"/>
         <result column="settle_date" jdbcType="VARCHAR" property="settleDate"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="resv1" jdbcType="VARCHAR" property="resv1"/>

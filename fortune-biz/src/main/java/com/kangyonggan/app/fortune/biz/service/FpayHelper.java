@@ -2,26 +2,21 @@ package com.kangyonggan.app.fortune.biz.service;
 
 import com.kangyonggan.app.fortune.biz.util.PropertiesUtil;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
+import com.kangyonggan.app.fortune.common.util.FpayUtil;
 import com.kangyonggan.app.fortune.common.util.XStreamUtil;
 import com.kangyonggan.app.fortune.common.util.XmlUtil;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
-import com.kangyonggan.app.fortune.model.constants.DictionaryType;
-import com.kangyonggan.app.fortune.model.constants.RespCo;
-import com.kangyonggan.app.fortune.model.constants.TranCo;
-import com.kangyonggan.app.fortune.model.vo.Merchant;
-import com.kangyonggan.app.fortune.model.vo.Protocol;
-import com.kangyonggan.app.fortune.model.vo.Trans;
-import com.kangyonggan.app.fortune.model.xml.Body;
+import com.kangyonggan.app.fortune.model.constants.Resp;
 import com.kangyonggan.app.fortune.model.xml.Fpay;
-import com.kangyonggan.app.fortune.model.xml.Header;
 import com.thoughtworks.xstream.XStream;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.OutputStream;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * @author kangyonggan
@@ -37,247 +32,82 @@ public class FpayHelper {
     private String prefix = PropertiesUtil.getProperties("redis.prefix") + ":";
 
     @Autowired
-    private MerchantService merchantService;
-
-    @Autowired
-    private TransService transService;
-
-    @Autowired
-    private DictionaryService dictionaryService;
-
-    @Autowired
     private RedisService redisService;
 
-    @Autowired
-    private ProtocolService protocolService;
+    /**
+     * 写响应
+     *
+     * @param out        输出流
+     * @param publicKey  对方公钥
+     * @param privateKey 己方私钥
+     * @param merchCo    商户号
+     * @param tranCo     交易码
+     * @param resp       响应码
+     * @param fpay       请求/响应
+     */
+    public static void writeResponse(OutputStream out, PublicKey publicKey, PrivateKey privateKey, String merchCo, String tranCo, Resp resp, Fpay fpay) {
+        try {
+            String respXml = buildRespXml(resp, fpay);
+            writeResponse(out, publicKey, privateKey, merchCo, tranCo, respXml);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+    }
 
     /**
-     * 构建异常报文
+     * 实际写响应
      *
-     * @param reqFpay
-     * @param respCode
+     * @param out        输出流
+     * @param publicKey  对方公钥
+     * @param privateKey 己方私钥
+     * @param merchCo    商户号
+     * @param tranCo     交易码
+     * @param respXml    响应报文
+     */
+    private static void writeResponse(OutputStream out, PublicKey publicKey, PrivateKey privateKey, String merchCo, String tranCo, String respXml) {
+        try {
+            respXml = XmlUtil.format(respXml);
+            log.info("响应报文明文:\n{}", respXml);
+            // 签名
+            byte[] signBytes = FpayUtil.sign(respXml, privateKey);
+            log.info("响应报文签名数据长度:{}", signBytes.length);
+
+            // 加密
+            byte[] encryptedBytes = FpayUtil.encrypt(respXml, publicKey);
+            log.info("响应报文密文长度{}", encryptedBytes.length);
+
+            // 构建报文
+            byte bytes[] = FpayUtil.build(merchCo, tranCo, signBytes, encryptedBytes);
+
+            out.write(bytes);
+            out.flush();
+            log.info("响应回写完毕");
+        } catch (Exception e) {
+            log.warn("回写响应报文异常", e);
+        }
+    }
+
+    /**
+     * 构建响应报文
+     *
+     * @param resp 响应码
+     * @param resp 请求
      * @return
      * @throws Exception
      */
-    public String buildErrorXml(Fpay reqFpay, String respCode) throws Exception {
-        // 响应码
-        RespCo resp = RespCo.getRespCo(respCode);
-
+    private static String buildRespXml(Resp resp, Fpay fpay) throws Exception {
         XStream xStream = XStreamUtil.getXStream();
         xStream.processAnnotations(Fpay.class);
 
-        // 响应头
-        Header header = new Header();
-        Body body = new Body();
-        if (reqFpay != null) {
-            header = reqFpay.getHeader();
-            body = reqFpay.getBody();
-        }
-        header.setRespCo(resp.getRespCo());
-        header.setRespMsg(resp.getRespMsg());
-
-        // 响应报文整体
-        Fpay respFpay = new Fpay();
-        respFpay.setHeader(header);
-        respFpay.setBody(body);
-
-        // 转xml
-        String respXml = xStream.toXML(respFpay);
-
-        // 格式化xml
-        respXml = XmlUtil.format(respXml);
-        return respXml;
-    }
-
-    /**
-     * 入参非空校验， 顺带写入缺省值
-     *
-     * @param fpay
-     * @return
-     */
-    public boolean validEmpty(Fpay fpay) {
         if (fpay == null) {
-            return false;
+            fpay = new Fpay();
+        }
+        if (resp != null) {
+            fpay.setRespCo(resp.getRespCo());
+            fpay.setRespMsg(resp.getRespMsg());
         }
 
-        Header header = fpay.getHeader();
-        Body body = fpay.getBody();
-
-        if (header == null) {
-            return false;
-        }
-
-        if (body == null) {
-            return false;
-        }
-
-        // 交易header
-        if (StringUtils.isEmpty(header.getMerchCo())) {
-            return false;
-        }
-
-        if (StringUtils.isEmpty(header.getTranCo())) {
-            return false;
-        }
-
-        if (StringUtils.isEmpty(header.getSerialNo())) {
-            return false;
-        }
-
-        if (StringUtils.isEmpty(header.getReqDate())) {
-            return false;
-        }
-
-        if (StringUtils.isEmpty(header.getReqTime())) {
-            return false;
-        }
-
-        // 检验body
-        if (TranCo.K001.name().equals(header.getTranCo()) || TranCo.K002.name().equals(header.getTranCo())) {
-            // 签约解约相关校验
-            if (StringUtils.isEmpty(body.getAcctNo())) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getAcctNm())) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getIdTp())) {
-                body.setIdTp("0");
-            }
-            if (StringUtils.isEmpty(body.getIdNo())) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getMobile())) {
-                return false;
-            }
-        } else if (TranCo.K003.name().equals(header.getTranCo())) {
-            if (StringUtils.isEmpty(body.getProtocolNo())) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getCurrCo())) {
-                body.setCurrCo("00");
-            }
-            if (body.getAmount() == null) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getSndrAcctTp())) {
-                body.setSndrAcctTp("00");
-            }
-            if (StringUtils.isEmpty(body.getSettleDate())) {
-                body.setSettleDate(DateUtil.getDate());
-            }
-        } else if (TranCo.K004.name().equals(header.getTranCo())) {
-            if (StringUtils.isEmpty(body.getProtocolNo())) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getCurrCo())) {
-                body.setCurrCo("00");
-            }
-            if (body.getAmount() == null) {
-                return false;
-            }
-            if (StringUtils.isEmpty(body.getRcvrAcctTp())) {
-                body.setRcvrAcctTp("00");
-            }
-            if (StringUtils.isEmpty(body.getSettleDate())) {
-                body.setSettleDate(DateUtil.getDate());
-            }
-        } else if (TranCo.K005.name().equals(header.getTranCo())) {
-            if (StringUtils.isEmpty(body.getOrgnSerialNo())) {
-                return false;
-            }
-        } else if (TranCo.K006.name().equals(header.getTranCo())) {
-            if (StringUtils.isEmpty(body.getAcctNo())) {
-                return false;
-            }
-        }
-
-        log.info("数据非空校验通过");
-        return true;
-    }
-
-    /**
-     * 入参合法性校验
-     * isValid：校验是否通过
-     * respCo：校验不通过时的错误码
-     *
-     * @param fpay
-     * @return
-     */
-    public Map<String, String> validData(Fpay fpay) throws Exception {
-        Map<String, String> result = new HashMap();
-        result.put("isValid", "F");
-
-        Merchant merchant = merchantService.findMerchantByMerchCo(fpay.getHeader().getMerchCo());
-        if (merchant == null) {
-            result.put("respCo", RespCo.RESP_CO_0013.getRespCo());
-            return result;
-        }
-
-        Trans trans = transService.findTransByMerchCoAndTranCo(merchant.getMerchCo(), fpay.getHeader().getTranCo());
-        if (trans == null) {
-            result.put("respCo", RespCo.RESP_CO_0014.getRespCo());
-            return result;
-        }
-
-        if (trans.getIsPaused() == 1) {
-            result.put("respCo", RespCo.RESP_CO_0015.getRespCo());
-            return result;
-        }
-
-        if (TranCo.K001.name().equals(fpay.getHeader().getTranCo())) {
-            // 签约验证件类型
-            if (!dictionaryService.exists(DictionaryType.ID_TP.name(), fpay.getBody().getIdTp())) {
-                result.put("respCo", RespCo.RESP_CO_0016.getRespCo());
-                return result;
-            }
-        }
-
-        if (TranCo.K002.name().equals(fpay.getHeader().getTranCo())) {
-            // 解约验证件类型
-            if (!dictionaryService.exists(DictionaryType.ID_TP.name(), fpay.getBody().getIdTp())) {
-                result.put("respCo", RespCo.RESP_CO_0016.getRespCo());
-                return result;
-            }
-
-            // 解约验证协议号是否存在
-            Protocol protocol = protocolService.findProtocolByMerchCoAndAcctNo(merchant.getMerchCo(), fpay.getBody().getAcctNo());
-            if (protocol == null) {
-                result.put("respCo", RespCo.RESP_CO_0022.getRespCo());
-                return result;
-            }
-        }
-
-        if (TranCo.K003.name().equals(fpay.getHeader().getTranCo()) || TranCo.K004.name().equals(fpay.getHeader().getTranCo())) {
-            // 代扣代付验币种
-            if (!dictionaryService.exists(DictionaryType.CURR_CO.name(), fpay.getBody().getCurrCo())) {
-                result.put("respCo", RespCo.RESP_CO_0017.getRespCo());
-                return result;
-            }
-
-            // 验证协议号是否存在
-            Protocol protocol = protocolService.findProtocolByProtocolNo(fpay.getBody().getProtocolNo());
-            if (protocol == null) {
-                result.put("respCo", RespCo.RESP_CO_0022.getRespCo());
-                return result;
-            }
-
-            // 验是否解约
-            if (protocol.getIsUnsign() == 1) {
-                result.put("respCo", RespCo.RESP_CO_0021.getRespCo());
-                return result;
-            }
-
-            // 验单笔超限
-            if (fpay.getBody().getAmount().compareTo(trans.getSingQuota()) > 0) {
-                result.put("respCo", RespCo.RESP_CO_0018.getRespCo());
-                return result;
-            }
-        }
-
-        result.put("isValid", "Y");
-        log.info("数据合法性校验通过");
-        return result;
+        return xStream.toXML(fpay);
     }
 
     /**

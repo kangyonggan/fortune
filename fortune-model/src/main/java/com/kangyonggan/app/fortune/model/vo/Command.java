@@ -105,16 +105,10 @@ public class Command implements Serializable {
     private BigDecimal amount;
 
     /**
-     * 付款方式账户类型
+     * 账户类型
      */
-    @Column(name = "sndr_acct_tp")
-    private String sndrAcctTp;
-
-    /**
-     * 收款方式账户类型
-     */
-    @Column(name = "rcvr_acct_tp")
-    private String rcvrAcctTp;
+    @Column(name = "acct_tp")
+    private String acctTp;
 
     /**
      * 清算日期
