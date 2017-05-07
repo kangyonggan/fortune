@@ -384,16 +384,6 @@ CREATE TABLE command
   COMMENT '请求方交易时间',
   fpay_date       VARCHAR(8)                            NOT NULL                    DEFAULT ''
   COMMENT '发财付交易日期',
-  acct_no         VARCHAR(20)                           NOT NULL                    DEFAULT ''
-  COMMENT '卡号',
-  acct_nm         VARCHAR(20)                           NOT NULL                    DEFAULT ''
-  COMMENT '户名',
-  mobile          VARCHAR(11)                           NOT NULL                    DEFAULT ''
-  COMMENT '手机号',
-  id_tp           VARCHAR(1)                            NOT NULL                    DEFAULT '0'
-  COMMENT '证件类型, 默认身份证：0',
-  id_no           VARCHAR(40)                           NOT NULL                    DEFAULT ''
-  COMMENT '证件号码',
   currCo          VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '币种, 默认人民币：00',
   amount          DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'

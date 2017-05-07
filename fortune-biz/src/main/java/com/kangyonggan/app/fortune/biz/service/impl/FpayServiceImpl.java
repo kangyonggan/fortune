@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * @author kangyonggan
  * @since 5/4/17
@@ -140,7 +138,10 @@ public class FpayServiceImpl implements FpayService {
             log.info("交易金额为：{}", amount);
 
             MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNo(merchCo);
-            if (fpay.getAmount().compareTo(merchAcct.getBalance()) > 0) {
+            if (merchAcct == null) {
+                resp = Resp.RESP_CO_0013;
+                log.info(resp.getRespMsg());
+            } else if (fpay.getAmount().compareTo(merchAcct.getBalance()) > 0) {
                 resp = Resp.RESP_CO_0011;
                 log.info(resp.getRespMsg());
             } else {
@@ -174,6 +175,71 @@ public class FpayServiceImpl implements FpayService {
         log.info("==================== 离开发财付单笔代扣接口 ====================");
     }
 
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void redeem(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
+        log.info("==================== 进入发财付单笔代扣接口 ====================");
+        // 必填域校验
+        FpayHelper.checkPayEmpty(fpay);
+
+        // 合法性校验
+        FpayHelper.checkPayValid(fpay);
+
+        Resp resp;
+
+        // 协议是否有效
+        Protocol protocol = protocolService.findProtocolByProtocolNo(fpay.getProtocolNo());
+        if (protocol == null || protocol.getIsUnsign() == 1 || protocol.getExpiredTime().before(DateUtil.now())) {
+            resp = Resp.RESP_CO_0012;
+        } else {
+            // 更新交易状态, 交易金额后两位前补00即响应码，没对应的响应码则为成功。
+            String amount = fpay.getAmount().toString();
+            log.info("交易金额为：{}", amount);
+
+            MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNo(merchCo);
+            if (merchAcct == null) {
+                resp = Resp.RESP_CO_0013;
+                log.info(resp.getRespMsg());
+            } else {
+                int index = amount.lastIndexOf(".");
+                String end = "0000";
+                if (index != -1) {
+                    end = "00" + amount.substring(index + 1);
+                    end = StringUtils.rightPad(end, 4, "0");
+                }
+                resp = Resp.getRespCo(end);
+
+                if ("Y,E,I".indexOf(resp.getTranSt()) > -1) {
+                    MerchAcct ma = new MerchAcct();
+                    ma.setMerchCo(merchCo);
+                    ma.setBalance(merchAcct.getBalance().add(fpay.getAmount()));
+
+                    merchAcctService.updateMerchAcct(ma);
+                    log.info("商户头寸已增加");
+                }
+            }
+        }
+
+        // 落库
+        writeCommon(merchCo, TranCo.K004.name(), resp.getTranSt(), fpay);
+        log.info("交易落库成功");
+
+        // 回写响应数据
+        writeCommonResp(fpay, resp);
+
+        log.info("==================== 离开发财付单笔代扣接口 ====================");
+    }
+
+    @Override
+    public void query(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
+
+    }
+
+    @Override
+    public void queryBalance(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
+
+    }
+
     /**
      * 交易落库
      *
@@ -195,22 +261,6 @@ public class FpayServiceImpl implements FpayService {
         command.setTranSt(tranSt);
 
         commandService.saveCommand(command);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void redeem(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
-
-    }
-
-    @Override
-    public void query(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
-
-    }
-
-    @Override
-    public void queryBalance(String merchCo, Fpay fpay) throws EmptyParamsException, ValidParamsException, Exception {
-
     }
 
     /**

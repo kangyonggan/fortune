@@ -59,7 +59,7 @@ public class PayTest {
                 "    <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>  \n" +
                 "    <reqDate>20170507</reqDate>  \n" +
                 "    <reqTime>153623</reqTime>  \n" +
-                "    <protocolNo>201705050000001</protocolNo>  \n" +
+                "    <protocolNo>201705070000000000000000000000000000000000000001</protocolNo>  \n" +
                 "    <amount>1.00</amount>  \n" +
                 "</fpay>";
         log.info("请求报文明文:{}", plain);

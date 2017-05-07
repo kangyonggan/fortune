@@ -14,11 +14,6 @@
         <result column="req_date" jdbcType="VARCHAR" property="reqDate"/>
         <result column="req_time" jdbcType="VARCHAR" property="reqTime"/>
         <result column="fpay_date" jdbcType="VARCHAR" property="fpayDate"/>
-        <result column="acct_no" jdbcType="VARCHAR" property="acctNo"/>
-        <result column="acct_nm" jdbcType="VARCHAR" property="acctNm"/>
-        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
-        <result column="id_tp" jdbcType="VARCHAR" property="idTp"/>
-        <result column="id_no" jdbcType="VARCHAR" property="idNo"/>
         <result column="currCo" jdbcType="VARCHAR" property="currco"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
         <result column="acct_tp" jdbcType="VARCHAR" property="acctTp"/>

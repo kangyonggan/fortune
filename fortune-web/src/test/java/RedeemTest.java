@@ -13,7 +13,7 @@ import java.util.Map;
  * @since 2017/5/6 0006
  */
 @Log4j2
-public class SignTest {
+public class RedeemTest {
 
     /**
      * 商户号
@@ -23,7 +23,7 @@ public class SignTest {
     /**
      * 交易码
      */
-    private static String tranCo = "K001";
+    private static String tranCo = "K004";
 
     /**
      * 字符集
@@ -59,10 +59,8 @@ public class SignTest {
                 "    <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>  \n" +
                 "    <reqDate>20170507</reqDate>  \n" +
                 "    <reqTime>153623</reqTime>  \n" +
-                "    <acctNo>6228218880054088518</acctNo>  \n" +
-                "    <acctNm>公测用户</acctNm>  \n" +
-                "    <idNo>340321199103173095</idNo>  \n" +
-                "    <mobile>15121119571</mobile>  \n" +
+                "    <protocolNo>201705070000000000000000000000000000000000000001</protocolNo>  \n" +
+                "    <amount>2.01</amount>  \n" +
                 "</fpay>";
         log.info("请求报文明文:{}", plain);
 

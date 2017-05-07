@@ -65,35 +65,6 @@ public class Command implements Serializable {
     private String fpayDate;
 
     /**
-     * 卡号
-     */
-    @Column(name = "acct_no")
-    private String acctNo;
-
-    /**
-     * 户名
-     */
-    @Column(name = "acct_nm")
-    private String acctNm;
-
-    /**
-     * 手机号
-     */
-    private String mobile;
-
-    /**
-     * 证件类型, 默认身份证：0
-     */
-    @Column(name = "id_tp")
-    private String idTp;
-
-    /**
-     * 证件号码
-     */
-    @Column(name = "id_no")
-    private String idNo;
-
-    /**
      * 币种, 默认人民币：00
      */
     @Column(name = "currCo")
