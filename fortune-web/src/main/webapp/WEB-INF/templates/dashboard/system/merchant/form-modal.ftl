@@ -63,10 +63,22 @@
                 <label>调试模式</label>
             </div>
             <div class="col-md-7 controls">
-                <select name="isDebug" class="form-control">
-                    <option value="0">否</option>
-                    <option value="1" <#if merchant.merchCo?? && merchant.isDebug==1>selected</#if>>是</option>
-                </select>
+                <#--<select name="isDebug" class="form-control">-->
+                    <#--<option value="0">否</option>-->
+                    <#--<option value="1" <#if merchant.merchCo?? && merchant.isDebug==1>selected</#if>>是</option>-->
+                <#--</select>-->
+                <label class="inline">
+                    <input name="isDebug" value="0" type="radio" class="ace"
+                           <#if merchant.merchCo?? && merchant.isDebug==0>checked</#if>>
+                    <span class="lbl middle"> 否</span>
+                </label>
+
+                &nbsp; &nbsp; &nbsp;
+                <label class="inline">
+                    <input name="isDebug" value="1" type="radio" class="ace"
+                           <#if merchant.merchCo?? && merchant.isDebug==1>checked</#if>>
+                    <span class="lbl middle"> 是</span>
+                </label>
             </div>
         </div>
     </div>
