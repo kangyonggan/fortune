@@ -59,6 +59,7 @@ public class DashboardMerchantInfoController extends BaseController {
     public Map<String, Object> info(@ModelAttribute(value = "merchant") @Valid Merchant merchant, BindingResult result,
                                     @RequestParam(value = "publicKey", required = false) MultipartFile publicKey) throws FileUploadException {
         Map<String, Object> resultMap = getResultMap();
+        ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
 
         if (!result.hasErrors()) {
             if (publicKey != null && !publicKey.isEmpty()) {
@@ -66,6 +67,7 @@ public class DashboardMerchantInfoController extends BaseController {
                 merchant.setPublicKeyPath(fileName);
             }
 
+            merchant.setMerchCo(shiroMerchant.getMerchCo());
             merchantService.updateMerchantByMerchCo(merchant);
             resultMap.put("merchant", merchantService.findMerchantByMerchCo(merchant.getMerchCo()));
         } else {
