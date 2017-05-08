@@ -61,6 +61,12 @@ $.extend($.validator.addMethod("isMenuCode", function (value) {
     return str.test(value);
 }, "纯大写,可带下划线,不超过32位"));
 
+$.extend($.validator.addMethod("isMobile", function(value, element) {
+    var length = value.length;
+    var mobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+    return this.optional(element) || (length == 11 && mobile.test(value));
+}, "请正确填写您的手机号码"));
+
 $.extend($.validator.addMethod("isMenuUrl", function (value) {
     var str = /^[a-z\/]{1,32}$/;
     return str.test(value);

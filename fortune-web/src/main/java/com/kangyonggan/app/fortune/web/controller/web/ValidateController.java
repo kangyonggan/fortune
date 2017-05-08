@@ -1,9 +1,6 @@
 package com.kangyonggan.app.fortune.web.controller.web;
 
-import com.kangyonggan.app.fortune.biz.service.DictionaryService;
-import com.kangyonggan.app.fortune.biz.service.MenuService;
-import com.kangyonggan.app.fortune.biz.service.MerchantService;
-import com.kangyonggan.app.fortune.biz.service.RoleService;
+import com.kangyonggan.app.fortune.biz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +27,9 @@ public class ValidateController {
 
     @Autowired
     private DictionaryService dictionaryService;
+
+    @Autowired
+    private MerchAcctService merchAcctService;
 
     /**
      * 校验商户号是否可用
@@ -101,6 +101,24 @@ public class ValidateController {
         }
 
         return !dictionaryService.existsDictionaryCode(code);
+    }
+
+    /**
+     * 校验卡号是否可用
+     *
+     * @param merchAcctNo
+     * @param oldMerchAcctNo
+     * @return
+     */
+    @RequestMapping(value = "acct", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean validateMerchAcctNo(@RequestParam("merchAcctNo") String merchAcctNo,
+                                          @RequestParam(value = "oldMerchAcctNo", required = false, defaultValue = "") String oldMerchAcctNo) {
+        if (merchAcctNo.equals(oldMerchAcctNo)) {
+            return true;
+        }
+
+        return !merchAcctService.existsMerchAcctNo(merchAcctNo);
     }
 
 }

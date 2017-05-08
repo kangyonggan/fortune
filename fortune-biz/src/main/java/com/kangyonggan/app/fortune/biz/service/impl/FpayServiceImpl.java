@@ -160,7 +160,7 @@ public class FpayServiceImpl implements FpayService {
                     ma.setMerchCo(merchCo);
                     ma.setBalance(merchAcct.getBalance().subtract(fpay.getAmount()));
 
-                    merchAcctService.updateMerchAcct(ma);
+                    merchAcctService.updateMasterMerchAcct(ma);
                     log.info("商户头寸已扣除");
                 }
             }
@@ -215,7 +215,7 @@ public class FpayServiceImpl implements FpayService {
                     ma.setMerchCo(merchCo);
                     ma.setBalance(merchAcct.getBalance().add(fpay.getAmount()));
 
-                    merchAcctService.updateMerchAcct(ma);
+                    merchAcctService.updateMasterMerchAcct(ma);
                     log.info("商户头寸已增加");
                 }
             }
@@ -271,7 +271,7 @@ public class FpayServiceImpl implements FpayService {
         Resp resp = Resp.RESP_CO_0000;
 
         // 查询账户
-        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchNoAndAcctNo(merchCo, fpay.getAcctNo());
+        MerchAcct merchAcct = merchAcctService.findMerAcctByMerchCoAndAcctNo(merchCo, fpay.getAcctNo());
         if (merchAcct == null) {
             resp = Resp.RESP_CO_0014;
         } else {

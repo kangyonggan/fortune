@@ -212,7 +212,7 @@ CREATE TABLE merch_acct
   COMMENT '商户银行卡户名',
   merch_mobile  VARCHAR(11)                           NOT NULL
   COMMENT '商户手机号',
-  merch_id_no   VARCHAR(18)                           NOT NULL
+  merch_id_no   VARCHAR(40)                           NOT NULL
   COMMENT '商户证件号',
   merch_id_tp   VARCHAR(1)                            NOT NULL                    DEFAULT '0'
   COMMENT '商户证件类型',
@@ -234,8 +234,6 @@ CREATE INDEX created_time_ix
   ON merch_acct (created_time);
 CREATE UNIQUE INDEX merch_co_merch_acct_no_UNIQUE
   ON merch_acct (merch_co, merch_acct_no);
-CREATE UNIQUE INDEX merch_co_is_master_UNIQUE
-  ON merch_acct (merch_co, is_master);
 
 -- ----------------------------
 --  Table structure for trans
@@ -419,7 +417,7 @@ VALUES
   ('MERCHANT', '商户', 'DASHBOARD', 'merchant', 1, 'menu-icon fa fa-user'),
   ('MERCHANT_INFO', '基本信息', 'MERCHANT', 'merchant/info', 0, ''),
   ('MERCHANT_ACCT', '对公账户', 'MERCHANT', 'merchant/acct', 1, ''),
-  ('MERCHANT_TRANS', '交易列表', 'MERCHANT', 'merchant/trans', 2, ''),
+  ('MERCHANT_TRANS', '交易类型', 'MERCHANT', 'merchant/trans', 2, ''),
   ('MERCHANT_PROTOCOL', '协议管理', 'MERCHANT', 'merchant/protocol', 3, ''),
   ('MERCHANT_COMMAND', '交易查询', 'MERCHANT', 'merchant/command', 4, '');
 
