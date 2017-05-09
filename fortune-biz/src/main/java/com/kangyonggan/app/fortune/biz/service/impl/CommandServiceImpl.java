@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
 
     @Override
     @LogTime
-    public List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt) {
+    public List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt) throws ParseException {
         Example example = new Example(Command.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotEmpty(tranSt)) {

@@ -3,6 +3,7 @@ package com.kangyonggan.app.fortune.biz.service;
 import com.kangyonggan.app.fortune.model.dto.CommandDto;
 import com.kangyonggan.app.fortune.model.vo.Command;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -44,8 +45,9 @@ public interface CommandService {
      * @param endDate
      * @param tranSt
      * @return
+     * @throws ParseException
      */
-    List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt);
+    List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt) throws ParseException;
 
     /**
      * 查询流水详情

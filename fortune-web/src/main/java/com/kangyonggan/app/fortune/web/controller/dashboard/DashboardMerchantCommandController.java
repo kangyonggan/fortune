@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -42,6 +43,7 @@ public class DashboardMerchantCommandController extends BaseController {
      * @param tranSt
      * @param model
      * @return
+     * @throws ParseException
      */
     @RequestMapping(method = RequestMethod.GET)
     @RequiresPermissions("MERCHANT_COMMAND")
@@ -49,8 +51,8 @@ public class DashboardMerchantCommandController extends BaseController {
                        @RequestParam(value = "startDate", required = false, defaultValue = "") String startDate,
                        @RequestParam(value = "endDate", required = false, defaultValue = "") String endDate,
                        @RequestParam(value = "tranSt", required = false, defaultValue = "") String tranSt,
-                       Model model) {
-        List<Command> commands = commandService.searchCommands(pageNum, startDate, endDate, tranSt);
+                       Model model) throws ParseException {
+        List<Command> commands = commandService.searchCommands(pageNum, startDate.replaceAll("-", ""), endDate.replaceAll("-", ""), tranSt);
         PageInfo<Command> page = new PageInfo(commands);
         List<Dictionary> allTrans = dictionaryService.findDictionariesByType(DictionaryType.TRANS_CO.getType());
 

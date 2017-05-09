@@ -1,5 +1,6 @@
 package com.kangyonggan.app.fortune.common.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusNanos(long nanosToAdd) {
-        return Date.from( LocalDateTime.now().plusNanos(nanosToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusNanos(nanosToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -57,7 +58,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusSeconds(long secondsToAdd) {
-        return Date.from( LocalDateTime.now().plusSeconds(secondsToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusSeconds(secondsToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -67,7 +68,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusMinutes(long minutesToAdd) {
-        return Date.from( LocalDateTime.now().plusMinutes(minutesToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusMinutes(minutesToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -77,7 +78,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusHours(long hoursToAdd) {
-        return Date.from( LocalDateTime.now().plusHours(hoursToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusHours(hoursToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -87,7 +88,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusDays(long datesToAdd) {
-        return Date.from( LocalDateTime.now().plusDays(datesToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusDays(datesToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -97,7 +98,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusWeeks(long weeksToAdd) {
-        return Date.from( LocalDateTime.now().plusWeeks(weeksToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusWeeks(weeksToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -107,7 +108,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusMonths(long monthsToAdd) {
-        return Date.from( LocalDateTime.now().plusMonths(monthsToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusMonths(monthsToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -117,7 +118,7 @@ public class DateUtil {
      * @return
      */
     public static Date plusYears(long yearsToAdd) {
-        return Date.from( LocalDateTime.now().plusYears(yearsToAdd).atZone(zoneId).toInstant());
+        return Date.from(LocalDateTime.now().plusYears(yearsToAdd).atZone(zoneId).toInstant());
     }
 
     /**
@@ -132,30 +133,12 @@ public class DateUtil {
     /**
      * 字符串转成8位日期
      *
-     * @param dateTimeStr
-     * @return
-     */
-    public static Date fromDateTime(String dateTimeStr) {
-        return Date.from(LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern(DATETIME_PATTERN)).atZone(zoneId).toInstant());
-    }
-
-    /**
-     * 字符串转成8位日期
-     *
      * @param dateStr
      * @return
      */
-    public static Date fromDate(String dateStr) {
-        return Date.from(LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern(DATE_PATTERN)).atZone(zoneId).toInstant());
+    public static Date fromDate(String dateStr) throws ParseException {
+//        return Date.from(LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern(DATE_PATTERN)).atZone(zoneId).toInstant());
+        return new SimpleDateFormat(DATE_PATTERN).parse(dateStr);
     }
 
-    /**
-     * 字符串转成6位日期
-     *
-     * @param timeStr
-     * @return
-     */
-    public static Date fromTime(String timeStr) {
-        return Date.from(LocalDateTime.parse(timeStr, DateTimeFormatter.ofPattern(TIME_PATTERN)).atZone(zoneId).toInstant());
-    }
 }
