@@ -20,6 +20,15 @@ public interface TransService {
     Trans findTransByMerchCoAndTranCo(String merchCo, String tranCo);
 
     /**
+     * 查询商户的交易类型(包括逻辑删除的)
+     *
+     * @param merchCo
+     * @param tranCo
+     * @return
+     */
+    Trans findTransByMerchCoAndTranCoWithDeleted(String merchCo, String tranCo);
+
+    /**
      * 查找商户所有交易类
      *
      * @param merchCo
@@ -47,4 +56,13 @@ public interface TransService {
      * @param trans
      */
     void deleteTrans(Trans trans);
+
+    /**
+     * 判断商户交易是否存在
+     *
+     * @param merchCo
+     * @param tranCo
+     * @return
+     */
+    boolean exists(String merchCo, String tranCo);
 }

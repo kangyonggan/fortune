@@ -64,12 +64,10 @@ public class DashboardMerchantTransController extends BaseController {
     @RequestMapping(value = "create", method = RequestMethod.GET)
     @RequiresPermissions("MERCHANT_TRANS")
     public String create(Model model) {
-        ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
-        List<Trans> transs = transService.findTransByMerchCo(shiroMerchant.getMerchCo());
         List<Dictionary> allTrans = dictionaryService.findDictionariesByType(DictionaryType.TRANS_CO.getType());
-        allTrans = filter(allTrans, transs);
 
         model.addAttribute("allTrans", allTrans);
+        model.addAttribute("trans", new Trans());
         return getPathFormModal();
     }
 
@@ -87,6 +85,12 @@ public class DashboardMerchantTransController extends BaseController {
         Map<String, Object> resultMap = getResultMap();
         ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
         trans.setMerchCo(shiroMerchant.getMerchCo());
+
+        boolean exists = transService.exists(shiroMerchant.getMerchCo(), trans.getTranCo());
+        if (exists) {
+            setResultMapFailure(resultMap, "不可重复添加此交易");
+            return resultMap;
+        }
 
         if (!result.hasErrors()) {
             transService.saveTrans(trans);
@@ -139,44 +143,23 @@ public class DashboardMerchantTransController extends BaseController {
     }
 
     /**
-     * 删除
+     * 删除/恢复
      *
      * @param tranCo
      * @param model
      * @return
      */
-    @RequestMapping(value = "{tranCo:[\\w]+}/delete", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    @RequiresPermissions("SYSTEM_MERCHANT")
-    public String delete(@PathVariable("tranCo") String tranCo, Model model) {
+    @RequestMapping(value = "{tranCo:[\\w]+}/{isDeleted:\\bundelete\\b|\\bdelete\\b}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequiresPermissions("MERCHANT_TRANS")
+    public String delete(@PathVariable("tranCo") String tranCo, @PathVariable("isDeleted") String isDeleted, Model model) {
         ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
         Trans trans = new Trans();
         trans.setMerchCo(shiroMerchant.getMerchCo());
         trans.setTranCo(tranCo);
-        trans.setIsDeleted(AppConstants.IS_DELETED_YES);
+        trans.setIsDeleted((byte) (isDeleted.equals("delete") ? 1 : 0));
         transService.updateTransByMerchCoAndTranCo(trans);
 
-        model.addAttribute("trans", transService.findTransByMerchCoAndTranCo(shiroMerchant.getMerchCo(), tranCo));
-        return getPathTableTr();
-    }
-
-    /**
-     * 恢复
-     *
-     * @param tranCo
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "{tranCo:[\\w]+}/undelete", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    @RequiresPermissions("SYSTEM_MERCHANT")
-    public String undelete(@PathVariable("tranCo") String tranCo, Model model) {
-        ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
-        Trans trans = new Trans();
-        trans.setMerchCo(shiroMerchant.getMerchCo());
-        trans.setTranCo(tranCo);
-        trans.setIsDeleted(AppConstants.IS_DELETED_NO);
-        transService.updateTransByMerchCoAndTranCo(trans);
-
-        model.addAttribute("trans", transService.findTransByMerchCoAndTranCo(shiroMerchant.getMerchCo(), tranCo));
+        model.addAttribute("trans", transService.findTransByMerchCoAndTranCoWithDeleted(shiroMerchant.getMerchCo(), tranCo));
         return getPathTableTr();
     }
 
@@ -196,23 +179,5 @@ public class DashboardMerchantTransController extends BaseController {
         trans.setTranCo(tranCo);
 
         transService.deleteTrans(trans);
-    }
-
-    private List<Dictionary> filter(List<Dictionary> allTrans, List<Trans> transs) {
-        List<Dictionary> newList = new ArrayList();
-
-        for (Dictionary dictionary : allTrans) {
-            boolean exists = false;
-            for (Trans trans : transs) {
-                if (trans.getTranCo().equals(dictionary.getCode())) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                newList.add(dictionary);
-            }
-        }
-        return newList;
     }
 }

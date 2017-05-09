@@ -57,4 +57,13 @@ public interface DictionaryService {
      * @return
      */
     List<Dictionary> findDictionariesByType(String type);
+
+    /**
+     * 查找字典
+     *
+     * @param type
+     * @param tranCo
+     * @return
+     */
+    Dictionary findDictionaryByTypeAndCode(String type, String tranCo);
 }

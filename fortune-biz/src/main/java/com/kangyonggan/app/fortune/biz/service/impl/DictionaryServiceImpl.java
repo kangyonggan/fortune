@@ -80,4 +80,15 @@ public class DictionaryServiceImpl extends BaseService<Dictionary> implements Di
         example.setOrderByClause("sort asc");
         return myMapper.selectByExample(example);
     }
+
+    @Override
+    @LogTime
+    public Dictionary findDictionaryByTypeAndCode(String type, String tranCo) {
+        Dictionary dictionary = new Dictionary();
+        dictionary.setType(type);
+        dictionary.setCode(tranCo);
+        dictionary.setIsDeleted(AppConstants.IS_DELETED_NO);
+
+        return myMapper.selectOne(dictionary);
+    }
 }
