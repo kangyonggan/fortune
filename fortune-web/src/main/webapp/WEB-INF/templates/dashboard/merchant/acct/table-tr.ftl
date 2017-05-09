@@ -21,8 +21,8 @@
 
             <ul class="dropdown-menu dropdown-menu-right dropdown-inverse">
                 <li>
-                    <a href="javascript:" data-role="acct-delete" title="删除银行卡"
-                       data-url="${ctx}/dashboard/merchant/acct/${merchAcct.merchAcctNo}/delete">
+                    <a href="javascript:" data-role="acct-remove" title="删除银行卡"
+                       data-url="${ctx}/dashboard/merchant/acct/${merchAcct.merchAcctNo}/remove">
                         删除
                     </a>
                 </li>

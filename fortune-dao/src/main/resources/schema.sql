@@ -257,8 +257,6 @@ CREATE TABLE trans
   COMMENT '日累计限额, -1代表无限额',
   is_paused    TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '交易暂停:{0:正常, 1:暂停}',
-  resume_time  TIMESTAMP                             NULL
-  COMMENT '交易暂停的恢复时间',
   is_deleted   TINYINT                               NOT NULL                    DEFAULT 0
   COMMENT '逻辑删除:{0:未删除, 1:已删除}',
   created_time TIMESTAMP                             NOT NULL                    DEFAULT CURRENT_TIMESTAMP

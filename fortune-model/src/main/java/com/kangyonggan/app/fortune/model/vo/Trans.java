@@ -1,10 +1,11 @@
 package com.kangyonggan.app.fortune.model.vo;
 
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
-import lombok.Data;
 
 @Data
 @Table(name = "trans")
@@ -51,12 +52,6 @@ public class Trans implements Serializable {
      */
     @Column(name = "is_paused")
     private Byte isPaused;
-
-    /**
-     * 交易暂停的恢复时间
-     */
-    @Column(name = "resume_time")
-    private Date resumeTime;
 
     /**
      * 逻辑删除:{0:未删除, 1:已删除}

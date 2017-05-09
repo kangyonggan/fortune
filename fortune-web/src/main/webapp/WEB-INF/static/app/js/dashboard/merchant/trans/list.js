@@ -1,9 +1,9 @@
 $(function () {
-    updateState("merchant/acct");
+    updateState("merchant/trans");
 
-    var $table = $('#merchAcct-table');
+    var $table = $('#trans-table');
 
-    $table.on('click', 'a[data-role=acct-remove]', function () {
+    $table.on('click', 'a[data-role=trans-remove]', function () {
         var $trigger = $(this);
         var url = $trigger.data('url');
         var title = $trigger.attr("title");

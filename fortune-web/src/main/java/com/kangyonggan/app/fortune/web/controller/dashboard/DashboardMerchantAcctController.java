@@ -10,7 +10,6 @@ import com.kangyonggan.app.fortune.model.vo.ShiroMerchant;
 import com.kangyonggan.app.fortune.web.controller.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -105,7 +104,7 @@ public class DashboardMerchantAcctController extends BaseController {
      */
     @RequestMapping(value = "{merchAcctNo:[\\w]+}/edit", method = RequestMethod.GET)
     @RequiresPermissions("MERCHANT_ACCT")
-    public String create(@PathVariable("merchAcctNo") String merchAcctNo, Model model) {
+    public String edit(@PathVariable("merchAcctNo") String merchAcctNo, Model model) {
         List<Dictionary> idTps = dictionaryService.findDictionariesByType(DictionaryType.ID_TP.getType());
 
         model.addAttribute("idTps", idTps);
@@ -139,15 +138,15 @@ public class DashboardMerchantAcctController extends BaseController {
     }
 
     /**
-     * 删除
+     * 物理删除
      *
      * @param merchAcctNo
      * @return
      */
-    @RequestMapping(value = "{merchAcct:[\\w]+}/delete", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "{merchAcct:[\\w]+}/remove", method = RequestMethod.GET)
     @RequiresPermissions("MERCHANT_ACCT")
     @ResponseBody
-    public void delete(@PathVariable("merchAcct") String merchAcctNo) {
+    public void remove(@PathVariable("merchAcct") String merchAcctNo) {
         MerchAcct merchAcct = new MerchAcct();
         ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
         merchAcct.setMerchCo(shiroMerchant.getMerchCo());

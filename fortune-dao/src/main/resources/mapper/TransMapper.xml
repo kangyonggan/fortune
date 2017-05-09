@@ -12,7 +12,6 @@
         <result column="sing_quota" jdbcType="DECIMAL" property="singQuota"/>
         <result column="date_quota" jdbcType="DECIMAL" property="dateQuota"/>
         <result column="is_paused" jdbcType="TINYINT" property="isPaused"/>
-        <result column="resume_time" jdbcType="TIMESTAMP" property="resumeTime"/>
         <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
