@@ -1,6 +1,9 @@
 package com.kangyonggan.app.fortune.biz.service;
 
+import com.kangyonggan.app.fortune.model.dto.CommandDto;
 import com.kangyonggan.app.fortune.model.vo.Command;
+
+import java.util.List;
 
 /**
  * @author kangyonggan
@@ -32,4 +35,23 @@ public interface CommandService {
      * 把10分钟之前的N更新为F
      */
     void updateCommandsToFailure();
+
+    /**
+     * 搜索交易
+     *
+     * @param pageNum
+     * @param startDate
+     * @param endDate
+     * @param tranSt
+     * @return
+     */
+    List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt);
+
+    /**
+     * 查询流水详情
+     *
+     * @param id
+     * @return
+     */
+    CommandDto findCommandById(Long id);
 }

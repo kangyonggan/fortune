@@ -14,7 +14,7 @@
         <result column="req_date" jdbcType="VARCHAR" property="reqDate"/>
         <result column="req_time" jdbcType="VARCHAR" property="reqTime"/>
         <result column="fpay_date" jdbcType="VARCHAR" property="fpayDate"/>
-        <result column="currCo" jdbcType="VARCHAR" property="currco"/>
+        <result column="curr_co" jdbcType="VARCHAR" property="currCo"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
         <result column="acct_tp" jdbcType="VARCHAR" property="acctTp"/>
         <result column="settle_date" jdbcType="VARCHAR" property="settleDate"/>
@@ -26,4 +26,12 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
     </resultMap>
+
+    <select id="selectCommandById" parameterType="Long" resultType="com.kangyonggan.app.fortune.model.dto.CommandDto">
+        SELECT c.*, p.acct_no AS acctNo, p.acct_nm AS acctNm, p.mobile AS mobile, p.id_tp AS idTp, p.id_no AS idNo
+        FROM command c
+            LEFT JOIN protocol p ON c.protocol_no = p.protocol_no
+        WHERE c.id = #{id}
+            AND c.is_deleted = 0
+    </select>
 </mapper>

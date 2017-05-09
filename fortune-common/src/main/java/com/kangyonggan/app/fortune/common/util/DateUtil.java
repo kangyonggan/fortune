@@ -16,6 +16,9 @@ import java.util.Date;
 public class DateUtil {
 
     private static final String FULL_DATETIME_PATTERN = "yyyyMMddHHmmssSSS";
+    private static final String DATETIME_PATTERN = "yyyyMMddHHmmss";
+    private static final String DATE_PATTERN = "yyyyMMdd";
+    private static final String TIME_PATTERN = "HHmmss";
 
     private static final ZoneId zoneId = ZoneId.systemDefault();
 
@@ -124,5 +127,35 @@ public class DateUtil {
      */
     public static Date now() {
         return Date.from(LocalDateTime.now().atZone(zoneId).toInstant());
+    }
+
+    /**
+     * 字符串转成8位日期
+     *
+     * @param dateTimeStr
+     * @return
+     */
+    public static Date fromDateTime(String dateTimeStr) {
+        return Date.from(LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern(DATETIME_PATTERN)).atZone(zoneId).toInstant());
+    }
+
+    /**
+     * 字符串转成8位日期
+     *
+     * @param dateStr
+     * @return
+     */
+    public static Date fromDate(String dateStr) {
+        return Date.from(LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern(DATE_PATTERN)).atZone(zoneId).toInstant());
+    }
+
+    /**
+     * 字符串转成6位日期
+     *
+     * @param timeStr
+     * @return
+     */
+    public static Date fromTime(String timeStr) {
+        return Date.from(LocalDateTime.parse(timeStr, DateTimeFormatter.ofPattern(TIME_PATTERN)).atZone(zoneId).toInstant());
     }
 }

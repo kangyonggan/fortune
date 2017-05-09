@@ -67,8 +67,8 @@ public class Command implements Serializable {
     /**
      * 币种, 默认人民币：00
      */
-    @Column(name = "currCo")
-    private String currco;
+    @Column(name = "curr_co")
+    private String currCo;
 
     /**
      * 交易金额

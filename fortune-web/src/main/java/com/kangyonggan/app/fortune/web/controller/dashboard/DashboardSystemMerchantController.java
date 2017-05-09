@@ -169,6 +169,7 @@ public class DashboardSystemMerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "{merchCo:[\\w]+}", method = RequestMethod.GET)
+    @RequiresPermissions("SYSTEM_MERCHANT")
     public String detail(@PathVariable("merchCo") String merchCo, Model model) {
         model.addAttribute("merchant", merchantService.findMerchantByMerchCo(merchCo));
         return getPathDetailModal();

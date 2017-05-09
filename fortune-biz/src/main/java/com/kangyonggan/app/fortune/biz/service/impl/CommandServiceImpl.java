@@ -1,12 +1,17 @@
 package com.kangyonggan.app.fortune.biz.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.kangyonggan.app.fortune.biz.service.CommandService;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
+import com.kangyonggan.app.fortune.mapper.CommandMapper;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
 import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.TranSt;
+import com.kangyonggan.app.fortune.model.dto.CommandDto;
 import com.kangyonggan.app.fortune.model.vo.Command;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -20,6 +25,9 @@ import java.util.List;
 @Service
 @Log4j2
 public class CommandServiceImpl extends BaseService<Command> implements CommandService {
+
+    @Autowired
+    private CommandMapper commandMapper;
 
     @Override
     @LogTime
@@ -61,5 +69,32 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         example.createCriteria().andEqualTo("tranSt", TranSt.N.name()).andLessThan("createdTime", DateUtil.plusMinutes(-10));
 
         myMapper.updateByExampleSelective(command, example);
+    }
+
+    @Override
+    @LogTime
+    public List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt) {
+        Example example = new Example(Command.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotEmpty(tranSt)) {
+            criteria.andEqualTo("tranSt", tranSt);
+        }
+        if (StringUtils.isNotEmpty(startDate)) {
+            criteria.andGreaterThanOrEqualTo("createdTime", DateUtil.fromDate(startDate));
+        }
+        if (StringUtils.isNotEmpty(endDate)) {
+            criteria.andLessThanOrEqualTo("createdTime", DateUtil.fromDate(endDate));
+        }
+        criteria.andEqualTo("isDeleted", AppConstants.IS_DELETED_NO);
+        example.setOrderByClause("id desc");
+
+        PageHelper.startPage(pageNum, AppConstants.PAGE_SIZE);
+        return myMapper.selectByExample(example);
+    }
+
+    @Override
+    @LogTime
+    public CommandDto findCommandById(Long id) {
+        return commandMapper.selectCommandById(id);
     }
 }

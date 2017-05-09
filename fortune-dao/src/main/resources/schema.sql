@@ -347,7 +347,7 @@ CREATE TABLE command
   COMMENT '请求方交易时间',
   fpay_date       VARCHAR(8)                            NOT NULL                    DEFAULT ''
   COMMENT '发财付交易日期',
-  currCo          VARCHAR(2)                            NOT NULL                    DEFAULT '00'
+  curr_co          VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '币种, 默认人民币：00',
   amount          DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
   COMMENT '交易金额',
