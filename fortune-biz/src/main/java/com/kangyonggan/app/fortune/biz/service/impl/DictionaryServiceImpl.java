@@ -38,7 +38,7 @@ public class DictionaryServiceImpl extends BaseService<Dictionary> implements Di
             criteria.andLike("value", StringUtil.toLikeString(value));
         }
 
-        example.setOrderByClause("sort asc");
+        example.setOrderByClause("type desc, sort asc");
 
         PageHelper.startPage(pageNum, AppConstants.PAGE_SIZE);
         return myMapper.selectByExample(example);
