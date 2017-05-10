@@ -416,7 +416,7 @@ VALUES
   ('MERCHANT_INFO', '基本信息', 'MERCHANT', 'merchant/info', 0, ''),
   ('MERCHANT_ACCT', '对公账户', 'MERCHANT', 'merchant/acct', 1, ''),
   ('MERCHANT_TRANS', '交易类型', 'MERCHANT', 'merchant/trans', 2, ''),
-  ('MERCHANT_PROTOCOL', '协议管理', 'MERCHANT', 'merchant/protocol', 3, ''),
+  ('MERCHANT_PROTOCOL', '协议查询', 'MERCHANT', 'merchant/protocol', 3, ''),
   ('MERCHANT_COMMAND', '交易查询', 'MERCHANT', 'merchant/command', 4, '');
 
 -- ----------------------------
@@ -466,7 +466,7 @@ INSERT INTO merchant
 VALUES
   ('201705050000001', '公测商户', '9606b0029ba4a8c9369f288cced0dc465eb5eabd', '3685072edcf8aad8',
    '/upload/merch_rsa_public_key_2048.pem',
-   'E:/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
+   '/Users/kyg/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
 
 INSERT INTO merch_acct
 (merch_co, merch_acct_no, merch_acct_nm, merch_mobile, merch_id_no, balance, is_master)

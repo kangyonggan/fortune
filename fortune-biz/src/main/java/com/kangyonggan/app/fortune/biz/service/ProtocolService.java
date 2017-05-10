@@ -2,6 +2,9 @@ package com.kangyonggan.app.fortune.biz.service;
 
 import com.kangyonggan.app.fortune.model.vo.Protocol;
 
+import java.text.ParseException;
+import java.util.List;
+
 /**
  * @author kangyonggan
  * @since 2017/5/4 0004
@@ -38,4 +41,18 @@ public interface ProtocolService {
      * @return
      */
     Protocol findProtocolByProtocolNo(String protocolNo);
+
+    /**
+     * 搜索协议号
+     *
+     * @param pageNum
+     * @param startDate
+     * @param endDate
+     * @param protocolNo
+     * @param acctNo
+     * @return
+     * @throws ParseException
+     */
+    List<Protocol> searchProtocols(int pageNum, String startDate, String endDate, String protocolNo, String acctNo) throws ParseException;
+
 }

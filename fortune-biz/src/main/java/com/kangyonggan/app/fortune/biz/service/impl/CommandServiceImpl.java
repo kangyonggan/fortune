@@ -2,6 +2,7 @@ package com.kangyonggan.app.fortune.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.kangyonggan.app.fortune.biz.service.CommandService;
+import com.kangyonggan.app.fortune.biz.service.MerchantService;
 import com.kangyonggan.app.fortune.common.util.DateUtil;
 import com.kangyonggan.app.fortune.mapper.CommandMapper;
 import com.kangyonggan.app.fortune.model.annotation.LogTime;
@@ -9,6 +10,7 @@ import com.kangyonggan.app.fortune.model.constants.AppConstants;
 import com.kangyonggan.app.fortune.model.constants.TranSt;
 import com.kangyonggan.app.fortune.model.dto.CommandDto;
 import com.kangyonggan.app.fortune.model.vo.Command;
+import com.kangyonggan.app.fortune.model.vo.ShiroMerchant;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
 
     @Autowired
     private CommandMapper commandMapper;
+
+    @Autowired
+    private MerchantService merchantService;
 
     @Override
     @LogTime
@@ -77,6 +82,10 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
     public List<Command> searchCommands(int pageNum, String startDate, String endDate, String tranSt) throws ParseException {
         Example example = new Example(Command.class);
         Example.Criteria criteria = example.createCriteria();
+        ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
+
+        criteria.andEqualTo("merchCo", shiroMerchant.getMerchCo());
+
         if (StringUtils.isNotEmpty(tranSt)) {
             criteria.andEqualTo("tranSt", tranSt);
         }
