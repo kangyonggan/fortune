@@ -39,6 +39,7 @@ public class DashboardMerchantInfoController extends BaseController {
     public String info(Model model) {
         ShiroMerchant shiroMerchant = merchantService.getShiroMerchant();
         Merchant merchant = merchantService.findMerchantByMerchCo(shiroMerchant.getMerchCo());
+        merchant.setPrivateKeyPath(null);
 
         model.addAttribute("merchant", merchant);
         return getPathIndex();
@@ -69,7 +70,10 @@ public class DashboardMerchantInfoController extends BaseController {
 
             merchant.setMerchCo(shiroMerchant.getMerchCo());
             merchantService.updateMerchantByMerchCo(merchant);
-            resultMap.put("merchant", merchantService.findMerchantByMerchCo(merchant.getMerchCo()));
+            merchant = merchantService.findMerchantByMerchCo(merchant.getMerchCo());
+            merchant.setPrivateKeyPath(null);
+
+            resultMap.put("merchant", merchant);
         } else {
             setResultMapFailure(resultMap);
         }
