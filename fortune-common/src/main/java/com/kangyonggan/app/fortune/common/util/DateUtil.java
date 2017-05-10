@@ -92,6 +92,16 @@ public class DateUtil {
     }
 
     /**
+     * 在当前日期的基础上加datesToAdd天
+     *
+     * @param datesToAdd 为负数则是减去datesToAdd天
+     * @return
+     */
+    public static String plusStrDays(long datesToAdd) {
+        return LocalDateTime.now().plusDays(datesToAdd).format(DateTimeFormatter.BASIC_ISO_DATE);
+    }
+
+    /**
      * 在当前日期的基础上加weeksToAdd周
      *
      * @param weeksToAdd 为负数则是减去weeksToAdd周

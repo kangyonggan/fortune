@@ -169,6 +169,8 @@ CREATE TABLE merchant
   COMMENT '商户公钥路径',
   private_key_path VARCHAR(64)                           NOT NULL                    DEFAULT ''
   COMMENT '发财付私钥路径',
+  ftp_type         VARCHAR(10)                           NOT NULL                    DEFAULT 'common'
+  COMMENT 'ftp类型',
   ftp_host         VARCHAR(20)                           NOT NULL                    DEFAULT ''
   COMMENT 'ftp主机名',
   ftp_user         VARCHAR(64)                           NOT NULL                    DEFAULT ''
@@ -347,7 +349,7 @@ CREATE TABLE command
   COMMENT '请求方交易时间',
   fpay_date       VARCHAR(8)                            NOT NULL                    DEFAULT ''
   COMMENT '发财付交易日期',
-  curr_co          VARCHAR(2)                            NOT NULL                    DEFAULT '00'
+  curr_co         VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '币种, 默认人民币：00',
   amount          DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
   COMMENT '交易金额',
@@ -430,9 +432,17 @@ VALUES
 -- ----------------------------
 --  data for role_menu
 -- ----------------------------
-INSERT INTO role_menu SELECT 'ROLE_ADMIN', code FROM menu WHERE code LIKE 'SYSTEM%' OR code = 'DASHBOARD';
+INSERT INTO role_menu SELECT
+                        'ROLE_ADMIN',
+                        code
+                      FROM menu
+                      WHERE code LIKE 'SYSTEM%' OR code = 'DASHBOARD';
 
-INSERT INTO role_menu SELECT 'ROLE_MERCHANT', code FROM menu WHERE code LIKE 'MERCHANT%' OR code = 'DASHBOARD';
+INSERT INTO role_menu SELECT
+                        'ROLE_MERCHANT',
+                        code
+                      FROM menu
+                      WHERE code LIKE 'MERCHANT%' OR code = 'DASHBOARD';
 
 INSERT INTO dictionary
 (code, value, type, sort)

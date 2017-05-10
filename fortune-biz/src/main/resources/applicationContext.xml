@@ -36,6 +36,7 @@
             <tx:method name="remove*" propagation="REQUIRED"/>
             <tx:method name="pay*" propagation="REQUIRED"/>
             <tx:method name="redeem*" propagation="REQUIRED"/>
+            <tx:method name="gen*" propagation="REQUIRED"/>
 
             <tx:method name="search*" read-only="true" propagation="REQUIRED"/>
             <tx:method name="find*" read-only="true" propagation="REQUIRED"/>

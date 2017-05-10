@@ -34,27 +34,27 @@ public class SignTest {
      * 调试模式
      */
     private static boolean isDebug = false;
-//
-//    /**
-//     * 对方公钥路径
-//     */
-//    private static String publicKeyPath = "E:/data/fpay/fpay/fpay_rsa_public_key_2048.pem";
-//
-//    /**
-//     * 己方私钥路径
-//     */
-//    private static String privateKeyPath = "E:/data/fpay/merch/merch_pkcs8_rsa_private_key_2048.pem";
-
 
     /**
      * 对方公钥路径
      */
-    private static String publicKeyPath = "/Users/kyg/data/fpay/fpay/fpay_rsa_public_key_2048.pem";
+    private static String publicKeyPath = "E:/data/fpay/fpay/fpay_rsa_public_key_2048.pem";
 
     /**
      * 己方私钥路径
      */
-    private static String privateKeyPath = "/Users/kyg/data/fpay/merch/merch_pkcs8_rsa_private_key_2048.pem";
+    private static String privateKeyPath = "E:/data/fpay/merch/merch_pkcs8_rsa_private_key_2048.pem";
+
+
+//    /**
+//     * 对方公钥路径
+//     */
+//    private static String publicKeyPath = "/Users/kyg/data/fpay/fpay/fpay_rsa_public_key_2048.pem";
+//
+//    /**
+//     * 己方私钥路径
+//     */
+//    private static String privateKeyPath = "/Users/kyg/data/fpay/merch/merch_pkcs8_rsa_private_key_2048.pem";
 
 
     public static void main(String[] args) throws Exception {

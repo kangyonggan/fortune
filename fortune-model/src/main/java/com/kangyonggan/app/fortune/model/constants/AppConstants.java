@@ -73,5 +73,10 @@ public interface AppConstants {
      * 商户角色
      */
     String DEFAULT_ROLE_CODE = "ROLE_MERCHANT";
+
+    /**
+     * 对账文件分隔符
+     */
+    String FILE_SPLIT = "|";
 }
 

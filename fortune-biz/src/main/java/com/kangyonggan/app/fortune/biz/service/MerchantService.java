@@ -80,4 +80,13 @@ public interface MerchantService {
      * @return
      */
     boolean existsMerchCo(String merchCo);
+
+    /**
+     * 推送对账的商户
+     * @param ftpType
+     * @return
+     */
+    List<Merchant> findMerchantsByFtpType(String ftpType);
+
+
 }

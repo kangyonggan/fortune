@@ -129,6 +129,16 @@ public class MerchantServiceImpl extends BaseService<Merchant> implements Mercha
         return super.exists(merchant);
     }
 
+    @Override
+    @LogTime
+    public List<Merchant> findMerchantsByFtpType(String ftpType) {
+        Merchant merchant = new Merchant();
+        merchant.setFtpType(ftpType);
+        merchant.setIsDeleted(AppConstants.IS_DELETED_NO);
+
+        return myMapper.select(merchant);
+    }
+
     /**
      * 批量保存商户角色
      *

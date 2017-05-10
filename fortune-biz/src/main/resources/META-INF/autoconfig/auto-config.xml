@@ -36,6 +36,7 @@
         <property name="fortune.log4j2.home" description="log4j2日志的文件主目录" defaultValue="/Users/kyg/logs/fortune"/>
 
         <property name="fortune.file.root.path" description="文件根目录" defaultValue="/Users/kyg/code/kyg/fortune/fortune-web/src/main/webapp/WEB-INF/"/>
+        <property name="fortune.settle.dir" description="对账文件根目录" defaultValue="E:/data/dz/"/>
         <property name="fortune.slow.method.time" description="慢方法时间(秒)" defaultValue="1"/>
         <property name="fortune.slow.interface.time" description="慢接口时间(秒)" defaultValue="1"/>
         <property name="fortune.cache.open" description="是否开启缓存,Y:开启,N:不开启" defaultValue="Y"/>

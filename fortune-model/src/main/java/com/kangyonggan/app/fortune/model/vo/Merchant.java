@@ -56,6 +56,12 @@ public class Merchant implements Serializable {
     private String privateKeyPath;
 
     /**
+     * ftp类型
+     */
+    @Column(name = "ftp_type")
+    private String ftpType;
+
+    /**
      * ftp主机名
      */
     @Column(name = "ftp_host")

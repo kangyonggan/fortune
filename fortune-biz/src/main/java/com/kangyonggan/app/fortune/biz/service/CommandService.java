@@ -2,6 +2,7 @@ package com.kangyonggan.app.fortune.biz.service;
 
 import com.kangyonggan.app.fortune.model.dto.CommandDto;
 import com.kangyonggan.app.fortune.model.vo.Command;
+import com.kangyonggan.app.fortune.model.vo.Merchant;
 
 import java.text.ParseException;
 import java.util.List;
@@ -56,4 +57,13 @@ public interface CommandService {
      * @return
      */
     CommandDto findCommandById(Long id);
+
+    /**
+     * 生成商户的对账文件
+     *
+     * @param merchant
+     * @return
+     * @throws Exception
+     */
+    String genSettleFile(Merchant merchant, String ftpType) throws Exception;
 }
