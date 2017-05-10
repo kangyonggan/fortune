@@ -465,7 +465,7 @@ INSERT INTO merchant
 (merch_co, merch_nm, password, salt, public_key_path, private_key_path)
 VALUES
   ('201705050000001', '公测商户', '9606b0029ba4a8c9369f288cced0dc465eb5eabd', '3685072edcf8aad8',
-   '/upload/merch_rsa_public_key_2048.pem',
+   '/upload/201705050000001_merch_rsa_public_key_2048.pem',
    '/Users/kyg/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
 
 INSERT INTO merch_acct
