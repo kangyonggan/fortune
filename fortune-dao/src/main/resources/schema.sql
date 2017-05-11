@@ -165,9 +165,9 @@ CREATE TABLE merchant
   COMMENT '密码盐',
   charset          VARCHAR(8)                            NOT NULL                    DEFAULT 'UTF-8'
   COMMENT '编码',
-  public_key_path  VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  public_key_path  VARCHAR(128)                          NOT NULL                    DEFAULT ''
   COMMENT '商户公钥路径',
-  private_key_path VARCHAR(64)                           NOT NULL                    DEFAULT ''
+  private_key_path VARCHAR(128)                          NOT NULL                    DEFAULT ''
   COMMENT '发财付私钥路径',
   ftp_type         VARCHAR(10)                           NOT NULL                    DEFAULT ''
   COMMENT 'ftp类型',
