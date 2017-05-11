@@ -32,8 +32,8 @@ public class SettleCommonTask {
      * 普通对账
      * cron表达式：* * * * * *（秒 分 时 日 月 星期）
      */
-    @Scheduled(cron = "0 0 1 * * *")
-//    @Scheduled(cron = "0 0/1 * * * *")
+//    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void executeCommon() {
         ftpType(FtpType.common);
     }
@@ -42,8 +42,8 @@ public class SettleCommonTask {
      * 基金公司对账
      * cron表达式：* * * * * *（秒 分 时 日 月 星期）
      */
-    @Scheduled(cron = "0 0 20/15 * * *")
-//    @Scheduled(cron = "0 0/1 * * * *")
+//    @Scheduled(cron = "0 0 20/15 * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void executeFund() {
         ftpType(FtpType.fund);
     }
@@ -60,7 +60,7 @@ public class SettleCommonTask {
             String filePath = null;
             try {
                 filePath = commandService.genSettleFile(merchant, ftpType.name());
-                log.info("商户{}的对账文件生成晚了，文件路径:{}", merchant.getMerchNm(), filePath);
+                log.info("商户{}的对账文件生成完了，文件路径:{}", merchant.getMerchNm(), filePath);
             } catch (Exception e) {
                 log.info("生成对账文件异常", e);
             }

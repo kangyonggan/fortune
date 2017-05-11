@@ -126,7 +126,11 @@ public class CommandServiceImpl extends BaseService<Command> implements CommandS
         command.setTranSt(TranSt.F.name());
 
         Example example = new Example(Command.class);
-        example.createCriteria().andEqualTo("merchCo", merchant.getMerchCo()).andEqualTo("settleDate", settleDate);
+        List<String> trsnSts = new ArrayList();
+        trsnSts.add(TranSt.E.name());
+        trsnSts.add(TranSt.I.name());
+        trsnSts.add(TranSt.N.name());
+        example.createCriteria().andEqualTo("merchCo", merchant.getMerchCo()).andEqualTo("settleDate", settleDate).andIn("tranSt", trsnSts);
         myMapper.updateByExampleSelective(command, example);
 
         // 查出所有交易，写入文件

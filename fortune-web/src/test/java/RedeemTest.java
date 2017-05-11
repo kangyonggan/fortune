@@ -69,8 +69,8 @@ public class RedeemTest {
                 "    <serialNo>" + DateUtil.getFullDateTime() + "</serialNo>  \n" +
                 "    <reqDate>20170507</reqDate>  \n" +
                 "    <reqTime>153623</reqTime>  \n" +
-                "    <protocolNo>201705100000000000000000000000000000000000000001</protocolNo>  \n" +
-                "    <amount>2.00</amount>  \n" +
+                "    <protocolNo>201705110000000000000000000000000000000000000001</protocolNo>  \n" +
+                "    <amount>2.10</amount>  \n" +
                 "</fpay>";
         log.info("请求报文明文:{}", plain);
 
