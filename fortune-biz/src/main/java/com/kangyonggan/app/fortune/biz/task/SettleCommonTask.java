@@ -42,8 +42,8 @@ public class SettleCommonTask {
      * 基金公司对账
      * cron表达式：* * * * * *（秒 分 时 日 月 星期）
      */
-//    @Scheduled(cron = "0 0 20/15 * * *")
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 20/15 * * *")
+//    @Scheduled(cron = "0 0/1 * * * *")
     public void executeFund() {
         ftpType(FtpType.fund);
     }
