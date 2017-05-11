@@ -57,7 +57,36 @@
                 <div class="space-4"></div>
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right" for="fullname">调试模式<span
+                    <label class="col-sm-3 control-label no-padding-right" for="ftpType">对账模式<span
+                            class="red">*</span></label>
+
+                    <div class="col-xs-12 col-sm-5">
+                        <label class="inline">
+                            <input name="ftpType" value="" type="radio" class="ace"
+                                   <#if merchant.ftpType==''>checked</#if>>
+                            <span class="lbl middle"> 不对账</span>
+                        </label>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <label class="inline">
+                            <input name="ftpType" value="common" type="radio" class="ace"
+                                   <#if merchant.ftpType=='common'>checked</#if>>
+                            <span class="lbl middle"> 普通对账</span>
+                        </label>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <label class="inline">
+                            <input name="ftpType" value="fund" type="radio" class="ace"
+                                   <#if merchant.ftpType=='fund'>checked</#if>>
+                            <span class="lbl middle"> 基金公司</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-4"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="isDebug">调试模式<span
                             class="red">*</span></label>
 
                     <div class="col-xs-12 col-sm-5">

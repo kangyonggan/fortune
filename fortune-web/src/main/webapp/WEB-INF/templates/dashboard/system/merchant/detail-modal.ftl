@@ -16,6 +16,10 @@
         <td>${merchant.charset}</td>
     </tr>
     <tr>
+        <th>清算模式</th>
+        <td><#include "ftp-type.ftl"></td>
+    </tr>
+    <tr>
         <th>调试模式</th>
         <td><#include "debug.ftl"></td>
     </tr>

@@ -60,16 +60,40 @@
     <div class="row">
         <div class="row form-group">
             <div class="col-md-3 control-label">
+                <label>对账模式</label>
+            </div>
+            <div class="col-md-7 controls">
+                <label class="inline">
+                    <input name="ftpType" value="" type="radio" class="ace"
+                           <#if !merchant.merchCo?? || merchant.ftpType==''>checked</#if>>
+                    <span class="lbl middle"> 不对账</span>
+                </label>
+
+                &nbsp; &nbsp; &nbsp;
+                <label class="inline">
+                    <input name="ftpType" value="common" type="radio" class="ace"
+                           <#if merchant.merchCo?? && merchant.ftpType=='common'>checked</#if>>
+                    <span class="lbl middle"> 普通对账</span>
+                </label>
+
+                &nbsp; &nbsp; &nbsp;
+                <label class="inline">
+                    <input name="ftpType" value="fund" type="radio" class="ace"
+                           <#if merchant.merchCo?? && merchant.ftpType=='fund'>checked</#if>>
+                    <span class="lbl middle"> 基金公司</span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row form-group">
+            <div class="col-md-3 control-label">
                 <label>调试模式</label>
             </div>
             <div class="col-md-7 controls">
-                <#--<select name="isDebug" class="form-control">-->
-                    <#--<option value="0">否</option>-->
-                    <#--<option value="1" <#if merchant.merchCo?? && merchant.isDebug==1>selected</#if>>是</option>-->
-                <#--</select>-->
                 <label class="inline">
                     <input name="isDebug" value="0" type="radio" class="ace"
-                           <#if merchant.merchCo?? && merchant.isDebug==0>checked</#if>>
+                           <#if !merchant.merchCo?? || merchant.isDebug==0>checked</#if>>
                     <span class="lbl middle"> 否</span>
                 </label>
 

@@ -169,7 +169,7 @@ CREATE TABLE merchant
   COMMENT '商户公钥路径',
   private_key_path VARCHAR(64)                           NOT NULL                    DEFAULT ''
   COMMENT '发财付私钥路径',
-  ftp_type         VARCHAR(10)                           NOT NULL                    DEFAULT 'common'
+  ftp_type         VARCHAR(10)                           NOT NULL                    DEFAULT ''
   COMMENT 'ftp类型',
   ftp_host         VARCHAR(20)                           NOT NULL                    DEFAULT ''
   COMMENT 'ftp主机名',

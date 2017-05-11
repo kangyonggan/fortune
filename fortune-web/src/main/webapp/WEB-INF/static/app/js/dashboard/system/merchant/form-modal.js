@@ -37,8 +37,11 @@ $(function () {
                 required: false,
                 maxlength: 8
             },
+            ftpType: {
+                required: true
+            },
             isDebug: {
-                required: false,
+                required: true,
                 range: [0, 1]
             },
             ftpHost: {

@@ -4,6 +4,7 @@
     <td>${merchant.merchCo}</td>
     <td>${merchant.merchNm}</td>
     <td>${merchant.charset}</td>
+    <td><#include "ftp-type.ftl"></td>
     <td><#include "debug.ftl"></td>
     <td><#include "delete.ftl"></td>
     <td><@c.relative_date datetime=merchant.createdTime/></td>
