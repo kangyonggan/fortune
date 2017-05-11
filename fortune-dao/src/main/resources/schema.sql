@@ -351,7 +351,7 @@ CREATE TABLE command
   COMMENT '发财付交易日期',
   curr_co         VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '币种, 默认人民币：00',
-  amount          DECIMAL(16, 2)                        NOT NULL                    DEFAULT '0'
+  amount          DECIMAL(16, 2)                        NOT NULL
   COMMENT '交易金额',
   acct_tp         VARCHAR(2)                            NOT NULL                    DEFAULT '00'
   COMMENT '账户类型',
@@ -476,7 +476,7 @@ INSERT INTO merchant
 VALUES
   ('201705050000001', '公测商户', '9606b0029ba4a8c9369f288cced0dc465eb5eabd', '3685072edcf8aad8',
    '/upload/201705050000001_merch_rsa_public_key_2048.pem',
-   '/Users/kyg/data/fpay/fpay/fpay_pkcs8_rsa_private_key_2048.pem');
+   '/home/hxzq/data/fpay/201705050000001_fpay_pkcs8_rsa_private_key_2048.pem');
 
 INSERT INTO merch_acct
 (merch_co, merch_acct_no, merch_acct_nm, merch_mobile, merch_id_no, balance, is_master)
