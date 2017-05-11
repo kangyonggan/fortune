@@ -29,4 +29,4 @@
 商户使用“公测商户”进行联调完毕后，可申请一个特有的商户号。暂不支持在线申请，后面可能会增加此功能。
 
 ## 最新接口文档
-[发财付平台接口规范.docx](https://www.kangyonggan.com/downloads/发财付平台接口规范.docx)
+[发财付平台接口规范.docx](http://kangyonggan.com:8888/downloads/发财付平台接口规范.docx)
