@@ -101,6 +101,7 @@ public class MerchantServiceImpl extends BaseService<Merchant> implements Mercha
 
     @Override
     @LogTime
+    @CacheDelete("merchant:merchCo:{0:merchCo}")
     public void updateMerchantPassword(Merchant merchant) {
         entryptPassword(merchant);
         updateMerchantByMerchCo(merchant);
