@@ -8,7 +8,7 @@
                 <label>商户号</label>
             </div>
             <div class="col-md-7 controls">
-                <input type="text" class="form-control readonly" value="${merchant.merchCo}" readonly/>
+                <input type="text" name="merchCo" class="form-control readonly" value="${merchant.merchCo}" readonly/>
             </div>
         </div>
     </div>
