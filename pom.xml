@@ -97,6 +97,7 @@
         <zxing.version>3.3.0</zxing.version>
         <poi.version>3.12</poi.version>
         <xstream.version>1.4.9</xstream.version>
+        <asm.version>3.3.1</asm.version>
     </properties>
 
     <build>
@@ -458,11 +459,6 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.pegdown</groupId>
-                <artifactId>pegdown</artifactId>
-                <version>${pegdown.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
@@ -506,6 +502,11 @@
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
                 <version>${xstream.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

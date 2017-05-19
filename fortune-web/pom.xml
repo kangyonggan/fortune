@@ -17,6 +17,10 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
             <!--tomcat7-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
