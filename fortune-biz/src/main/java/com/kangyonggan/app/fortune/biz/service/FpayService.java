@@ -16,7 +16,7 @@ public interface FpayService {
      * 签约
      *
      * @param merchCo 商户号
-     * @param fpay 请求
+     * @param fpay    请求
      * @throws EmptyParamsException 必填域缺失
      * @throws ValidParamsException 数据不合法
      * @throws Exception            未知异常
@@ -27,7 +27,7 @@ public interface FpayService {
      * 解约
      *
      * @param merchCo 商户号
-     * @param fpay 请求
+     * @param fpay    请求
      * @throws EmptyParamsException 必填域缺失
      * @throws ValidParamsException 数据不合法
      * @throws Exception            未知异常
@@ -38,7 +38,7 @@ public interface FpayService {
      * 单笔代扣
      *
      * @param merchCo 商户号
-     * @param fpay 请求
+     * @param fpay    请求
      * @throws EmptyParamsException 必填域缺失
      * @throws ValidParamsException 数据不合法
      * @throws Exception            未知异常
@@ -49,7 +49,7 @@ public interface FpayService {
      * 单笔代付
      *
      * @param merchCo 商户号
-     * @param fpay 请求
+     * @param fpay    请求
      * @throws EmptyParamsException 必填域缺失
      * @throws ValidParamsException 数据不合法
      * @throws Exception            未知异常
@@ -60,7 +60,7 @@ public interface FpayService {
      * 交易查询
      *
      * @param merchCo 商户号
-     * @param fpay 请求
+     * @param fpay    请求
      * @throws EmptyParamsException 必填域缺失
      * @throws ValidParamsException 数据不合法
      * @throws Exception            未知异常
@@ -71,7 +71,7 @@ public interface FpayService {
      * 余额查询
      *
      * @param merchCo 商户号
-     * @param fpay 请求
+     * @param fpay    请求
      * @throws EmptyParamsException 必填域缺失
      * @throws ValidParamsException 数据不合法
      * @throws Exception            未知异常

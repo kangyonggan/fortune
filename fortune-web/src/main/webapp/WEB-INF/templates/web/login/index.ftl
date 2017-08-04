@@ -16,7 +16,7 @@
                     <label for="merchCo">商户号</label>
                     <div class="input-icon input-icon-right">
                         <input type="text" name="merchCo" class="form-control"
-                               placeholder="密码:5至15位的字母数字组合"/>
+                               placeholder="商户号:5至15位的字母数字组合"/>
                         <i class="ace-icon fa fa-user"></i>
                     </div>
                 </div>
